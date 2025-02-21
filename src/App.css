@@ -1,42 +1,123 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  --branco: #FFFFFF;
+  --preto: #000000;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+html {
+  background-color: var(--branco) !important;
+  color: var(--preto) !important;
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+  body {
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+      margin-bottom: 3%;
+    }
+  
+    #root {
+      padding: 2rem;
+      text-align: center;
+      height: 90vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    
+      .home {
+        .titulo {
+          font-size: 40px;
+          text-align: start;
+        }
+  
+        .viagens {
+          margin-top: 5%;
+          display: flex;
+  
+          .infoViagem {
+            width: 15%;
+            height: 30vh;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 40px;
+  
+              .adicionarViagem, .viagemCadastrada {
+                border: 2px solid black;
+                border-radius: 7px;
+                padding: 2%;
+                width: 95%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+  
+              .icone {
+                margin: 0px;
+                font-size: 40px;
+              }
+          }
+        }
+      }
+  
+      .planoViagem {
+        text-align: start;
+  
+        .telasInfo {
+          display: flex;
+          justify-content: space-between;
+          margin: 3% 0 4% 0;
+          width: 80%;
+  
+          .opcao {
+            border: 2px solid var(--preto);
+            border-radius: 7px;
+            padding: 0.5%;
+          }
+        }
+
+        .agenda {
+          display: flex;
+          justify-content: space-between;
+        }
+  
+        .listaHospedagens, .listaTransporte, .listaPasseios, .listaDespesas {
+          margin-top: 2%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 60%;
+          border-bottom: 1px solid #dddddd;
+  
+          p {
+            margin: 2px;
+          }
+  
+          h3 {
+            margin: 5px 0px;
+          }
+          
+        }
+  
+        .submit {
+          display: flex;
+          justify-content: flex-end;
+  
+          .adicionar {
+            border: 2px solid var(--preto);
+            border-radius: 100px;
+            font-size: 35px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+          }
+        }
+      }
+    }
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
