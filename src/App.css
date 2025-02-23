@@ -13,7 +13,6 @@ html {
       display: flex;
       justify-content: space-between;
       padding: 0;
-      margin-bottom: 3%;
     }
   
     #root {
@@ -23,6 +22,112 @@ html {
       width: 100%;
       display: flex;
       flex-direction: column;
+
+      .card {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        .titulo {
+          text-align: center;
+          font-size: 40px;
+        }
+    
+        .form {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 50%;
+          margin: 20px;
+    
+          .campos {
+            margin: 15px;
+            width: 60%;
+      
+            .label {
+              display: block;
+              margin-bottom: 5px;
+              font-weight: bold;
+              text-align: left;
+            }
+      
+            .input {
+              border: 2px solid var(#ddd);
+              border-radius: 7px;
+              height: 28px;
+              width: 96%;
+              padding: 6px;
+              outline: none;
+            }
+
+            .react-datepicker-wrapper {
+              display: block !important;
+            }
+
+            .select {
+              border: 2px solid var(--border);
+              border-radius: 7px;
+              height: 45px;
+              width: 100%;
+              padding: 6px;
+              outline: none;
+            }
+          }
+
+          .camposHora, .camposSenha {
+            width: 60%;
+            display: flex;
+            justify-content: space-between;
+
+            .camp {
+              width: 100%;
+
+              .label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                text-align: left;
+              }
+        
+              .input {
+                border: 2px solid var(#ddd);
+                border-radius: 7px;
+                height: 28px;
+                width: 90%;
+                padding: 6px;
+                outline: none;
+              }
+            }
+          }
+    
+          .submit {
+            display: flex;
+            justify-content: flex-end;
+            width: 60%;
+            margin: 15px;
+  
+            p {
+              font-size: 13px;
+            }
+    
+            .salvar {
+              border-radius: 5px;
+              border: none;
+              cursor: pointer;
+              width: 15%;
+              height: 30px;
+              font-size: 15px;
+              font-weight: bold;
+              padding: 0px;
+              width: 70px;
+    
+            }
+          }
+        }
+      }
     
       .home {
         .titulo {
@@ -115,6 +220,58 @@ html {
             justify-content: center;
             align-items: center;
             text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    body {
+      #root {
+        .card {
+          .form {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 550px) {
+  html {
+    body {
+      #root {
+        .card {
+          .titulo {
+            font-size: 35px;
+          }
+
+          .form {
+            .campos {
+              width: 90%;
+            }
+  
+            .submit {
+              width: 90%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 355px) {
+  html {
+    body {
+      #root {
+        .card {
+          h1 {
+            font-size: 25px;
           }
         }
       }
