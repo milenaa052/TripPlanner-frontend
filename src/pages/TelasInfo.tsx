@@ -1,8 +1,8 @@
 import { useState } from "react";
-import TelaHospedagem from "./TelaHospedagem";
-import TelaTransporte from "./TelaTransporte";
-import TelaPasseios from "./TelaPasseios";
-import TelaDespesas from "./TelaDespesas";
+import TelaHospedagem from "../components/TelaHospedagem";
+import TelaTransporte from "../components/TelaTransporte";
+import TelaPasseios from "../components/TelaPasseios";
+import TelaDespesas from "../components/TelaDespesas";
 
 function TelasInfo() {
     const [tela, setTela] = useState("Hospedagem");
