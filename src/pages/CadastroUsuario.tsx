@@ -14,7 +14,7 @@ function CadastroUsuario () {
         } else {
             setNome("");
             setCpf("");
-            navigate("/cadastro-auth");
+            navigate("/cadastro-usuario-auth");
         }
     }
 
@@ -35,7 +35,8 @@ function CadastroUsuario () {
                         value={cpf} onChange={(e) => setCpf(e.target.value)}/>
                 </div>
 
-                <div className="submit">
+                <div className="submitAuth">
+                    <p>Já tem cadastro? <a href="/login" className="link">Faça login</a></p>
                     <button type="submit" className="proximo">Próximo</button>
                 </div>
             </form>

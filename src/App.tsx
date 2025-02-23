@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Header from "./components/Header";
 import CadastroUsuario from "./pages/CadastroUsuario"
 import CadastroUsuarioAuth from "./pages/CadastroUsuarioAuth";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
 import CadastroViagem from "./pages/CadastroViagem";
 import TelasInfo from "./pages/TelasInfo";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cadastro-usuario" element={<CadastroUsuario />} />
           <Route path="/cadastro-usuario-auth" element={<CadastroUsuarioAuth />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/cadastro-viagem" element={<CadastroViagem />} />
           <Route path="/info-viagem" element={<TelasInfo />} />
           <Route path="/cadastro-hospedagem" element={<CadastroHospedagem />} />
