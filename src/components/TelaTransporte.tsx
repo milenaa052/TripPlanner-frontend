@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
 function TelaTransporte() {
     return (
         <div>
@@ -8,8 +11,13 @@ function TelaTransporte() {
                     <p>Até: Coliseu</p>
                     <p>Gasto: 20,00</p>
                 </div>
+                
                 <div className="mapa">
                     mapa
+                </div>
+
+                <div className="icone">
+                    <FontAwesomeIcon icon={faChevronRight}/>
                 </div>
             </div>
         </div>
