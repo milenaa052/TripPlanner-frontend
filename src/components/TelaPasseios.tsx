@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
 function TelaPasseios() {
     return (
         <div>
@@ -22,6 +25,10 @@ function TelaPasseios() {
 
                 <div className="mapa">
                     mapa
+                </div>
+
+                <div className="icone">
+                    <FontAwesomeIcon icon={faChevronRight}/>
                 </div>
             </div>
         </div>

@@ -1,3 +1,7 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
+
 function Home() {
     return (
         <div className="home">
@@ -6,28 +10,30 @@ function Home() {
             <div className="viagens">
                 <div className="infoViagem">
                     <div className="adicionarViagem">
-                        <p className="icone">+</p>
+                        <p className="icone">
+                            <FontAwesomeIcon icon={faPlus}/>
+                        </p>
                     </div>
                     <p>Adicionar viagem</p>
                 </div>
 
                 <div className="infoViagem">
                     <div className="viagemCadastrada">
-                        <p className="icone">+</p>
+                        <p className="icone"></p>
                     </div>
                     <p>Roma, IT</p>
                 </div>
                 
                 <div className="infoViagem">
                     <div className="viagemCadastrada">
-                        <p className="icone">+</p>
+                        <p className="icone"></p>
                     </div>
                     <p>Atenas, GR</p>
                 </div>
 
                 <div className="infoViagem">
                     <div className="viagemCadastrada">
-                        <p className="icone">+</p>
+                        <p className="icone"></p>
                     </div>
                     <p>Cairo, EG</p>
                 </div>

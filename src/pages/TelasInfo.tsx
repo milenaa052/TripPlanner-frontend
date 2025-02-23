@@ -1,8 +1,10 @@
 import { useState } from "react";
-import TelaHospedagem from "./TelaHospedagem";
-import TelaTransporte from "./TelaTransporte";
-import TelaPasseios from "./TelaPasseios";
-import TelaDespesas from "./TelaDespesas";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarDays, faPlus } from "@fortawesome/free-solid-svg-icons";
+import TelaHospedagem from "../components/TelaHospedagem";
+import TelaTransporte from "../components/TelaTransporte";
+import TelaPasseios from "../components/TelaPasseios";
+import TelaDespesas from "../components/TelaDespesas";
 
 function TelasInfo() {
     const [tela, setTela] = useState("Hospedagem");
@@ -10,7 +12,7 @@ function TelasInfo() {
     return (
         <div className="planoViagem">
             <h1 className="titulo">Roma, IT</h1>
-            <p>01/03/2025 - 10/03/2025</p>
+            <p><FontAwesomeIcon icon={faCalendarDays} /> 01/03/2025 - 10/03/2025</p>
 
             <div className="telasInfo">
                 <button className="opcao" type="submit" onClick={() => setTela("Hospedagem")}>Hospedagem</button>
@@ -25,7 +27,9 @@ function TelasInfo() {
             {tela === "Despesas" && <TelaDespesas />}
 
             <div className="submit">
-                <a href="" className="adicionar">+</a>
+                <a href="" className="adicionar">
+                    <FontAwesomeIcon icon={faPlus}/>
+                </a>
             </div>
         </div>
     );

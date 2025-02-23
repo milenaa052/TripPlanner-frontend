@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
 function TelaDespesas() {
     return (
         <div>
@@ -24,6 +27,10 @@ function TelaDespesas() {
 
                 <div className="mapa">
                     ícone
+                </div>
+
+                <div className="icone">
+                    <FontAwesomeIcon icon={faChevronRight}/>
                 </div>
             </div>
         </div>

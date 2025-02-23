@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
 function TelaHospedagem() {
     return (
         <div>
@@ -10,6 +13,10 @@ function TelaHospedagem() {
 
                 <div className="mapa">
                     mapa
+                </div>
+
+                <div className="icone">
+                    <FontAwesomeIcon icon={faChevronRight}/>
                 </div>
             </div>
         </div>
