@@ -13,7 +13,6 @@ html {
       display: flex;
       justify-content: space-between;
       padding: 0;
-      margin-bottom: 3%;
     }
   
     #root {
@@ -78,7 +77,7 @@ html {
             }
           }
 
-          .camposHora {
+          .camposHora, .camposSenha {
             width: 60%;
             display: flex;
             justify-content: space-between;
