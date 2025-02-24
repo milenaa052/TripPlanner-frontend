@@ -19,7 +19,8 @@ function CadastroUsuarioAuth () {
                     <input type="password" id="confirmaSenha" name="confirmaSenha" className="input" placeholder="Confime a sua senha"/>
                 </div>
 
-                <div className="submit">
+                <div className="submitAuth">
+                    <p>Já tem cadastro? <a href="/login" className="link">Faça login</a></p>
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
