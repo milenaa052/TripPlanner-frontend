@@ -13,8 +13,8 @@ function TelaDespesas() {
                     <p>01/03/2025</p>
                 </div>
 
-                <div className="mapa">
-                    ícone
+                <div className="icone">
+                    <FontAwesomeIcon icon={faChevronRight}/>
                 </div>
             </div>
 
@@ -25,9 +25,6 @@ function TelaDespesas() {
                     <p>01/03/2025</p>
                 </div>
 
-                <div className="mapa">
-                    ícone
-                </div>
 
                 <div className="icone">
                     <FontAwesomeIcon icon={faChevronRight}/>

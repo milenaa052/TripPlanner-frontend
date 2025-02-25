@@ -12,7 +12,7 @@ function TelasInfo() {
     return (
         <div className="planoViagem">
             <h1 className="titulo">Roma, IT</h1>
-            <p><FontAwesomeIcon icon={faCalendarDays} /> 01/03/2025 - 10/03/2025</p>
+            <p><FontAwesomeIcon icon={faCalendarDays} className="icone"/> 01/03/2025 - 10/03/2025</p>
 
             <div className="telasInfo">
                 <button className="opcao" type="submit" onClick={() => setTela("Hospedagem")}>Hospedagem</button>
@@ -26,10 +26,12 @@ function TelasInfo() {
             {tela === "Passeios" && <TelaPasseios />}
             {tela === "Despesas" && <TelaDespesas />}
 
-            <div className="submit">
-                <a href="" className="adicionar">
-                    <FontAwesomeIcon icon={faPlus}/>
-                </a>
+            <div className="botao">
+                <div className="adicionar">
+                    <a href="/" className="link">
+                        <FontAwesomeIcon icon={faPlus} className="icone"/>
+                    </a>
+                </div>
             </div>
         </div>
     );

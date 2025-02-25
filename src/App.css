@@ -1,6 +1,10 @@
 :root {
-  --branco: #FFFFFF;
+  --branco: #ffffff;
   --preto: #000000;
+  --cinza-claro: #ededed;
+  --cinza-claro2: #d9d9d9;
+  --laranja: #f58e27;
+  --laranja-escuro: #aa5601;
 }
 
 html {
@@ -8,7 +12,6 @@ html {
   color: var(--preto) !important;
 
   body {
-
     .header {
       display: flex;
       justify-content: space-between;
@@ -16,9 +19,15 @@ html {
 
       .icon {
         font-size: 25px;
+        color: var(--laranja);
+
+        &:hover {
+          color: var(--laranja-escuro);
+          cursor: pointer;
+        }
       }
     }
-  
+
     #root {
       padding: 2rem;
       text-align: center;
@@ -38,7 +47,7 @@ html {
           text-align: center;
           font-size: 40px;
         }
-    
+
         .form {
           display: flex;
           flex-direction: column;
@@ -46,25 +55,27 @@ html {
           align-items: center;
           width: 50%;
           margin: 20px;
-    
+
           .campos {
             margin: 15px;
             width: 60%;
-      
+
             .label {
               display: block;
               margin-bottom: 5px;
               font-weight: bold;
               text-align: left;
             }
-      
+
             .input {
-              border: 2px solid var(#ddd);
+              border: 2px solid var(--cinza-claro2);
               border-radius: 7px;
               height: 28px;
               width: 96%;
               padding: 6px;
               outline: none;
+              background-color: var(--cinza-claro);
+              color: var(--preto);
             }
 
             .react-datepicker-wrapper {
@@ -72,7 +83,9 @@ html {
             }
 
             .select {
-              border: 2px solid var(--border);
+              border: 2px solid var(--cinza-claro2);
+              background-color: var(--cinza-claro);
+              color: var(--preto);
               border-radius: 7px;
               height: 45px;
               width: 100%;
@@ -81,7 +94,8 @@ html {
             }
           }
 
-          .camposHora, .camposSenha {
+          .camposHora,
+          .camposSenha {
             width: 60%;
             display: flex;
             justify-content: space-between;
@@ -95,9 +109,11 @@ html {
                 font-weight: bold;
                 text-align: left;
               }
-        
+
               .input {
-                border: 2px solid var(#ddd);
+                border: 2px solid var(--cinza-claro2);
+                background-color: var(--cinza-claro);
+                color: var(--preto);
                 border-radius: 7px;
                 height: 28px;
                 width: 90%;
@@ -106,18 +122,20 @@ html {
               }
             }
           }
-    
+
           .submit {
             display: flex;
             justify-content: flex-end;
             width: 60%;
             margin: 15px;
-  
+
             p {
               font-size: 13px;
             }
-    
-            .salvar, .proximo, .entrar {
+
+            .salvar,
+            .proximo,
+            .entrar {
               border-radius: 5px;
               border: none;
               cursor: pointer;
@@ -127,7 +145,11 @@ html {
               font-weight: bold;
               padding: 0px;
               width: 70px;
-    
+              background-color: var(--laranja);
+
+              &:hover {
+                background-color: var(--laranja-escuro);
+              }
             }
           }
 
@@ -137,18 +159,20 @@ html {
             width: 60%;
             align-items: center;
             margin: 15px;
-            
+
             .link {
               text-decoration: none;
-              color: var(--black);
+              color: var(--preto);
               font-weight: bold;
-  
+
               &:hover {
-                color: var(--border-file);
+                color: var(--laranja);
               }
             }
 
-            .salvar, .proximo, .entrar {
+            .salvar,
+            .proximo,
+            .entrar {
               border-radius: 5px;
               border: none;
               cursor: pointer;
@@ -158,22 +182,26 @@ html {
               font-weight: bold;
               padding: 0px;
               width: 70px;
-    
+              background-color: var(--laranja);
+
+              &:hover {
+                background-color: var(--laranja-escuro);
+              }
             }
           }
         }
       }
-    
+
       .home {
         .titulo {
           font-size: 40px;
           text-align: start;
         }
-  
+
         .viagens {
           margin-top: 5%;
           display: flex;
-  
+
           .infoViagem {
             width: 15%;
             height: 30vh;
@@ -182,39 +210,51 @@ html {
             flex-direction: column;
             align-items: center;
             margin-right: 40px;
-  
-              .adicionarViagem, .viagemCadastrada {
-                border: 2px solid black;
-                border-radius: 7px;
-                padding: 2%;
-                width: 95%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              }
-  
+
+            .adicionarViagem,
+            .viagemCadastrada {
+              border: 2px solid black;
+              border-radius: 7px;
+              padding: 2%;
+              width: 95%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
               .icone {
                 margin: 0px;
                 font-size: 40px;
+                color: var(--laranja);
+
+                &:hover {
+                  color: var(--laranja-escuro);
+                }
               }
+            }
           }
         }
       }
-  
+
       .planoViagem {
         text-align: start;
-  
+
+        h1 {
+          margin-bottom: 0;
+        }
+
         .telasInfo {
           display: flex;
           justify-content: space-between;
           margin: 3% 0 4% 0;
           width: 80%;
-  
+
           .opcao {
-            border: 2px solid var(--preto);
-            border-radius: 7px;
-            padding: 0.5%;
+            border: 2px solid var(--cinza-claro2);
+            background-color: var(--cinza-claro);
+            padding: 0.8%;
+            color: var(--preto);
+            border-radius: 0px;
           }
         }
 
@@ -222,39 +262,62 @@ html {
           display: flex;
           justify-content: space-between;
         }
-  
-        .listaHospedagens, .listaTransporte, .listaPasseios, .listaDespesas {
+
+        .listaHospedagens,
+        .listaTransporte,
+        .listaPasseios,
+        .listaDespesas {
           margin-top: 2%;
           display: flex;
           justify-content: space-between;
           align-items: center;
           width: 80%;
           border-bottom: 1px solid #dddddd;
-  
+
           p {
             margin: 2px;
           }
-  
+
           h3 {
             margin: 5px 0px;
           }
-          
+
+          .mapa {
+            border: 2px solid var(--preto);
+            width: 25%;
+            height: 150px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
         }
-  
-        .submit {
+
+        .botao {
           display: flex;
           justify-content: flex-end;
-  
+
           .adicionar {
-            border: 2px solid var(--preto);
+            background-color: var(--laranja);
             border-radius: 100px;
-            font-size: 20px;
             width: 40px;
             height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-decoration: none;
+            position: fixed;
+            bottom: 50px;
+
+            .link {
+              .icone {
+                color: var(--branco);
+                font-size: 25px;
+              }
+            }
+
+            &:hover {
+              background-color: var(--laranja-escuro);
+            }
           }
         }
       }
@@ -289,7 +352,7 @@ html {
             .campos {
               width: 90%;
             }
-  
+
             .submit {
               width: 90%;
             }
