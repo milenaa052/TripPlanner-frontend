@@ -17,10 +17,11 @@ function TelaPasseios() {
                 <button className="dia">10/03</button>
             </div>
 
-            <div className="listaPasseios">
+            <div className="listagens">
                 <div className="textoInfo">
                     <h3>Coliseu</h3>
                     <p>08:00 - 10:00</p>
+                    <p>Gasto: 20,00</p>
                 </div>
 
                 <div className="mapa">

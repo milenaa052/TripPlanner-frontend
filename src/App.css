@@ -255,24 +255,55 @@ html {
             padding: 0.8%;
             color: var(--preto);
             border-radius: 0px;
+            outline: none;
+            cursor: pointer;
+            
+            &:hover {
+              background-color: var(--laranja);
+              color: var(--branco);
+              border: none;
+            }
+          }
+
+          .opcao.ativo {
+            background-color: var(--laranja);
+            color: var(--branco);
+            border: none;
           }
         }
 
         .agenda {
           display: flex;
           justify-content: space-between;
+          border-bottom: 1px solid var(--cinza-claro);
+
+          .dia {
+            background-color: transparent;
+            color: var(--preto);
+            outline: none;
+            border-radius: 0px;
+
+            &:hover {
+              background-color: var(--laranja);
+              color: var(--branco);
+              border: none;
+            }
+
+            &:active {
+              background-color: var(--laranja);
+              color: var(--branco);
+              border: none;
+            }
+          }
         }
 
-        .listaHospedagens,
-        .listaTransporte,
-        .listaPasseios,
-        .listaDespesas {
+        .listagens {
           margin-top: 2%;
           display: flex;
           justify-content: space-between;
           align-items: center;
           width: 80%;
-          border-bottom: 1px solid #dddddd;
+          border-bottom: 1px solid var(--cinza-claro);
 
           p {
             margin: 2px;
@@ -290,6 +321,10 @@ html {
             display: flex;
             align-items: center;
             justify-content: center;
+          }
+
+          .icone {
+            font-size: 25px;
           }
         }
 
