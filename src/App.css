@@ -3,6 +3,7 @@
   --preto: #000000;
   --cinza-claro: #ededed;
   --cinza-claro2: #d9d9d9;
+  --cinza-escuro: #b4b3b3;
   --laranja: #f58e27;
   --laranja-escuro: #aa5601;
 }
@@ -188,14 +189,51 @@ html {
                 background-color: var(--laranja-escuro);
               }
             }
+
+            .voltar {
+              border-radius: 5px;
+              border: none;
+              cursor: pointer;
+              width: 15%;
+              height: 30px;
+              font-size: 15px;
+              font-weight: bold;
+              padding: 5px;
+              width: 70px;
+              background-color: var(--cinza-claro);
+              color: var(--preto);
+              border: 2px solid var(--cinza-claro2);
+              margin-right: 10px;
+
+              &:hover {
+                background-color: var(--cinza-escuro);
+              }
+            }
           }
         }
       }
 
       .home {
-        .titulo {
-          font-size: 40px;
-          text-align: start;
+        .fileira {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .titulo {
+            font-size: 40px;
+            text-align: start;
+          }
+
+          .input {
+            border: 2px solid var(--cinza-claro2);
+            background-color: var(--cinza-claro);
+            color: var(--preto);
+            border-radius: 7px;
+            height: 25px;
+            width: 30%;
+            padding: 6px;
+            outline: none;
+          }
         }
 
         .viagens {
