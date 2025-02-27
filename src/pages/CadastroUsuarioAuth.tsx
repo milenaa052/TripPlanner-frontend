@@ -21,7 +21,7 @@ function CadastroUsuarioAuth () {
 
                 <div className="submitAuth">
                     <p>Já tem cadastro? <a href="/login" className="link">Faça login</a></p>
-                    <div>
+                    <div className="botoes">
                         <a href="/cadastro-usuario" className="voltar">Voltar</a>
                         <button type="submit" className="salvar">Salvar</button>
                     </div>

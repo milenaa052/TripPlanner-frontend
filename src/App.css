@@ -18,6 +18,10 @@ html {
       justify-content: space-between;
       padding: 0;
 
+      h2 {
+        margin: 0px 0px 15px 0px;
+      }
+
       .icon {
         font-size: 25px;
         color: var(--laranja);
@@ -177,7 +181,6 @@ html {
               border-radius: 5px;
               border: none;
               cursor: pointer;
-              width: 15%;
               height: 30px;
               font-size: 15px;
               font-weight: bold;
@@ -194,12 +197,9 @@ html {
               border-radius: 5px;
               border: none;
               cursor: pointer;
-              width: 15%;
-              height: 30px;
               font-size: 15px;
               font-weight: bold;
               padding: 5px;
-              width: 70px;
               background-color: var(--cinza-claro);
               color: var(--preto);
               border: 2px solid var(--cinza-claro2);
@@ -403,8 +403,43 @@ html {
     body {
       #root {
         .card {
+          .titulo {
+            font-size: 30px;
+          }
+
           .form {
             width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 655px) {
+  html {
+    body {
+      #root {
+        .card {
+          .form {
+            margin: 20px 0px;
+          }
+
+          .submitAuth {
+            p {
+              font-size: 13px;
+            }
+
+            .botoes {
+              .voltar {
+                padding: 2px;
+              }
+
+              .salvar {
+                height: 25px;
+                width: 50px;
+              }
+            }
           }
         }
       }
@@ -417,18 +452,51 @@ html {
     body {
       #root {
         .card {
-          .titulo {
-            font-size: 35px;
-          }
-
           .form {
-            .campos {
+            .campos, .camposHora {
               width: 90%;
             }
 
-            .submit {
+            .submit, .submitAuth {
               width: 90%;
             }
+
+            .submitAuth {
+              justify-content: flex-end;
+              flex-direction: column;
+              align-items: flex-end;
+
+              p {
+                font-size: 15px;
+              }
+
+              .botoes {
+                .voltar {
+                  padding: 5px;
+                }
+  
+                .salvar {
+                  height: 30px;
+                  width: 70px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 380px) {
+  html {
+    body {
+      #root {
+        padding: 1rem;
+
+        .card {
+          .titulo {
+            font-size: 25px;
           }
         }
       }
@@ -441,8 +509,10 @@ html {
     body {
       #root {
         .card {
-          h1 {
-            font-size: 25px;
+          .submitAuth {
+            p {
+              font-size: 12px;
+            }
           }
         }
       }
