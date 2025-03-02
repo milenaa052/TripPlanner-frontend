@@ -9,7 +9,10 @@ function Home() {
         "Roma, IT",
         "Rio de Janeiro, BR",
         "Cairo, EG",
-        "Atenas, GR"
+        "Atenas, GR",
+        "Teste 1",
+        "Teste 2",
+        "Teste 3"
     ]
 
     const viagensFiltradas = viagens.filter((cidade) => 
