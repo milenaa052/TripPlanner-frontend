@@ -26,13 +26,13 @@ function CadastroUsuario () {
                 <div className="campos">
                     <label htmlFor="nome" className="label">Nome Completo</label>
                     <input type="text" id="nome" name="nome" className="input" placeholder="Insira o seu nome completo"
-                        value={nome} onChange={(e) => setNome(e.target.value)}/>
+                        value={nome} onChange={(e) => setNome(e.target.value)} autoComplete="off"/>
                 </div>
                 
                 <div className="campos">
                     <label htmlFor="cpf" className="label">CPF</label>
                     <input type="text" id="cpf" name="cpf" className="input" placeholder="Insira o seu cpf"
-                        value={cpf} onChange={(e) => setCpf(e.target.value)}/>
+                        value={cpf} onChange={(e) => setCpf(e.target.value)} autoComplete="off"/>
                 </div>
 
                 <div className="submitAuth">

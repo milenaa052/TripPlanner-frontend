@@ -5,7 +5,9 @@ function Header() {
     return (
         <header className="header">
             <h2 className="logo">Logo</h2>
-            <FontAwesomeIcon icon={faCircleUser} className="icon"/>
+            <a href="/usuario">
+                <FontAwesomeIcon icon={faCircleUser} className="icon"/>
+            </a>
         </header>
     );
 };
