@@ -17,7 +17,7 @@ function TelaPasseios() {
     const ajustarDiasPorPagina = () => {
         const larguraTela = window.innerWidth;
 
-        if (larguraTela < 350) {
+        if (larguraTela < 390) {
             setDiasPorPagina(3);
         } else if (larguraTela < 500) {
             setDiasPorPagina(4);

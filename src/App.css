@@ -41,7 +41,7 @@ html {
       display: flex;
       flex-direction: column;
 
-      .card {
+      .card, .cardUser {
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -209,6 +209,42 @@ html {
                 background-color: var(--cinza-escuro);
               }
             }
+          }
+        }
+      }
+
+      .usuario {
+        .infoUsuario {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+
+          .titulo {
+            margin: 30px 0px 0px 0px;
+            font-size: 35px;
+  
+            .icone {
+              font-size: 20px;
+              margin-left: 10px;
+              color: var(--laranja);
+              cursor: pointer;
+            }
+          }
+
+          .input {
+            border: 2px solid var(--cinza-claro2);
+            border-radius: 7px;
+            height: 28px;
+            width: 100%;
+            padding: 6px;
+            outline: none;
+            background-color: var(--cinza-claro);
+            color: var(--preto);
+          }
+  
+          .email {
+            float: inline-start;
           }
         }
       }
@@ -428,7 +464,7 @@ html {
   html {
     body {
       #root {
-        .card {
+        .card, .cardUser {
           .titulo {
             font-size: 30px;
           }
@@ -477,7 +513,7 @@ html {
   html {
     body {
       #root {
-        .card {
+        .card, .cardUser {
           .form {
             margin: 20px 0px;
           }
@@ -496,6 +532,14 @@ html {
                 height: 25px;
                 width: 50px;
               }
+            }
+          }
+        }
+
+        .usuario {
+          .infoUsuario {
+            .titulo {
+              font-size: 25px;
             }
           }
         }
@@ -524,7 +568,7 @@ html {
   html {
     body {
       #root {
-        .card {
+        .card, .cardUser {
           .form {
             .campos, .camposHora {
               width: 90%;
@@ -599,6 +643,14 @@ html {
   html {
     body {
       #root {
+        .usuario {
+          .infoUsuario {
+            .titulo {
+              font-size: 20px;
+            }
+          }
+        }
+
         .planoViagem {
           .telasInfo {
             display: grid;
@@ -632,7 +684,7 @@ html {
       #root {
         padding: 1rem;
 
-        .card {
+        .card, .cardUser {
           .titulo {
             font-size: 25px;
           }
@@ -640,6 +692,22 @@ html {
           .form {
             .campos, .submit {
               margin: 15px 0px;
+            }
+          }
+        }
+
+        .usuario {
+          .infoUsuario {
+            .titulo {
+              font-size: 17px;
+
+              .icon {
+                font-size: 15px;
+              }
+            }
+
+            .email {
+              font-size: 13px;
             }
           }
         }
@@ -660,7 +728,7 @@ html {
   html {
     body {
       #root {
-        .card {
+        .card, .cardUser {
           .submitAuth {
             p {
               font-size: 12px;
