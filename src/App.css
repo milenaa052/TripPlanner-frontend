@@ -449,6 +449,25 @@ html {
             grid-template-columns: repeat(3, 1fr);
           }
         }
+
+        .planoViagem {
+          .titulo {
+            font-size: 30px;
+          }
+
+          .telasInfo {
+            width: 100%;
+          }
+
+          .listagens {
+            width: 100%;
+
+            .mapa {
+              width: 40%;
+              height: 160px;
+            }
+          }
+        }
       }
     }
   }
@@ -488,6 +507,12 @@ html {
             .infoViagem {
               width: 65%;
             }
+          }
+        }
+
+        .planoViagem {
+          .paginacao {
+            margin-bottom: 20px;
           }
         }
       }
@@ -550,6 +575,48 @@ html {
             .infoViagem {
               width: 40%;
               height: 35vh;
+              margin: 0px;
+            }
+          }
+        }
+
+        .planoViagem {
+          .listagens {
+            font-size: 13px;
+            
+            .mapa {
+              height: 90px;
+              width: 30%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    body {
+      #root {
+        .planoViagem {
+          .telasInfo {
+            display: grid;
+            width: 100%;
+            grid-template-columns: repeat(2, 1fr);
+
+            .opcao {
+              margin: 10px;
+            }
+          }
+
+          h2 {
+            font-size: 20px;
+          }
+
+          .listagens {
+            .mapa {
+              width: 40%;
               margin: 0px;
             }
           }

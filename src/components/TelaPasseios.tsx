@@ -1,18 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faChevronLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function TelaPasseios() {
     const [diaSelecionado, setDiaSelecionado] = useState(Object);
     const [paginaAtual, setPaginaAtual] = useState(1);
-    const diasPorPagina = 10;
+    const [diasPorPagina, setDiasPorPagina] = useState(8);
     
     const viagens = {
         id: 1,
         destino: "Itália",
         inicio: "2025-03-01",
-        fim: "2025-03-10"
-    };    
+        fim: "2025-03-15"
+    };
+    
+    const ajustarDiasPorPagina = () => {
+        const larguraTela = window.innerWidth;
+
+        if (larguraTela < 350) {
+            setDiasPorPagina(3);
+        } else if (larguraTela < 500) {
+            setDiasPorPagina(4);
+        } else if (larguraTela < 768) {
+            setDiasPorPagina(6);
+        } else if (larguraTela < 1024) {
+            setDiasPorPagina(7);
+        } else {
+            setDiasPorPagina(8);
+        }
+    };
+
+    useEffect(() => {
+        ajustarDiasPorPagina();
+        window.addEventListener("resize", ajustarDiasPorPagina);
+
+        return () => {
+            window.removeEventListener("resize", ajustarDiasPorPagina);
+        };
+    }, []);
     
     const gerarDias = () => {
         const dias = [];
@@ -55,7 +80,7 @@ function TelaPasseios() {
                 {diasExibidos.map((dia) => (
                     <button key={dia} className={`dia ${diaSelecionado === dia ? "ativo" : ""}`} 
                         onClick={() => setDiaSelecionado(dia)}>
-                        {dia}
+                        { dia }
                     </button>
                 ))}
             </div>
