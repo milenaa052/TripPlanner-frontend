@@ -1,20 +1,72 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faChevronLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function TelaPasseios() {
+    const [diaSelecionado, setDiaSelecionado] = useState(Object);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const diasPorPagina = 5;
+    
+    const viagens = {
+        id: 1,
+        destino: "Itália",
+        inicio: "2025-03-01",
+        fim: "2025-03-10"
+    };    
+    
+    const gerarDias = () => {
+        const dias = [];
+        const dataAtual = new Date(viagens.inicio);
+        const dataFinal = new Date(viagens.fim);
+
+        while (dataAtual <= dataFinal) {
+            dias.push(new Date(dataAtual).toISOString().split("T")[0]); // Formato YYYY-MM-DD
+            dataAtual.setDate(dataAtual.getDate() + 1);
+        }
+
+        return dias;
+        
+    };
+
+    const diasViagem = gerarDias();
+
+    const indexInicial = (paginaAtual - 1) * diasPorPagina;
+    const indexFinal = indexInicial + diasPorPagina;
+    const diasExibidos = diasViagem.slice(indexInicial, indexFinal);
+
+    const proximaPagina = () => {
+        if (indexFinal < diasViagem.length) {
+            setPaginaAtual(paginaAtual + 1);
+        }
+    };
+
+    const paginaAnterior = () => {
+        if (paginaAtual > 1) {
+            setPaginaAtual(paginaAtual - 1);
+        }
+    };
+
     return (
         <div>
             <div className="agenda">
-                <button className="dia">01/03</button>
-                <button className="dia">02/03</button>
-                <button className="dia">03/03</button>
-                <button className="dia">04/03</button>
-                <button className="dia">05/03</button>
-                <button className="dia">06/03</button>
-                <button className="dia">07/03</button>
-                <button className="dia">08/03</button>
-                <button className="dia">09/03</button>
-                <button className="dia">10/03</button>
+                {diasExibidos.map((dia) => (
+                    <button key={dia} className={`dia ${diaSelecionado === dia ? "ativo" : ""}`} 
+                        onClick={() => setDiaSelecionado(dia)}>
+                        {dia}
+                    </button>
+                ))}
+            </div>
+
+            <div className="paginacao">
+                <button onClick={paginaAnterior} disabled={paginaAtual === 1} className="botao">
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                </button>
+                
+                <span>Página {paginaAtual}</span>
+
+                <button onClick={proximaPagina} disabled={indexFinal >= diasViagem.length} className="botao">
+                    <FontAwesomeIcon icon={faChevronRight} />
+                </button>
             </div>
 
             <div className="listagens">
@@ -30,6 +82,14 @@ function TelaPasseios() {
 
                 <div className="icone">
                     <FontAwesomeIcon icon={faChevronRight}/>
+                </div>
+            </div>
+
+            <div className="botao">
+                <div className="adicionar">
+                    <a href="/cadastro-passeio" className="link">
+                        <FontAwesomeIcon icon={faPlus} className="icone"/>
+                    </a>
                 </div>
             </div>
         </div>

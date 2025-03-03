@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function TelaHospedagem() {
     return (
@@ -18,6 +18,14 @@ function TelaHospedagem() {
 
                 <div className="icone">
                     <FontAwesomeIcon icon={faChevronRight}/>
+                </div>
+            </div>
+
+            <div className="botao">
+                <div className="adicionar">
+                    <a href="/cadastro-hospedagem" className="link">
+                        <FontAwesomeIcon icon={faPlus} className="icone"/>
+                    </a>
                 </div>
             </div>
         </div>

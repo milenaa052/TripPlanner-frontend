@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import TelaHospedagem from "../components/TelaHospedagem";
 import TelaTransporte from "../components/TelaTransporte";
 import TelaPasseios from "../components/TelaPasseios";
@@ -40,14 +40,6 @@ function TelasInfo() {
             {tela === "Transporte" && <TelaTransporte />}
             {tela === "Passeios" && <TelaPasseios />}
             {tela === "Despesas" && <TelaDespesas />}
-
-            <div className="botao">
-                <div className="adicionar">
-                    <a href="/" className="link">
-                        <FontAwesomeIcon icon={faPlus} className="icone"/>
-                    </a>
-                </div>
-            </div>
         </div>
     );
 };

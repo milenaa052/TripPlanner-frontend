@@ -343,6 +343,23 @@ html {
           }
         }
 
+        .paginacao {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          margin-top: 10px;
+
+          .botao {
+            background-color: transparent;
+            border: none;
+            color: var(--preto);
+
+            &:hover {
+              color: var(--laranja);
+            }
+          }
+        }
+
         .listagens {
           margin-top: 2%;
           display: flex;
