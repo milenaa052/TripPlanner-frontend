@@ -5,7 +5,7 @@ import { faChevronRight, faChevronLeft, faPlus } from "@fortawesome/free-solid-s
 function TelaPasseios() {
     const [diaSelecionado, setDiaSelecionado] = useState(Object);
     const [paginaAtual, setPaginaAtual] = useState(1);
-    const diasPorPagina = 5;
+    const diasPorPagina = 10;
     
     const viagens = {
         id: 1,
@@ -16,16 +16,19 @@ function TelaPasseios() {
     
     const gerarDias = () => {
         const dias = [];
-        const dataAtual = new Date(viagens.inicio);
-        const dataFinal = new Date(viagens.fim);
+
+        const [anoInicio, mesInicio, diaInicio] = viagens.inicio.split("-").map(Number);
+        const [anoFim, mesFim, diaFim] = viagens.fim.split("-").map(Number);
+
+        const dataAtual = new Date(anoInicio, mesInicio - 1, diaInicio);
+        const dataFinal = new Date(anoFim, mesFim - 1, diaFim);
 
         while (dataAtual <= dataFinal) {
-            dias.push(new Date(dataAtual).toISOString().split("T")[0]); // Formato YYYY-MM-DD
+            dias.push(dataAtual.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })); // Formato YYYY-MM-DD
             dataAtual.setDate(dataAtual.getDate() + 1);
         }
 
         return dias;
-        
     };
 
     const diasViagem = gerarDias();

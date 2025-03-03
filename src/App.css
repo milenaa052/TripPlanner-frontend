@@ -353,6 +353,7 @@ html {
             background-color: transparent;
             border: none;
             color: var(--preto);
+            outline: none;
 
             &:hover {
               color: var(--laranja);
