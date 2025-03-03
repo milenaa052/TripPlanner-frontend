@@ -16,10 +16,24 @@ html {
     .header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 0;
 
-      h2 {
-        margin: 0px 0px 15px 0px;
+      .titulo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 25%;
+
+        .logo {
+          margin: 0px 0px 15px 0px;
+          width: 35%;
+        }
+
+        h1 {
+          margin: 0px;
+          font-size: 30px;
+        }
       }
 
       .icon {
@@ -460,10 +474,30 @@ html {
   }
 }
 
+@media (max-width: 1024px) {
+  html {
+    body {
+      #root {
+        .header {
+          .titulo {
+            width: 45%;
+          }
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 768px) {
   html {
     body {
       #root {
+        .header {
+          .titulo {
+            width: 50%;
+          }
+        }
+
         .card, .cardUser {
           .titulo {
             font-size: 30px;
@@ -513,6 +547,18 @@ html {
   html {
     body {
       #root {
+        .header {
+          .titulo {
+           .logo {
+              width: 25%;
+           }
+
+           h1 {
+            font-size: 25px;
+           }
+          }
+        }
+
         .card, .cardUser {
           .form {
             margin: 20px 0px;
@@ -643,6 +689,16 @@ html {
   html {
     body {
       #root {
+        .header {
+          .titulo {
+            width: 45%;
+
+            h1 {
+              font-size: 18px;
+            }
+          }
+        }
+
         .usuario {
           .infoUsuario {
             .titulo {
@@ -728,6 +784,12 @@ html {
   html {
     body {
       #root {
+        .header {
+          .titulo {
+            width: 50%;
+          }
+        }
+
         .card, .cardUser {
           .submitAuth {
             p {
