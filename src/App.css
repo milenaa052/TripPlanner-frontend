@@ -23,11 +23,11 @@ html {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 25%;
+        width: 23%;
 
         .logo {
-          margin: 0px 0px 15px 0px;
-          width: 35%;
+          margin: 0px 0px 20px 0px;
+          width: 30%;
         }
 
         h1 {
@@ -270,7 +270,7 @@ html {
           align-items: center;
 
           .titulo {
-            font-size: 40px;
+            font-size: 35px;
             text-align: start;
           }
 
@@ -299,8 +299,8 @@ html {
           }
 
           .infoViagem {
-            width: 85%;
-            height: 30vh;
+            width: 80%;
+            height: 28vh;
             display: flex;
             justify-content: center;
             flex-direction: column;
@@ -480,7 +480,13 @@ html {
       #root {
         .header {
           .titulo {
-            width: 45%;
+            width: 35%;
+          }
+        }
+
+        .home {
+          .viagens {
+            grid-template-columns: repeat(3, 1fr);
           }
         }
       }
@@ -494,7 +500,7 @@ html {
       #root {
         .header {
           .titulo {
-            width: 50%;
+            width: 45%;
           }
         }
 
@@ -513,10 +519,6 @@ html {
             .titulo {
               font-size: 25px;
             }
-          }
-
-          .viagens {
-            grid-template-columns: repeat(3, 1fr);
           }
         }
 
@@ -614,6 +616,18 @@ html {
   html {
     body {
       #root {
+        .header {
+          .titulo {
+           .logo {
+              width: 30%;
+           }
+
+           h1 {
+            font-size: 23px;
+           }
+          }
+        }
+
         .card, .cardUser {
           .form {
             .campos, .camposHora {

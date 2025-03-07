@@ -39,6 +39,11 @@ function CadastroTransporte() {;
                     <input type="number" id="gasto" name="gasto" className="input" placeholder="Insira o gasto com o transporte"/>
                 </div>
 
+                <div className="campos">
+                    <label htmlFor="data" className="label">Data</label>
+                    <input type="date" id="data" name="data" className="input"/>
+                </div>
+
                 <div className="submit">
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
