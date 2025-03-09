@@ -5,7 +5,7 @@ function Header() {
     return (
         <header className="header">
             <div className="titulo">
-                <img src="../../public/TripPlanner.png" alt="Logo Trip Planner" className="logo" />
+                <img src="/TripPlanner.png" alt="Logo Trip Planner" className="logo" />
                 <h1>Trip Planner</h1>
             </div>
             
