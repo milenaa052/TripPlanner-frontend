@@ -6,6 +6,7 @@
   --cinza-escuro: #b4b3b3;
   --laranja: #f58e27;
   --laranja-escuro: #aa5601;
+  --vermelho: #fc0000;
 }
 
 html {
@@ -158,7 +159,6 @@ html {
               border-radius: 5px;
               border: none;
               cursor: pointer;
-              width: 15%;
               height: 30px;
               font-size: 15px;
               font-weight: bold;
@@ -168,6 +168,26 @@ html {
 
               &:hover {
                 background-color: var(--laranja-escuro);
+              }
+            }
+
+            .excluir {
+              background-color: transparent;
+              color: var(--vermelho);
+              outline: none;
+              border: none;
+              width: 30px;
+              height: 30px;
+              border-radius: 5px;
+              font-size: 17px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-right: 5px;
+
+              &:hover {
+                background-color: var(--vermelho);
+                color: var(--branco);
               }
             }
           }
@@ -439,6 +459,88 @@ html {
 
           .icone {
             font-size: 25px;
+
+            button {
+              background-color: transparent;
+              color: var(--preto);
+              outline: none;
+              border: none;
+
+              .icone {
+                &:hover {
+                  color: var(--laranja);
+                }
+              }
+            }
+          }
+        }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .modal {
+            width: 40%;
+            background-color: var(--branco);
+            border-radius: 7px;
+
+            .card {
+              .campos, .camposHora {
+                width: 100%;
+              }
+
+              .submit {
+                width: 100%;
+              }
+
+              .modal-overlay {
+                .modal {
+                  width: 30%;
+                  font-size: 13px;
+                  padding: 10px;
+
+                  .botoes {
+                    display: flex;
+                    justify-content: flex-end;
+
+                    button {
+                      margin: 10px;
+                    }
+
+                    .confirmar {
+                      background-color: var(--vermelho);
+                      border: none;
+
+                      &:hover {
+                        background-color: var(--cinza-claro2);
+                        color: var(--vermelho);
+                        border: 2px solid var(--vermelho);
+                        font-weight: bold;
+                      }
+                    }
+
+                    .cancelar {
+                      background-color: var(--cinza-escuro);
+                      border: none;
+
+                      &:hover {
+                        background-color: var(--cinza-claro2);
+                        color: var(--preto);
+                        border: 2px solid var(--preto);
+                        font-weight: bold;
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
 
@@ -489,6 +591,15 @@ html {
             grid-template-columns: repeat(3, 1fr);
           }
         }
+
+        .planoViagem {
+          .modal-overlay {
+            .modal {
+              width: 60%;
+            }
+          }
+        }
+        
       }
     }
   }
@@ -537,6 +648,24 @@ html {
             .mapa {
               width: 40%;
               height: 160px;
+            }
+          }
+
+          .modal-overlay {
+            .modal {
+              width: 60%;
+
+              .card {
+                .form {
+                  width: 70%;
+                }
+
+                .modal-overlay {
+                  .modal {
+                    width: 50%;
+                  }
+                }
+              }
             }
           }
         }
@@ -740,6 +869,24 @@ html {
             .mapa {
               width: 40%;
               margin: 0px;
+            }
+          }
+
+          .modal-overlay {
+            .modal {
+              width: 90%;
+
+              .card {
+                .form {
+                  width: 90%;
+                }
+
+                .modal-overlay {
+                  .modal {
+                    width: 80%;
+                  }
+                }
+              }
             }
           }
         }

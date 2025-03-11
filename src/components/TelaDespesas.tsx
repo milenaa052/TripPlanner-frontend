@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
+import ModalDespesa from "./ModalDespesa";
 
 function TelaDespesas() {
+     const [modal, setModal] = useState(false);
+
     return (
         <div>
             <h2>Total de Despesas: 80,00</h2>
@@ -14,7 +18,9 @@ function TelaDespesas() {
                 </div>
 
                 <div className="icone">
-                    <FontAwesomeIcon icon={faChevronRight}/>
+                    <button onClick={() => setModal(true)}>
+                        <FontAwesomeIcon icon={faChevronRight}/>
+                    </button>
                 </div>
             </div>
 
@@ -38,6 +44,14 @@ function TelaDespesas() {
                     </a>
                 </div>
             </div>
+
+            {modal && (
+                <div className="modal-overlay" onClick={() => setModal(false)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <ModalDespesa />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
