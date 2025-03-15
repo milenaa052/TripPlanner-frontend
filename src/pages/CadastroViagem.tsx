@@ -3,18 +3,26 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function CadastroViagem() {;
+function CadastroViagem() {
     const [dataInicio, setDataInicio] = useState<Date | null>(null);
     const [dataFim, setDataFim] = useState<Date | null>(null);
     const [mensagem, setMensagem] = useState("");
     const [localOrigem, setLocalOrigem] = useState("");
     const [localDestino, setLocalDestino] = useState("");
-    const [dataInicial, setDataInicial] = useState("");
-    const [dataFinal, setDataFinal] = useState("");
 
-    const enviarForm = async () => {
+    const enviarForm = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!dataInicio || !dataFim) {
+            setMensagem("Selecione uma data válida!");
+            return;
+        }
+
+        const dataInicial = dataInicio.toISOString().split("T")[0];
+        const dataFinal = dataFim.toISOString().split("T")[0];
+
         try {
-            await axios.post(`http:localhost:3000/cadastro-viagem`, {
+            await axios.post("http://localhost:3000/cadastro-viagem", {
                 localOrigem,
                 localDestino,
                 dataInicial,
@@ -25,8 +33,8 @@ function CadastroViagem() {;
 
             setLocalOrigem("");
             setLocalDestino("");
-            setDataInicial("");
-            setDataFinal("");
+            setDataInicio(null);
+            setDataFim(null);
         } catch (error) {
             setMensagem("Erro ao salvar dados");
             console.log(error)
@@ -43,32 +51,35 @@ function CadastroViagem() {;
         <div className="card">
             <h1 className="titulo">Criar Viagem</h1>
 
-            <form className="form">
+            <form className="form" onSubmit={enviarForm}>
                 <div className="campos">
                     <label htmlFor="localOrigem" className="label">Local de Origem</label>
-                    <input type="text" id="localOrigem" name="localOrigem" className="input" 
-                        value={localOrigem} onChange={(e) => setLocalDestino(e.target.value)} placeholder="Insira a cidade de origem"/>
+                    <input type="text" id="localOrigem" name="localOrigem" className="input"
+                        value={localOrigem} onChange={(e) => setLocalOrigem(e.target.value)} 
+                        placeholder="Insira a cidade de origem"/>
                 </div>
 
                 <div className="campos">
                     <label htmlFor="localDestino" className="label">Destino</label>
-                    <input type="text" id="localDestino" name="localDestino" className="input" 
-                       value={localDestino} onChange={(e) => setLocalDestino(e.target.value)} placeholder="Insira a cidade de destino"/>
+                    <input type="text" id="localDestino" name="localDestino" className="input"
+                        value={localDestino} onChange={(e) => setLocalDestino(e.target.value)} 
+                        placeholder="Insira a cidade de destino"/>
                 </div>
                 
                 <div className="campos">
                     <label htmlFor="data" className="label">Data de início e fim da viagem</label>
                     <DatePicker selected={dataInicio} onChange={manipularDatas} id="data" name="data"
-                        startDate={dataInicio} endDate={dataFim} selectsRange className="input" placeholderText="dd/mm/yyyy - dd/mm/yyyy"/>
+                        startDate={dataInicio} endDate={dataFim} selectsRange className="input" 
+                        placeholderText="dd/mm/yyyy - dd/mm/yyyy" dateFormat="dd/MM/yyyy"/>
                 </div>
 
                 <div className="submit">
-                    <button type="submit" className="salvar" onSubmit={enviarForm}>Salvar</button>
+                    <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
 
             { mensagem && <p>{mensagem}</p> }
-      </div>
+        </div>
     );
 };
 
