@@ -3,11 +3,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-interface NominatimResposta {
-  display_name: string;
+interface GeoNamesResposta {
+  name: string;
+  countryCode: string;
   lat: string;
-  lon: string;
+  lng: string;
 }
+
+const GEONAMES_USERNAME = "milenaa052";
 
 const marcadorIcone = new Leaflet.Icon({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -25,7 +28,8 @@ const MapaComponente: React.FC = () => {
   const [cidade, setCidade] = useState<string>("");
   const [posicao, setPosicao] = useState<[number, number]>([0, 0]);
   const [carregando, setCarregando] = useState<boolean>(false);
-  const [sugestoes, setSugestoes] = useState<{ nome: string; lat: number; lon: number }[]>([]);
+  const [paisCodigo, setPaisCodigo] = useState("");
+  const [sugestoes, setSugestoes] = useState<{ nome: string; codigoPais: string; lat: number; lon: number }[]>([]);
 
   const buscarSugestoes = async (input: string) => {
     if (input.length < 3) {
@@ -35,18 +39,18 @@ const MapaComponente: React.FC = () => {
 
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${input}`
+        `http://api.geonames.org/searchJSON?q=${input}&maxRows=5&username=${GEONAMES_USERNAME}`
       );
       
-      const data: NominatimResposta[] = await response.json();
+      const data = await response.json();
 
-      if (data.length > 0) {
-        const opcoes = data.map((item: NominatimResposta) => ({
-          nome: item.display_name,
-          lat: parseFloat(item.lat),
-          lon: parseFloat(item.lon),
+      if (data.geonames.length > 0) {
+        const opcoes = data.geonames.map((item: GeoNamesResposta) => ({
+          nome: item.name,
+          lat: item.lat,
+          lon: item.lng,
+          pais: item.countryCode,
         }));
-        
         setSugestoes(opcoes);
       } else {
         setSugestoes([]);
@@ -67,15 +71,15 @@ const MapaComponente: React.FC = () => {
 
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${cidadeNome}`
+        `http://api.geonames.org/searchJSON?q=${cidadeNome}&maxRows=1&username=${GEONAMES_USERNAME}`
       );
 
-      const data: NominatimResposta[] = await response.json();
+      const data = await response.json();
 
-      if (data.length > 0) {
-        const lat = parseFloat(data[0].lat);
-        const lon = parseFloat(data[0].lon);
-        setPosicao([lat, lon]);
+      if (data.geonames.length > 0) {
+        const cidadeEncontrada = data.geonames[0];
+        setPosicao([parseFloat(cidadeEncontrada.lat), parseFloat(cidadeEncontrada.lng)]);
+        setPaisCodigo(cidadeEncontrada.countryCode);
       } else {
         alert("Cidade não encontrada!");
       }
@@ -108,6 +112,8 @@ const MapaComponente: React.FC = () => {
       <button onClick={() => buscarCidade(cidade)} disabled={carregando}>
         {carregando ? "Buscando..." : "Buscar"}
       </button>
+
+      {paisCodigo && <p>Código do País: {paisCodigo}</p>}
 
       <MapContainer
         center={[0, 0]} zoom={2}
