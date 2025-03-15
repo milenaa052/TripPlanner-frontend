@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
+import ModalTransporte from "./ModalTransporte";
 
 function TelaTransporte() {
+    const [modal, setModal] = useState(false);
+
     return (
         <div>
             <div className="listagens">
@@ -18,7 +22,9 @@ function TelaTransporte() {
                 </div>
 
                 <div className="icone">
-                    <FontAwesomeIcon icon={faChevronRight}/>
+                    <button onClick={() => setModal(true)}>
+                        <FontAwesomeIcon icon={faChevronRight}/>
+                    </button>
                 </div>
             </div>
 
@@ -29,6 +35,14 @@ function TelaTransporte() {
                     </a>
                 </div>
             </div>
+
+            {modal && (
+                <div className="modal-overlay" onClick={() => setModal(false)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <ModalTransporte />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

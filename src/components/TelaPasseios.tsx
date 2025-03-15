@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faChevronLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
+import ModalPasseio from "./ModalPasseio";
 
 function TelaPasseios() {
     const [diaSelecionado, setDiaSelecionado] = useState(Object);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [diasPorPagina, setDiasPorPagina] = useState(8);
+    const [modal, setModal] = useState(false);
     
     const viagens = {
         id: 1,
@@ -109,7 +111,9 @@ function TelaPasseios() {
                 </div>
 
                 <div className="icone">
-                    <FontAwesomeIcon icon={faChevronRight}/>
+                    <button onClick={() => setModal(true)}>
+                        <FontAwesomeIcon icon={faChevronRight}/>
+                    </button>
                 </div>
             </div>
 
@@ -120,6 +124,14 @@ function TelaPasseios() {
                     </a>
                 </div>
             </div>
+
+            {modal && (
+                <div className="modal-overlay" onClick={() => setModal(false)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <ModalPasseio />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

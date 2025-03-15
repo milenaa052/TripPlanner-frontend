@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
+import ModalHospedagem from "./ModalHospedagem";
 
 function TelaHospedagem() {
+    const [modal, setModal] = useState(false);
+
     return (
         <div>
             <div className="listagens">
@@ -17,7 +21,9 @@ function TelaHospedagem() {
                 </div>
 
                 <div className="icone">
-                    <FontAwesomeIcon icon={faChevronRight}/>
+                    <button onClick={() => setModal(true)}>
+                        <FontAwesomeIcon icon={faChevronRight} className="icone"/>
+                    </button>
                 </div>
             </div>
 
@@ -28,6 +34,14 @@ function TelaHospedagem() {
                     </a>
                 </div>
             </div>
+
+            {modal && (
+                <div className="modal-overlay" onClick={() => setModal(false)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <ModalHospedagem />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
