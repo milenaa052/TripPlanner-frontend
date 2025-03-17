@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import InputLocal from "../components/InputLocal";
+import InputDestino from "../components/InputDestino";
 
 function CadastroViagem() {
     const [dataInicio, setDataInicio] = useState<Date | null>(null);
@@ -9,6 +11,7 @@ function CadastroViagem() {
     const [mensagem, setMensagem] = useState("");
     const [localOrigem, setLocalOrigem] = useState("");
     const [localDestino, setLocalDestino] = useState("");
+    const [codigoPais, setCodigoPais] = useState("");
 
     const enviarForm = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,6 +28,7 @@ function CadastroViagem() {
             await axios.post("http://localhost:3000/cadastro-viagem", {
                 localOrigem,
                 localDestino,
+                codigoPais,
                 dataInicial,
                 dataFinal
             })
@@ -33,6 +37,7 @@ function CadastroViagem() {
 
             setLocalOrigem("");
             setLocalDestino("");
+            setCodigoPais("");
             setDataInicio(null);
             setDataFim(null);
         } catch (error) {
@@ -54,16 +59,12 @@ function CadastroViagem() {
             <form className="form" onSubmit={enviarForm}>
                 <div className="campos">
                     <label htmlFor="localOrigem" className="label">Local de Origem</label>
-                    <input type="text" id="localOrigem" name="localOrigem" className="input"
-                        value={localOrigem} onChange={(e) => setLocalOrigem(e.target.value)} 
-                        placeholder="Insira a cidade de origem"/>
+                    <InputLocal local={localOrigem} setLocal={setLocalOrigem} className="input" />
                 </div>
 
                 <div className="campos">
                     <label htmlFor="localDestino" className="label">Destino</label>
-                    <input type="text" id="localDestino" name="localDestino" className="input"
-                        value={localDestino} onChange={(e) => setLocalDestino(e.target.value)} 
-                        placeholder="Insira a cidade de destino"/>
+                    <InputDestino localDestino={localDestino} setLocalDestino={setLocalDestino} setCodigoPais={setCodigoPais} className="input" />
                 </div>
                 
                 <div className="campos">

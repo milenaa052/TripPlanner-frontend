@@ -11,6 +11,7 @@ function Home() {
         idViagem: number,
         localOrigem: string,
         localDestino: string,
+        codigoPais: string,
         dataInicial: Date,
         dataFinal: Date,
     }
@@ -29,8 +30,6 @@ function Home() {
     const viagensFiltradas = viagem.filter((cidade) => 
         cidade.localDestino.toLowerCase().includes(busca.toLowerCase())
     );
-
-    const abreviacao = "mc"
 
     return (
         <div className="home">
@@ -55,7 +54,7 @@ function Home() {
                         <div className="infoViagem">
                             <div className="viagemCadastrada">
                                 <a href={`/info-viagem/${cidade.idViagem}`}>
-                                    <img src={`https://flagcdn.com/144x108/${abreviacao}.png`} alt="" />
+                                    <img src={`https://flagcdn.com/144x108/${cidade.codigoPais.toLowerCase()}.png`} alt="" />
                                 </a>   
                             </div>
                             <p>{ cidade.localDestino }</p>
