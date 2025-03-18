@@ -20,7 +20,6 @@ function Home() {
         axios.get("http://localhost:3000/viagens")
             .then((response) => {
                 setViagem(response.data)
-                console.log(response.data);
             })
             .catch((error) => {
                 console.error("Erro ao buscar viagens:", error)

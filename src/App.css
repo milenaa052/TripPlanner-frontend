@@ -358,6 +358,10 @@ html {
           margin-bottom: 0;
         }
 
+        .icone {
+          margin-right: 10px;
+        }
+
         .telasInfo {
           display: flex;
           justify-content: space-between;
@@ -562,6 +566,10 @@ html {
               .icone {
                 color: var(--branco);
                 font-size: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0px;
               }
             }
 
