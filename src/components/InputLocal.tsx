@@ -53,7 +53,7 @@ const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) 
           buscarSugestoes(e.target.value);
         }}
         list="sugestoes-cidades"
-        placeholder="Insira a cidade de origem"
+        placeholder="Insira o local"
         className={className}
       />
       
