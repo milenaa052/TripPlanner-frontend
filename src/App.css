@@ -407,12 +407,12 @@ html {
               color: var(--branco);
               border: none;
             }
+          }
 
-            &:active {
-              background-color: var(--laranja);
-              color: var(--branco);
-              border: none;
-            }
+          .dia.ativo {
+            background-color: var(--laranja);
+            color: var(--branco);
+            border: none;
           }
         }
 

@@ -30,8 +30,8 @@ function App() {
           <Route path="/cadastro-viagem" element={<CadastroViagem />} />
           <Route path="/info-viagem/:id" element={<TelasInfo />} />
           <Route path="/cadastro-hospedagem/:id" element={<CadastroHospedagem />} />
-          <Route path="/cadastro-transporte" element={<CadastroTransporte />} />
-          <Route path="/cadastro-passeio" element={<CadastroPasseio />} />
+          <Route path="/cadastro-transporte/:id" element={<CadastroTransporte />} />
+          <Route path="/cadastro-passeio/:id" element={<CadastroPasseio />} />
           <Route path="/cadastro-despesas/:id" element={<CadastroDespesas />} />
         </Routes>
       </Router>

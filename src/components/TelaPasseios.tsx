@@ -1,20 +1,58 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faChevronLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router";
 import ModalPasseio from "./ModalPasseio";
+import axios from "axios";
+import MapaLocal from "./MapaLocal";
+
+interface Viagem {
+    idViagem: number;
+    localOrigem: string;
+    localDestino: string;
+    codigoPais: string;
+    dataInicial: string;
+    dataFinal: string;
+}
+
+interface Passeio {
+    idPasseio: number;
+    dataPasseio: string;
+    localPasseio: string;
+    horaInicial: string;
+    horaFinal: string;
+    gastoPasseio: number;
+}
 
 function TelaPasseios() {
-    const [diaSelecionado, setDiaSelecionado] = useState(Object);
+    const [diaSelecionado, setDiaSelecionado] = useState<string | null>(null);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [diasPorPagina, setDiasPorPagina] = useState(8);
     const [modal, setModal] = useState(false);
-    
-    const viagens = {
-        id: 1,
-        destino: "Itália",
-        inicio: "2025-03-01",
-        fim: "2025-03-15"
-    };
+    const [viagem, setViagem] = useState<Viagem | null>(null);
+    const [passeio, setPasseio] = useState<Passeio[]>([]);
+
+    const { id } = useParams();
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/viagem/${id}`)
+        .then((response) => {
+            setViagem(response.data)
+        })
+        .catch((error) => {
+            console.error("Erro ao buscar a viagem " + error)
+        })
+    }, [id]);
+
+    useEffect(() => {
+        axios.get("http://localhost:3000/passeios")
+        .then((response) => {
+            setPasseio(response.data)
+        })
+        .catch((error) => {
+            console.error("Erro ao buscar passeios " + error)
+        })
+    }, [])
     
     const ajustarDiasPorPagina = () => {
         const larguraTela = window.innerWidth;
@@ -42,16 +80,23 @@ function TelaPasseios() {
     }, []);
     
     const gerarDias = () => {
-        const dias = [];
+        const dias: string[] = [];
 
-        const [anoInicio, mesInicio, diaInicio] = viagens.inicio.split("-").map(Number);
-        const [anoFim, mesFim, diaFim] = viagens.fim.split("-").map(Number);
+        if (!viagem) {
+            return dias;
+        }
 
-        const dataAtual = new Date(anoInicio, mesInicio - 1, diaInicio);
-        const dataFinal = new Date(anoFim, mesFim - 1, diaFim);
+        const dataInicial = new Date(viagem.dataInicial);
+        const dataFinal = new Date(viagem.dataFinal);
+    
+        const dataAtual = new Date(dataInicial);
 
         while (dataAtual <= dataFinal) {
-            dias.push(dataAtual.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })); // Formato YYYY-MM-DD
+            const dia = String(dataAtual.getUTCDate()).padStart(2, '0');
+            const mes = String(dataAtual.getUTCMonth() + 1).padStart(2, '0');
+
+            dias.push(`${dia}/${mes}`);
+    
             dataAtual.setDate(dataAtual.getDate() + 1);
         }
 
@@ -76,6 +121,16 @@ function TelaPasseios() {
         }
     };
 
+    const converterData = (dataSelecionada: string | null): string => {
+        if (!dataSelecionada || !viagem) return "";
+    
+        const [dia, mes] = dataSelecionada.split("/").map(Number);
+        const ano = new Date(viagem.dataInicial).getFullYear();
+    
+        return `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")} 00:00:00`;
+    };
+    
+
     return (
         <div>
             <div className="agenda">
@@ -99,27 +154,46 @@ function TelaPasseios() {
                 </button>
             </div>
 
-            <div className="listagens">
-                <div className="textoInfo">
-                    <h3>Coliseu</h3>
-                    <p>08:00 - 10:00</p>
-                    <p>Gasto: 20,00</p>
-                </div>
+            { passeio.some((passeioData) => {
+                const dataApi = new Date(passeioData.dataPasseio);
+                const dia = String(dataApi.getUTCDate()).padStart(2, '0');
+                const mes = String(dataApi.getUTCMonth() + 1).padStart(2, '0');
+                const dataFormatada = `${dia}/${mes}`;
+                return dataFormatada === diaSelecionado;
+            }) ? (
+                passeio.filter((passeioData) => {
+                    const dataApi = new Date(passeioData.dataPasseio);
+                    const dia = String(dataApi.getUTCDate()).padStart(2, '0');
+                    const mes = String(dataApi.getUTCMonth() + 1).padStart(2, '0');
+                    const dataFormatada = `${dia}/${mes}`;
+            
+                    return dataFormatada === diaSelecionado;
+                })
+                .map((passeios) => (
+                    <div className="listagens">
+                        <div className="textoInfo">
+                            <h3>{ passeios.localPasseio }</h3>
+                            <p>{ passeios.horaInicial } - { passeios.horaFinal }</p>
+                            <p>Gasto: { passeios.gastoPasseio.toFixed(2) }</p>
+                        </div>
 
-                <div className="mapa">
-                    mapa
-                </div>
+                        <div className="mapa">
+                            <MapaLocal local={passeios.localPasseio}/>
+                        </div>
 
-                <div className="icone">
-                    <button onClick={() => setModal(true)}>
-                        <FontAwesomeIcon icon={faChevronRight}/>
-                    </button>
-                </div>
-            </div>
+                        <div className="icone">
+                            <button onClick={() => setModal(true)}>
+                                <FontAwesomeIcon icon={faChevronRight}/>
+                            </button>
+                        </div>
+                    </div>
+            ))) : (
+                <p>Nenhum passeio cadastrado na data {diaSelecionado}</p>
+            )}
 
             <div className="botao">
                 <div className="adicionar">
-                    <a href="/cadastro-passeio" className="link">
+                    <a href={`/cadastro-passeio/${id}?data=${converterData(diaSelecionado)}`} className="link">
                         <FontAwesomeIcon icon={faPlus} className="icone"/>
                     </a>
                 </div>
