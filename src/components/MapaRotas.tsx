@@ -12,7 +12,6 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
   const [coordenadasRota, setCoordenadasRota] = useState<[number, number][]>([]);
   const [erro, setErro] = useState<string>("");
   const [centroMapa, setCentroMapa] = useState<[number, number]>([-23.55052, -46.633308]);
-  const [carregando, setCarregando] = useState<boolean>(false);
 
   useEffect(() => {
     if (!origem || !destino) return;
@@ -24,7 +23,6 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
       }
 
       setErro("");
-      setCarregando(true);
 
       try {
         console.log(`Buscando origem: ${origem}`);
@@ -57,8 +55,6 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
       } catch (error) {
         console.log("Erro na busca:", error);
         setErro("Erro ao buscar as cidades.");
-      } finally {
-        setCarregando(false);
       }
     };
 
@@ -94,12 +90,6 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
-      {carregando && (
-        <div>
-          <p>Carregando mapa...</p>
-        </div>
-      )}
-      
       <MapContainer 
         center={centroMapa} 
         zoom={12} 

@@ -5,7 +5,6 @@ import ModalTransporte from "./ModalTransporte";
 import { useParams } from "react-router";
 import axios from "axios";
 import MapaRotas from "./MapaRotas";
-import RotasMapa from "./RotasMapa";
 
 interface Transporte {
     idTransporte: number;
@@ -68,8 +67,6 @@ function TelaTransporte() {
             ) : (
                 <p>Nenhum transporte cadastrado.</p>
             )}
-
-            <RotasMapa />
 
             <div className="botao">
                 <div className="adicionar">
