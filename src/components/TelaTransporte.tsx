@@ -19,10 +19,15 @@ interface Transporte {
 function TelaTransporte() {
     const [modal, setModal] = useState(false);
     const [transporte, setTransporte] = useState<Transporte[]>([]);
+    const [idTransporte, setIdTransporte] = useState<Transporte | null>(null);
 
     const { id } = useParams();
 
     useEffect(() => {
+        carregarTransportes();
+    }, []);
+
+    const carregarTransportes = () => {
         axios.get("http://localhost:3000/transportes")
         .then((response) => {
             setTransporte(response.data)
@@ -30,7 +35,7 @@ function TelaTransporte() {
         .catch((error) => {
             console.error("Erro ao buscar transportes " + error)
         })
-    })
+    };
 
     const formatarData = (data: string) => {
         const date = new Date(data);
@@ -40,11 +45,26 @@ function TelaTransporte() {
         return `${dia}/${mes}/${ano}`;
     };
 
+    const deletarTransporte = (idTransporte: number) => {
+        axios.delete(`http://localhost:3000/transporte/${idTransporte}`)
+        .then(() => {
+            carregarTransportes();
+        })
+        .catch((error) => {
+            console.error("Erro ao excluir transporte ", error);
+        })
+    };
+
+    const abrirModal = (transporte: Transporte) => {
+        setIdTransporte(transporte);
+        setModal(true);
+    }
+
     return (
         <div>
             {transporte.length > 0 ? ( 
                 transporte.map((transportes) => (
-                    <div className="listagens">
+                    <div className="listagens" key={ transportes.idTransporte }>
                         <div className="textoInfo">
                             <h3>{ transportes.tipoTransporte }</h3>
                             <p>De: { transportes.origemTransporte }</p>
@@ -58,7 +78,7 @@ function TelaTransporte() {
                         </div>
 
                         <div className="icone">
-                            <button onClick={() => setModal(true)}>
+                            <button onClick={() => abrirModal(transportes)}>
                                 <FontAwesomeIcon icon={faChevronRight}/>
                             </button>
                         </div>
@@ -76,10 +96,14 @@ function TelaTransporte() {
                 </div>
             </div>
 
-            {modal && (
+            {modal && idTransporte && (
                 <div className="modal-overlay" onClick={() => setModal(false)}>
                     <div className="modal" onClick={(e) => e.stopPropagation()}>
-                        <ModalTransporte />
+                        <ModalTransporte
+                            transporte={idTransporte}
+                            onDelete={deletarTransporte}
+                            onClose={() => setModal(false)}
+                        />
                     </div>
                 </div>
             )}

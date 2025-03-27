@@ -4,7 +4,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import ConfirmaExclusao from "./ConfirmaExclusao";
 
-function ModalTransporte() {;
+interface TransporteProps {
+    idTransporte: number;
+    tipoTransporte: string;
+    origemTransporte: string;
+    destinoTransporte: string;
+    gastoTransporte: number;
+    dataTransporte: string;
+}
+
+interface ModalTransporteProps {
+    transporte: TransporteProps;
+    onDelete: (idTransporte: number) => void;
+    onClose: () => void;
+}
+
+function ModalTransporte({ transporte, onDelete, onClose }: ModalTransporteProps) {
+    const [tipoTransporte, setTipoTransporte] = useState(transporte.tipoTransporte);
+    const [origemTransporte, setOrigemTransporte] = useState(transporte.origemTransporte);
+    const [destinoTransporte, setDestinoTransporte] = useState(transporte.destinoTransporte);
+    const [gastoTransporte, setGastoTransporte] = useState(transporte.gastoTransporte.toString());
+    const [dataTransporte, setDataTransporte] = useState(transporte.dataTransporte);
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
 
     return (
@@ -12,7 +32,8 @@ function ModalTransporte() {;
             <form className="form">
                 <div className="campos">
                     <label htmlFor="tipoTransporte" className="label">Tipo de Transporte</label>
-                    <select name="tipoTransporte" id="tipoTransporte" className="select">
+                    <select name="tipoTransporte" id="tipoTransporte" className="select"
+                        value={tipoTransporte} onChange={(e) => setTipoTransporte(e.target.value)}>
                         <option value="">Selecione</option>
                         <option value="Aviao">Avião</option>
                         <option value="Barco">Barco</option>
@@ -32,22 +53,26 @@ function ModalTransporte() {;
 
                 <div className="campos">
                     <label htmlFor="localOrigem" className="label">De:</label>
-                    <input type="text" id="localOrigem" name="localOrigem" className="input" placeholder="Insira o local de origem"/>
+                    <input type="text" id="localOrigem" name="localOrigem" className="input" 
+                       value={origemTransporte} onChange={(e) => setOrigemTransporte(e.target.value)} placeholder="Insira o local de origem"/>
                 </div>
                 
                 <div className="campos">
                     <label htmlFor="localDestino" className="label">Até:</label>
-                    <input type="text" id="localDestino" name="localDestino" className="input" placeholder="Insira o local de destino"/>
+                    <input type="text" id="localDestino" name="localDestino" className="input" 
+                       value={destinoTransporte} onChange={(e) => setDestinoTransporte(e.target.value)} placeholder="Insira o local de destino"/>
                 </div>
 
                 <div className="campos">
                     <label htmlFor="gasto" className="label">Gasto</label>
-                    <input type="number" id="gasto" name="gasto" className="input" placeholder="Insira o gasto com o transporte"/>
+                    <input type="number" id="gasto" name="gasto" className="input" 
+                       value={gastoTransporte} onChange={(e) => setGastoTransporte(e.target.value)} placeholder="Insira o gasto com o transporte"/>
                 </div>
 
                 <div className="campos">
                     <label htmlFor="data" className="label">Data</label>
-                    <input type="date" id="data" name="data" className="input"/>
+                    <input type="date" id="data" name="data" className="input"
+                       value={dataTransporte} onChange={(e) => setDataTransporte(e.target.value)} />
                 </div>
 
                 <div className="submit">
@@ -62,7 +87,8 @@ function ModalTransporte() {;
                 <ConfirmaExclusao 
                     onClose={() => setMostrarConfirmacao(false)}
                     onConfirm={() => {
-                        setMostrarConfirmacao(false);
+                        onDelete(transporte.idTransporte);
+                        onClose();
                     }}
                 />
             )}
