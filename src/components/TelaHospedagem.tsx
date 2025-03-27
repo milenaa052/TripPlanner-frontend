@@ -17,10 +17,15 @@ interface Hospedagens {
 function TelaHospedagem() {
     const [modal, setModal] = useState(false);
     const [hospedagens, setHospedagens] = useState<Hospedagens[]>([]);
+    const [idHospedagem, setIdHospedagem] = useState<Hospedagens | null>(null);
 
     const { id } = useParams();
 
     useEffect(() => {
+        carregarHospedagens();
+    }, []);
+
+    const carregarHospedagens = () => {
         axios.get("http://localhost:3000/hospedagens")
             .then((response) => {
                 setHospedagens(response.data)
@@ -28,7 +33,7 @@ function TelaHospedagem() {
             .catch((error) => {
                 console.error("Erro ao buscar hospedagens ", error)
             })
-    }, []);
+    };
 
     const formatarData = (data: string) => {
         const date = new Date(data);
@@ -38,10 +43,25 @@ function TelaHospedagem() {
         return `${dia}/${mes}/${ano}`;
     };
 
+    const deletarHospedagem = (idHospedagem: number) => {
+        axios.delete(`http://localhost:3000/hospedagem/${idHospedagem}`)
+        .then(() => {
+            carregarHospedagens();
+        })
+        .catch((error) => {
+            console.error("Erro ao excluir hospedagem ", error);
+        })
+    };
+
+    const abrirModal = (hospedagem: Hospedagens) => {
+        setIdHospedagem(hospedagem);
+        setModal(true);
+    }
+
     return (
         <div>
             { hospedagens.map((hospedagens) => (
-                <div className="listagens">
+                <div className="listagens" key={hospedagens.idHospedagem}>
                     <div className="textoInfo">
                         <h3>{ hospedagens.localHospedagem } </h3>
                         <p>Checkin: { formatarData(hospedagens.dataCheckin) }</p>
@@ -54,7 +74,7 @@ function TelaHospedagem() {
                     </div>
 
                     <div className="icone">
-                        <button onClick={() => setModal(true)}>
+                        <button onClick={() => abrirModal(hospedagens)}>
                             <FontAwesomeIcon icon={faChevronRight} className="icone"/>
                         </button>
                     </div>
@@ -69,10 +89,14 @@ function TelaHospedagem() {
                 </div>
             </div>
 
-            {modal && (
+            {modal && idHospedagem && (
                 <div className="modal-overlay" onClick={() => setModal(false)}>
                     <div className="modal" onClick={(e) => e.stopPropagation()}>
-                        <ModalHospedagem />
+                        <ModalHospedagem
+                            hospedagem={idHospedagem}
+                            onDelete={deletarHospedagem}
+                            onClose={() => setModal(false)}
+                        />
                     </div>
                 </div>
             )}
