@@ -15,20 +15,23 @@ interface Despesa {
 function TelaDespesas() {
   const [modal, setModal] = useState(false);
   const [despesas, setDespesas] = useState<Despesa[]>([]);
+  const [idDespesa, setIdDespesa] = useState<Despesa | null>(null);
 
   const { id } = useParams();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/despesas")
-      .then((response) => {
-        setDespesas(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar despesas:", error);
-      });
+    carregarDespesas();
   }, []);
+
+  const carregarDespesas = () => {
+    axios.get("http://localhost:3000/despesas")
+    .then((response) => {
+      setDespesas(response.data);
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar despesas:", error);
+    });
+  }
 
   const formatarData = (data: string) => {
     const date = new Date(data);
@@ -38,12 +41,27 @@ function TelaDespesas() {
     return `${dia}/${mes}/${ano}`;
   };
 
+  const deletarDespesa = (idDespesa: number) => {
+    axios.delete(`http://localhost:3000/despesa/${idDespesa}`)
+    .then(() => {
+      carregarDespesas();
+    })
+    .catch((error) => {
+      console.error("Erro ao excluir despesa ", error);
+    })
+  };
+
+  const abrirModal = (despesa: Despesa) => {
+    setIdDespesa(despesa);
+    setModal(true);
+  };
+
   return (
     <div>
       <h2>Total de Despesas: 0</h2>
 
       {despesas.map((despesa) => (
-        <div className="listagens">
+        <div className="listagens" key={ despesa.idDespesa }>
           <div className="textoInfo">
             <h3>{despesa.tipoDespesa}</h3>
             <p>{despesa.gasto.toFixed(2)}</p>
@@ -51,7 +69,7 @@ function TelaDespesas() {
           </div>
 
           <div className="icone">
-            <button onClick={() => setModal(true)}>
+            <button onClick={() => abrirModal(despesa)}>
               <FontAwesomeIcon icon={faChevronRight} />
             </button>
           </div>
@@ -66,10 +84,14 @@ function TelaDespesas() {
         </div>
       </div>
 
-      {modal && (
+      {modal && idDespesa && (
         <div className="modal-overlay" onClick={() => setModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <ModalDespesa />
+            <ModalDespesa
+              despesa={idDespesa}
+              onDelete={deletarDespesa}
+              onClose={() => setModal(false)}
+            />
           </div>
         </div>
       )}

@@ -21,10 +21,10 @@ interface ModalPasseioProps {
 
 function ModalPasseio({ passeio, onDelete, onClose }: ModalPasseioProps) {
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
-    const [localPasseio, setLocalPasseio] = useState("");
-    const [horaInicial, setHoraInicial] = useState("");
-    const [horaFinal, setHoraFinal] = useState("");
-    const [gastoPasseio, setGastoPasseio] = useState("");
+    const [localPasseio, setLocalPasseio] = useState(passeio.localPasseio);
+    const [horaInicial, setHoraInicial] = useState(passeio.horaInicial);
+    const [horaFinal, setHoraFinal] = useState(passeio.horaFinal);
+    const [gastoPasseio, setGastoPasseio] = useState(passeio.gastoPasseio.toString());
 
     return (
         <div className="card">
