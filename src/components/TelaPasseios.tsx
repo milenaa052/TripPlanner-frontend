@@ -31,6 +31,7 @@ function TelaPasseios() {
     const [modal, setModal] = useState(false);
     const [viagem, setViagem] = useState<Viagem | null>(null);
     const [passeio, setPasseio] = useState<Passeio[]>([]);
+    const [idPasseio, setIdPasseio] = useState<Passeio | null>(null);
 
     const { id } = useParams();
 
@@ -45,6 +46,10 @@ function TelaPasseios() {
     }, [id]);
 
     useEffect(() => {
+        carregarPasseios();
+    }, []);
+
+    const carregarPasseios = () => {
         axios.get("http://localhost:3000/passeios")
         .then((response) => {
             setPasseio(response.data)
@@ -52,7 +57,7 @@ function TelaPasseios() {
         .catch((error) => {
             console.error("Erro ao buscar passeios " + error)
         })
-    }, [])
+    };
     
     const ajustarDiasPorPagina = () => {
         const larguraTela = window.innerWidth;
@@ -129,7 +134,21 @@ function TelaPasseios() {
     
         return `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")} 00:00:00`;
     };
+
+    const deletarPasseio = (idPasseio: number) => {
+        axios.delete(`http://localhost:3000/passeio/${idPasseio}`)
+        .then(() => {
+            carregarPasseios();
+        })
+        .catch((error) => {
+            console.error("Erro ao excluir passeio ", error);
+        })
+    }
     
+    const abrirModal = (passeio: Passeio) => {
+        setIdPasseio(passeio);
+        setModal(true);
+    }
 
     return (
         <div>
@@ -170,7 +189,7 @@ function TelaPasseios() {
                     return dataFormatada === diaSelecionado;
                 })
                 .map((passeios) => (
-                    <div className="listagens">
+                    <div className="listagens" key={ passeios.idPasseio }>
                         <div className="textoInfo">
                             <h3>{ passeios.localPasseio }</h3>
                             <p>{ passeios.horaInicial } - { passeios.horaFinal }</p>
@@ -182,7 +201,7 @@ function TelaPasseios() {
                         </div>
 
                         <div className="icone">
-                            <button onClick={() => setModal(true)}>
+                            <button onClick={() => abrirModal(passeios)}>
                                 <FontAwesomeIcon icon={faChevronRight}/>
                             </button>
                         </div>
@@ -199,10 +218,14 @@ function TelaPasseios() {
                 </div>
             </div>
 
-            {modal && (
+            {modal && idPasseio && (
                 <div className="modal-overlay" onClick={() => setModal(false)}>
                     <div className="modal" onClick={(e) => e.stopPropagation()}>
-                        <ModalPasseio />
+                        <ModalPasseio
+                            passeio={idPasseio}
+                            onDelete={deletarPasseio}
+                            onClose={() => setModal(false)}
+                        />
                     </div>
                 </div>
             )}
