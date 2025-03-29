@@ -50,7 +50,7 @@ function ModalDespesa({ despesa, onDelete, onClose }: ModalDespesaProps) {;
 
     const formatarData = (data: string) => {
         return data.slice(0, 10);
-    };
+    }
     
     return (
         <div className="card">
