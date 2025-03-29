@@ -135,6 +135,10 @@ function TelaPasseios() {
         return `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")} 00:00:00`;
     };
 
+    const formatarHora = (hora: string) => {
+        return hora.slice(0, 5);
+    }
+
     const deletarPasseio = (idPasseio: number) => {
         axios.delete(`http://localhost:3000/passeio/${idPasseio}`)
         .then(() => {
@@ -146,6 +150,8 @@ function TelaPasseios() {
     }
     
     const abrirModal = (passeio: Passeio) => {
+        const dataFormatada = converterData(diaSelecionado);
+        window.history.pushState({}, "", `/?data=${dataFormatada}`);
         setIdPasseio(passeio);
         setModal(true);
     }
@@ -192,7 +198,7 @@ function TelaPasseios() {
                     <div className="listagens" key={ passeios.idPasseio }>
                         <div className="textoInfo">
                             <h3>{ passeios.localPasseio }</h3>
-                            <p>{ passeios.horaInicial } - { passeios.horaFinal }</p>
+                            <p>{ formatarHora(passeios.horaInicial) } - { formatarHora(passeios.horaFinal) }</p>
                             <p>Gasto: { passeios.gastoPasseio.toFixed(2) }</p>
                         </div>
 

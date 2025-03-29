@@ -3,6 +3,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import ConfirmaExclusao from "./ConfirmaExclusao";
+import InputLocal from "./InputLocal";
+import axios from "axios";
+import { useParams, useLocation } from "react-router";
 
 interface PasseioProps {
     idPasseio: number;
@@ -25,14 +28,46 @@ function ModalPasseio({ passeio, onDelete, onClose }: ModalPasseioProps) {
     const [horaInicial, setHoraInicial] = useState(passeio.horaInicial);
     const [horaFinal, setHoraFinal] = useState(passeio.horaFinal);
     const [gastoPasseio, setGastoPasseio] = useState(passeio.gastoPasseio.toString());
+    const [mensagem, setMensagem] = useState("");
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const [dataPasseio, setDataPasseio] = useState(queryParams.get("data") || passeio.dataPasseio);
+
+    const { id } = useParams();
+
+    const formatarHora = (hora: string) => {
+        return `${hora}:00`;
+    };
+
+    const atualizarPasseio = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            await axios.put(`http://localhost:3000/passeio/${passeio.idPasseio}`, {
+                dataPasseio,
+                localPasseio,
+                horaInicial: formatarHora(horaInicial),
+                horaFinal: formatarHora(horaFinal),
+                gastoPasseio,
+                viagemId: Number(id)
+            })
+
+            setMensagem("Passeio atualizado com sucesso!");
+            onClose();
+            setDataPasseio("");
+
+        } catch (error) {
+            setMensagem("Erro ao atualizar o passeio.");
+            console.error(error);
+        }
+    }
 
     return (
         <div className="card">
-            <form className="form">
+            <form className="form" onSubmit={atualizarPasseio}>
                 <div className="campos">
                     <label htmlFor="localPasseio" className="label">Local</label>
-                    <input type="text" id="localPasseio" name="localPasseio" className="input" 
-                       value={localPasseio} onChange={(e) => setLocalPasseio(e.target.value)} placeholder="Insira o local do passeio"/>
+                    <InputLocal local={localPasseio} setLocal={setLocalPasseio} className="input" />
                 </div>
                 
                 <div className="camposHora">
@@ -62,6 +97,8 @@ function ModalPasseio({ passeio, onDelete, onClose }: ModalPasseioProps) {
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
+
+            { mensagem ? <p>{ mensagem }</p> : "" }
 
             {mostrarConfirmacao && (
                 <ConfirmaExclusao 
