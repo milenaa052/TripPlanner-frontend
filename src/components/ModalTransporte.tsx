@@ -3,6 +3,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import ConfirmaExclusao from "./ConfirmaExclusao";
+import InputLocal from "./InputLocal";
+import axios from "axios";
+import { useParams } from "react-router";
 
 interface TransporteProps {
     idTransporte: number;
@@ -26,10 +29,39 @@ function ModalTransporte({ transporte, onDelete, onClose }: ModalTransporteProps
     const [gastoTransporte, setGastoTransporte] = useState(transporte.gastoTransporte.toString());
     const [dataTransporte, setDataTransporte] = useState(transporte.dataTransporte);
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
+    const [mensagem, setMensagem] = useState("");
+
+    const { id } = useParams();
+
+    const atualizarTransporte = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            await axios.put(`http://localhost:3000/transporte/${transporte.idTransporte}`, {
+                tipoTransporte,
+                origemTransporte,
+                destinoTransporte,
+                gastoTransporte,
+                dataTransporte,
+                viagemId: Number(id)
+            })
+
+            setMensagem("Transporte atualizado com sucesso!");
+            onClose();
+
+        } catch (error) {
+            setMensagem("Erro ao atualizar o transporte");
+            console.error(error);
+        }
+    }
+
+    const formatarData = (data: string) => {
+        return data.slice(0, 10);
+    }
 
     return (
         <div className="card">
-            <form className="form">
+            <form className="form" onSubmit={atualizarTransporte}>
                 <div className="campos">
                     <label htmlFor="tipoTransporte" className="label">Tipo de Transporte</label>
                     <select name="tipoTransporte" id="tipoTransporte" className="select"
@@ -53,14 +85,12 @@ function ModalTransporte({ transporte, onDelete, onClose }: ModalTransporteProps
 
                 <div className="campos">
                     <label htmlFor="localOrigem" className="label">De:</label>
-                    <input type="text" id="localOrigem" name="localOrigem" className="input" 
-                       value={origemTransporte} onChange={(e) => setOrigemTransporte(e.target.value)} placeholder="Insira o local de origem"/>
+                    <InputLocal local={origemTransporte} setLocal={setOrigemTransporte} className="input" />
                 </div>
                 
                 <div className="campos">
                     <label htmlFor="localDestino" className="label">Até:</label>
-                    <input type="text" id="localDestino" name="localDestino" className="input" 
-                       value={destinoTransporte} onChange={(e) => setDestinoTransporte(e.target.value)} placeholder="Insira o local de destino"/>
+                    <InputLocal local={destinoTransporte} setLocal={setDestinoTransporte} className="input" />
                 </div>
 
                 <div className="campos">
@@ -72,7 +102,7 @@ function ModalTransporte({ transporte, onDelete, onClose }: ModalTransporteProps
                 <div className="campos">
                     <label htmlFor="data" className="label">Data</label>
                     <input type="date" id="data" name="data" className="input"
-                       value={dataTransporte} onChange={(e) => setDataTransporte(e.target.value)} />
+                       value={formatarData(dataTransporte)} onChange={(e) => setDataTransporte(e.target.value)} />
                 </div>
 
                 <div className="submit">
@@ -82,6 +112,8 @@ function ModalTransporte({ transporte, onDelete, onClose }: ModalTransporteProps
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
+
+            { mensagem ? <p>{ mensagem }</p> : "" }
 
             {mostrarConfirmacao && (
                 <ConfirmaExclusao 

@@ -11,7 +11,7 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
 }) => {
   const [coordenadasRota, setCoordenadasRota] = useState<[number, number][]>([]);
   const [erro, setErro] = useState<string>("");
-  const [centroMapa, setCentroMapa] = useState<[number, number]>([-23.55052, -46.633308]);
+  const [rotaAtual, setRotaAtual] = useState<{ origem: [number, number], destino: [number, number] } | null>(null);
 
   useEffect(() => {
     if (!origem || !destino) return;
@@ -42,11 +42,7 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
           const latDestino = parseFloat(dataDestino.geonames[0].lat);
           const lonDestino = parseFloat(dataDestino.geonames[0].lng);
 
-          const novoCentro = [
-            (latOrigem + latDestino) / 2, 
-            (lonOrigem + lonDestino) / 2
-          ];
-          setCentroMapa(novoCentro as [number, number]);
+          setRotaAtual({ origem: [latOrigem, lonOrigem], destino: [latDestino, lonDestino] });
 
           await buscarRotaGraphHopper(latOrigem, lonOrigem, latDestino, lonDestino);
         } else {
@@ -90,24 +86,25 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
-      <MapContainer 
-        center={centroMapa} 
-        zoom={12} 
-        style={{ height: "100%", width: "100%" }}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; OpenStreetMap contributors'
-        />
-
-        {coordenadasRota.length > 0 && (
-          <Polyline 
-            positions={coordenadasRota} 
-            color="blue" 
-            weight={3}
+      {rotaAtual && (
+        <MapContainer 
+          center={rotaAtual.origem} zoom={12} 
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; OpenStreetMap contributors'
           />
-        )}
-      </MapContainer>
+
+          {coordenadasRota.length > 0 && (
+            <Polyline 
+              positions={coordenadasRota} 
+              color="blue" 
+              weight={3}
+            />
+          )}
+        </MapContainer>
+      )}
 
       {erro && <p style={{ color: "red" }}>{erro}</p>}
     </div>
