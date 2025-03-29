@@ -4,11 +4,33 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import ConfirmaExclusao from "./ConfirmaExclusao";
+import InputLocal from "./InputLocal";
+import { useParams } from "react-router";
+import axios from "axios";
 
-function ModalHospedagem() {;
-    const [dataInicio, setDataInicio] = useState<Date | null>(null);
-    const [dataFim, setDataFim] = useState<Date | null>(null);
+interface HospedagemProps {
+    idHospedagem: number;
+    localHospedagem: string;
+    dataCheckin: string;
+    dataCheckout: string;
+    gastoTotal: number;
+}
+
+interface ModalHospedagemProps {
+    hospedagem: HospedagemProps;
+    onDelete: (idHospedagem: number) => void;
+    onClose: () => void;
+}
+
+function ModalHospedagem({ hospedagem, onDelete, onClose }: ModalHospedagemProps) {
+    const [dataInicio, setDataInicio] = useState<Date | null>(new Date(hospedagem.dataCheckin));
+    const [dataFim, setDataFim] = useState<Date | null>(new Date(hospedagem.dataCheckout));
+    const [localHospedagem, setLocalHospedagem] = useState(hospedagem.localHospedagem);
+    const [gastoTotal, setGastoTotal] = useState(hospedagem.gastoTotal.toString());
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
+    const [mensagem, setMensagem] = useState("");
+
+    const { id } = useParams();
 
     const manipularDatas = (range: [Date | null, Date | null]) => {
         const [startDate, endDate] = range;
@@ -16,12 +38,41 @@ function ModalHospedagem() {;
         setDataFim(endDate);
     };
 
+    const atualizarHospedagem = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!dataInicio || !dataFim) {
+            setMensagem("Selecione uma data válida!");
+            return;
+        }
+
+        const dataCheckin = dataInicio.toISOString().split("T")[0];
+        const dataCheckout = dataFim.toISOString().split("T")[0];
+
+        try {
+            await axios.put(`http://localhost:3000/hospedagem/${hospedagem.idHospedagem}`, {
+                localHospedagem,
+                dataCheckin,
+                dataCheckout,
+                gastoTotal: parseFloat(gastoTotal),
+                viagemId: Number(id)
+            })
+
+            setMensagem("Hospedagem atualizada com sucesso!!");
+            onClose();
+
+        } catch (error) {
+            setMensagem("Erro ao atualizar a hospedagem");
+            console.error(error);
+        }
+    }
+
     return (
         <div className="card">
-            <form className="form">
+            <form className="form" onSubmit={atualizarHospedagem}>
                 <div className="campos">
                     <label htmlFor="hotel" className="label">Hotel / Airnb</label>
-                    <input type="text" id="hotel" name="hotel" className="input" placeholder="Insira o local da sua hospedagem"/>
+                    <InputLocal local={localHospedagem} setLocal={setLocalHospedagem} className="input" />
                 </div>
                 
                 <div className="campos">
@@ -32,7 +83,8 @@ function ModalHospedagem() {;
 
                 <div className="campos">
                     <label htmlFor="gasto" className="label">Gasto Total</label>
-                    <input type="number" id="gasto" name="gasto" className="input" placeholder="Insira o gasto total com hospedagem"/>
+                    <input type="number" id="gasto" name="gasto" className="input" 
+                       value={gastoTotal} onChange={(e) => setGastoTotal(e.target.value)} placeholder="Insira o gasto total com hospedagem"/>
                 </div>
 
                 <div className="submit">
@@ -43,11 +95,14 @@ function ModalHospedagem() {;
                 </div>
             </form>
 
+            { mensagem ? <p>{ mensagem }</p> : "" }
+
             {mostrarConfirmacao && (
                 <ConfirmaExclusao 
                     onClose={() => setMostrarConfirmacao(false)}
                     onConfirm={() => {
-                        setMostrarConfirmacao(false);
+                        onDelete(hospedagem.idHospedagem);
+                        onClose();
                     }}
                 />
             )}

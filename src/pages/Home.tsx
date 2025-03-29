@@ -1,22 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 function Home() {
     const [busca, setBusca] = useState("");
+    const [viagem, setViagem] = useState<Viagem[]>([]);
 
-    const viagens = [
-        "Roma, IT",
-        "Rio de Janeiro, BR",
-        "Cairo, EG",
-        "Atenas, GR",
-        "Teste 1",
-        "Teste 2",
-        "Teste 3"
-    ]
+    interface Viagem {
+        idViagem: number,
+        localOrigem: string,
+        localDestino: string,
+        codigoPais: string,
+        dataInicial: Date,
+        dataFinal: Date,
+    }
 
-    const viagensFiltradas = viagens.filter((cidade) => 
-        cidade.toLowerCase().includes(busca.toLowerCase())
+    useEffect(() => {
+        axios.get("http://localhost:3000/viagens")
+            .then((response) => {
+                setViagem(response.data)
+            })
+            .catch((error) => {
+                console.error("Erro ao buscar viagens:", error)
+            })
+    }, []);
+
+    const viagensFiltradas = viagem.filter((cidade) => 
+        cidade.localDestino.toLowerCase().includes(busca.toLowerCase())
     );
 
     return (
@@ -41,9 +52,11 @@ function Home() {
                     viagensFiltradas.map((cidade) => (
                         <div className="infoViagem">
                             <div className="viagemCadastrada">
-                                <p className="icone"></p>
+                                <a href={`/info-viagem/${cidade.idViagem}`}>
+                                    <img src={`https://flagcdn.com/144x108/${cidade.codigoPais.toLowerCase()}.png`} alt="" />
+                                </a>   
                             </div>
-                            <p>{ cidade }</p>
+                            <p>{ cidade.localDestino }</p>
                         </div>
                     ))
                 ) : (
