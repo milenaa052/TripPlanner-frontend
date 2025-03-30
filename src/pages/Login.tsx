@@ -28,7 +28,7 @@ function Login () {
             setEmail("")
             setSenha("")
         } catch (error) {
-            setMensagem("Não foi possível realizar o login")
+            setMensagem("Email ou senha inválidos")
             console.error(error)
         }
     }

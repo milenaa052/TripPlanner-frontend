@@ -1,22 +1,84 @@
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+
 function CadastroUsuarioAuth () {
+    const [email, setEmail] = useState("")
+    const [senha, setSenha] = useState("")
+    const [confirmaSenha, setConfirmaSenha] = useState("")
+    const [mensagem, setMensagem] = useState("")
+    const navigate = useNavigate()
+    const [nome, setNome] = useState(localStorage.getItem("nome") || "")
+    const [cpf, setCpf] = useState(localStorage.getItem("cpf") || "")
+
+    useEffect(() => {
+        if (!nome || !cpf) {
+            navigate("/cadastro-usuario");
+        }
+    }, [nome, cpf, navigate]);
+
+    const cadastroUsuario = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!email || !senha || !confirmaSenha) {
+            setMensagem("Todos os campos são obrigatórios.");
+            return;
+        }
+
+        if (senha !== confirmaSenha) {
+            setMensagem("As senhas não coincidem.");
+            return;
+        }
+
+        try {
+            await axios.post("http://localhost:3000/cadastro-usuario", {
+                nome,
+                cpf,
+                email,
+                senha
+            });
+
+            setMensagem("Usuário cadastrado com sucesso!")
+
+            localStorage.removeItem("nome");
+            localStorage.removeItem("cpf");
+
+            setEmail("")
+            setSenha("")
+            setConfirmaSenha("")
+            setNome("")
+            setCpf("")
+
+            navigate("/login");
+
+        } catch (error) {
+            setMensagem("Erro ao cadastrar usuário.");
+            console.error(error);
+        }
+
+    }
+
     return (
         <div className="card">
             <h1 className="titulo">Cadastro de Usuário</h1>
 
-            <form className="form">
+            <form className="form" onSubmit={cadastroUsuario}>
                 <div className="campos">
                     <label htmlFor="email" className="label">Email</label>
-                    <input type="email" id="email" name="email" className="input" placeholder="Insira um email válido"/>
+                    <input type="email" id="email" name="email" className="input" autoComplete="off"
+                       value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Insira um email válido"/>
                 </div>
 
                 <div className="campos">
                     <label htmlFor="senha" className="label">Senha</label>
-                    <input type="password" id="senha" name="senha" className="input" placeholder="Insira a sua senha"/>
+                    <input type="password" id="senha" name="senha" className="input" autoComplete="off"
+                       value={senha} onChange={(e) => setSenha(e.target.value)} placeholder="Insira a sua senha"/>
                 </div>
 
                 <div className="campos">
                     <label htmlFor="confirmaSenha" className="label">Confirme a sua senha</label>
-                    <input type="password" id="confirmaSenha" name="confirmaSenha" className="input" placeholder="Confime a sua senha"/>
+                    <input type="password" id="confirmaSenha" name="confirmaSenha" className="input" autoComplete="off"
+                       value={confirmaSenha} onChange={(e) => setConfirmaSenha(e.target.value)} placeholder="Confime a sua senha"/>
                 </div>
 
                 <div className="submitAuth">
@@ -27,6 +89,8 @@ function CadastroUsuarioAuth () {
                     </div>
                 </div>
             </form>
+
+            { mensagem ? <p>{ mensagem }</p> : "" }
       </div>
     );
 };
