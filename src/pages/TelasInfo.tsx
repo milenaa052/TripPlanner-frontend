@@ -24,14 +24,18 @@ function TelasInfo() {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/viagem/${id}`)
-            .then((response) => {
-                setViagem(response.data)
-                console.log(response.data)
-            })
-            .catch((error) => {
-                console.error("Erro ao buscar viagem:", error)
-            })
+        axios.get(`http://localhost:3000/viagem/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
+        .then((response) => {
+            setViagem(response.data)
+            console.log(response.data)
+        })
+        .catch((error) => {
+            console.error("Erro ao buscar viagem:", error)
+        })
     }, [id]);
 
     const formatarData = (data: string) => {

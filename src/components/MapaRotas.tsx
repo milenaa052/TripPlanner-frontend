@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-const GEONAMES_USERNAME = "milenaa052";
 const API_KEY = "356a4553-eb5c-43e1-bff1-f878b4fd8f10";
 
 const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
@@ -27,12 +26,12 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
       try {
         console.log(`Buscando origem: ${origem}`);
         const responseOrigem = await fetch(
-          `http://api.geonames.org/searchJSON?q=${origem}&maxRows=1&username=${GEONAMES_USERNAME}`
+          `https://nominatim.openstreetmap.org/search?city=${origem}&format=json`
         );
         const dataOrigem = await responseOrigem.json();
 
         const responseDestino = await fetch(
-          `http://api.geonames.org/searchJSON?q=${destino}&maxRows=1&username=${GEONAMES_USERNAME}`
+          `https://nominatim.openstreetmap.org/search?city=${destino}&format=json`
         );
         const dataDestino = await responseDestino.json();
 

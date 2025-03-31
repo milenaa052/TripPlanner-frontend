@@ -4,7 +4,8 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 
 function Login () {
-    const [mensagem, setMensagem] = useState("")
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const { login } = useAuth();
@@ -21,14 +22,23 @@ function Login () {
 
             const token = response.data.token
             login(token)
-            navigate("/")
 
-            setMensagem("Login realizado com sucesso!")
+            setMensagemSucesso("Login realizado com sucesso!")
+
+            setTimeout(() => {
+                navigate("/")
+            }, 1500)
 
             setEmail("")
             setSenha("")
+
         } catch (error) {
-            setMensagem("Email ou senha inválidos")
+            setMensagemFalha("Email ou senha inválidos")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
             console.error(error)
         }
     }
@@ -56,7 +66,8 @@ function Login () {
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
     );
 };
