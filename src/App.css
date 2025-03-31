@@ -7,6 +7,7 @@
   --laranja: #f58e27;
   --laranja-escuro: #aa5601;
   --vermelho: #fc0000;
+  --verde: #3de626;
 }
 
 html {
@@ -247,7 +248,40 @@ html {
                 background-color: var(--cinza-escuro);
               }
             }
+
+            .sair {
+              border-radius: 5px;
+              border: none;
+              cursor: pointer;
+              font-size: 15px;
+              font-weight: bold;
+              padding: 5px;
+              background-color: var(--vermelho);
+              border: 1px solid var(--vermelho);
+              color: var(--branco);
+              margin-right: 10px;
+
+              &:hover {
+                background-color: var(--cinza-claro2);
+                color: var(--vermelho);
+                border: 2px solid var(--vermelho);
+              }
+            }
           }
+        }
+
+        .mensagemFalha {
+          padding: 5px;
+          background-color: var(--vermelho);
+          color: var(--branco);
+          border-radius: 3px;
+        }
+
+        .mensagemSucesso {
+          padding: 5px;
+          background-color: var(--verde);
+          color: var(--branco);
+          border-radius: 3px;
         }
       }
 
@@ -261,6 +295,9 @@ html {
           .titulo {
             margin: 30px 0px 0px 0px;
             font-size: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
   
             .icone {
               font-size: 20px;

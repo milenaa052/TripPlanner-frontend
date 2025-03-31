@@ -4,19 +4,29 @@ import { useNavigate } from "react-router";
 function CadastroUsuario () {
     const [nome, setNome] = useState("");
     const [cpf, setCpf] = useState("");
-    const [mensagem, setMensagem] = useState("")
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate();
 
     const cadastroUsuario = (e: React.FormEvent) => {
         e.preventDefault();
 
         if(!nome || !cpf) {
-            setMensagem("Nome ou CPF não preenchido")
+            setMensagemFalha("Nome ou CPF não preenchido")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
         } else {
             localStorage.setItem("nome", nome);
             localStorage.setItem("cpf", cpf);
 
-            navigate("/cadastro-usuario-auth");
+            setMensagemSucesso("Redirecionando para a próxima tela...")
+
+            setTimeout(() => {
+                navigate("/cadastro-usuario-auth")
+            }, 2000)
         }
     }
 
@@ -43,7 +53,8 @@ function CadastroUsuario () {
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
     );
 };

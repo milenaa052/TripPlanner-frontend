@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faCheck, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../contexts/AuthContext";
 
 function CadastroTransporte() {
     const [nomeUsuario, setNomeUsuario] = useState("Milena Santos de Oliveira");
     const [editando, setEditando] = useState(false);
+    const { logout } = useAuth()
 
     const handleEditar = () => {
         setEditando(true);
@@ -54,7 +56,10 @@ function CadastroTransporte() {
                         <input type="password" id="confimaSenha" name="confimaSenha" className="input" placeholder="Confime a sua senha"/>
                     </div>
 
-                    <div className="submit">
+                    <div className="submitAuth">
+                        <button className="sair" onClick={() => logout()}>
+                            Logout <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                        </button>
                         <button type="submit" className="salvar">Salvar</button>
                     </div>
                 </form>

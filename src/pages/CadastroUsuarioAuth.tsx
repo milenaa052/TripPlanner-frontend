@@ -1,32 +1,37 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
 function CadastroUsuarioAuth () {
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [confirmaSenha, setConfirmaSenha] = useState("")
-    const [mensagem, setMensagem] = useState("")
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate()
     const [nome, setNome] = useState(localStorage.getItem("nome") || "")
     const [cpf, setCpf] = useState(localStorage.getItem("cpf") || "")
-
-    useEffect(() => {
-        if (!nome || !cpf) {
-            navigate("/cadastro-usuario");
-        }
-    }, [nome, cpf, navigate]);
 
     const cadastroUsuario = async (e: React.FormEvent) => {
         e.preventDefault()
 
         if (!email || !senha || !confirmaSenha) {
-            setMensagem("Todos os campos são obrigatórios.");
+            setMensagemFalha("Todos os campos são obrigatórios.");
+            
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
             return;
         }
 
         if (senha !== confirmaSenha) {
-            setMensagem("As senhas não coincidem.");
+            setMensagemFalha("As senhas não coincidem.");
+            
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
             return;
         }
 
@@ -38,7 +43,7 @@ function CadastroUsuarioAuth () {
                 senha
             });
 
-            setMensagem("Usuário cadastrado com sucesso!")
+            setMensagemSucesso("Usuário cadastrado com sucesso!")
 
             localStorage.removeItem("nome");
             localStorage.removeItem("cpf");
@@ -49,13 +54,19 @@ function CadastroUsuarioAuth () {
             setNome("")
             setCpf("")
 
-            navigate("/login");
+            setTimeout(() => {
+                navigate("/login")
+            }, 2000)
 
         } catch (error) {
-            setMensagem("Erro ao cadastrar usuário.");
+            setMensagemFalha("Erro ao cadastrar usuário.");
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
             console.error(error);
         }
-
     }
 
     return (
@@ -90,7 +101,8 @@ function CadastroUsuarioAuth () {
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
     );
 };
