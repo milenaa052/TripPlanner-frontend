@@ -2,33 +2,55 @@ import axios from "axios";
 import { useState } from "react";
 import { useParams, useLocation } from "react-router";
 import InputLocal from "../components/InputLocal";
+import { useNavigate } from "react-router";
 
 function CadastroPasseio() {
     const [localPasseio, setLocalPasseio] = useState("");
     const [horaInicial, setHoraInicial] = useState("");
     const [horaFinal, setHoraFinal] = useState("");
     const [gastoPasseio, setGastoPasseio] = useState("");
-    const [mensagem, setMensagem] = useState("");
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const dataPasseio = queryParams.get("data");
+    const navigate = useNavigate()
 
     const { id } = useParams();
 
     const enviarForm = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!localPasseio || !horaInicial || !horaFinal|| !gastoPasseio) {
+            setMensagemFalha("Todos os campos são obrigatórios")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            return;
+        }
+
         try {
-            await axios.post("http://localhost:3000/cadastro-passeio", {
-                dataPasseio,
-                localPasseio,
-                horaInicial,
-                horaFinal,
-                gastoPasseio,
+            const dados = {
+                dataPasseio: dataPasseio,
+                localPasseio: localPasseio,
+                horaInicial: horaInicial,
+                horaFinal: horaFinal,
+                gastoPasseio: Number(gastoPasseio),
                 viagemId: Number(id)
+            }
+
+            await axios.post("http://localhost:3000/cadastro-passeio", dados, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             })
 
-            setMensagem("Passeio cadastrado com sucesso!");
+            setMensagemSucesso("Passeio cadastrado com sucesso!")
+            setTimeout(() => {
+                navigate(`/info-viagem/${id}`)
+            }, 2000)
 
             setLocalPasseio("");
             setHoraInicial("");
@@ -36,8 +58,13 @@ function CadastroPasseio() {
             setGastoPasseio("");
 
         } catch (error) {
-            setMensagem("Erro ao cadastrar passeio");
-            console.error(error);
+            setMensagemFalha("Erro ao realizar o cadastro de Passeio")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            console.error(error)
         }
     }
 
@@ -76,7 +103,8 @@ function CadastroPasseio() {
                 </div>
             </form>
 
-            { mensagem && <p>{ mensagem }</p> }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
     );
 };

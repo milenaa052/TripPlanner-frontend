@@ -20,15 +20,17 @@ interface ModalPasseioProps {
     passeio: PasseioProps;
     onDelete: (idPasseio: number) => void;
     onClose: () => void;
+    onUpdate: () => void;
 }
 
-function ModalPasseio({ passeio, onDelete, onClose }: ModalPasseioProps) {
+function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProps) {
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
     const [localPasseio, setLocalPasseio] = useState(passeio.localPasseio);
     const [horaInicial, setHoraInicial] = useState(passeio.horaInicial);
     const [horaFinal, setHoraFinal] = useState(passeio.horaFinal);
     const [gastoPasseio, setGastoPasseio] = useState(passeio.gastoPasseio.toString());
-    const [mensagem, setMensagem] = useState("");
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const [dataPasseio, setDataPasseio] = useState(queryParams.get("data") || passeio.dataPasseio);
@@ -42,22 +44,42 @@ function ModalPasseio({ passeio, onDelete, onClose }: ModalPasseioProps) {
     const atualizarPasseio = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!localPasseio || !horaInicial || !horaFinal|| !gastoPasseio) {
+            setMensagemFalha("Todos os campos são obrigatórios")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            return;
+        }
+
         try {
-            await axios.put(`http://localhost:3000/passeio/${passeio.idPasseio}`, {
-                dataPasseio,
-                localPasseio,
+            const dados = {
+                dataPasseio: dataPasseio,
+                localPasseio: localPasseio,
                 horaInicial: formatarHora(horaInicial),
                 horaFinal: formatarHora(horaFinal),
-                gastoPasseio,
+                gastoPasseio: Number(gastoPasseio),
                 viagemId: Number(id)
+            }
+
+            await axios.put(`http://localhost:3000/passeio/${passeio.idPasseio}`, dados, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             })
 
-            setMensagem("Passeio atualizado com sucesso!");
-            onClose();
+            setMensagemSucesso("Passeio atualizado com sucesso!");
+            onUpdate();
+            setTimeout(() => {
+                onClose();
+            }, 1500)
+
             setDataPasseio("");
 
         } catch (error) {
-            setMensagem("Erro ao atualizar o passeio.");
+            setMensagemFalha("Erro ao atualizar o passeio.");
             console.error(error);
         }
     }
@@ -98,8 +120,9 @@ function ModalPasseio({ passeio, onDelete, onClose }: ModalPasseioProps) {
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
-
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
+            
             {mostrarConfirmacao && (
                 <ConfirmaExclusao 
                     onClose={() => setMostrarConfirmacao(false)}
