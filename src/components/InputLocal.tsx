@@ -1,10 +1,8 @@
 import { useState } from "react";
 
-interface GeoNamesResposta {
-  name: string;
+interface NominatimResposta {
+  display_name: string;
 }
-
-const GEONAMES_USERNAME = process.env.GEONAMES_USERNAME
 
 interface InputLocalProps {
   local: string;
@@ -12,8 +10,8 @@ interface InputLocalProps {
   className: string;
 }
 
-const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) => {
-  const [sugestoes, setSugestoes] = useState<{ nome: string; codigoPais: string }[]>([]);
+const InputLocal: React.FC<InputLocalProps> = ({ local, setLocal, className }) => {
+  const [sugestoes, setSugestoes] = useState<{ nome: string }[]>([]);
 
   const buscarSugestoes = async (input: string) => {
     if (input.length < 3) {
@@ -23,16 +21,24 @@ const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) 
 
     try {
       const response = await fetch(
-        `http://api.geonames.org/searchJSON?q=${input}&maxRows=5&username=${GEONAMES_USERNAME}`
+        `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(input)}&format=json`,
+        {
+          headers: {
+            "User-Agent": "SeuApp/1.0 (milenasantosdeoliveira40@gmail.com)",
+          },
+        }
       );
-      
-      const data = await response.json();
 
-      if (data.geonames.length > 0) {
-        const opcoes = data.geonames.map((item: GeoNamesResposta) => ({
-          nome: item.name,
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+
+      const data: NominatimResposta[] = await response.json();
+
+      if (data.length > 0) {
+        const opcoes = data.map((item) => ({
+          nome: item.display_name,
         }));
-
         setSugestoes(opcoes);
       } else {
         setSugestoes([]);
@@ -56,7 +62,6 @@ const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) 
         placeholder="Insira o local"
         className={className}
       />
-      
       <datalist id="sugestoes-cidades">
         {sugestoes.map((sugestao, index) => (
           <option key={index} value={sugestao.nome} />

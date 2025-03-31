@@ -1,11 +1,9 @@
 import { useState } from "react";
 
-interface GeoNamesResposta {
-  name: string;
+interface NominatimResposta {
+  display_name: string;
   countryCode: string;
 }
-
-const GEONAMES_USERNAME = "milenaa052";
 
 interface InputDestinoProps {
   localDestino: string;
@@ -25,14 +23,23 @@ const InputDestino: React.FC<InputDestinoProps> = ({  localDestino, setLocalDest
 
     try {
       const response = await fetch(
-        `http://api.geonames.org/searchJSON?q=${input}&maxRows=5&username=${GEONAMES_USERNAME}`
+        `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(input)}&format=json`,
+        {
+          headers: {
+            "User-Agent": "SeuApp/1.0 (milenasantosdeoliveira40@gmail.com)",
+          },
+        }
       );
       
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
 
-      if (data.geonames.length > 0) {
-        const opcoes = data.geonames.map((item: GeoNamesResposta) => ({
-          nome: item.name,
+      const data: NominatimResposta[] = await response.json();
+
+      if (data.length > 0) {
+        const opcoes = data.map((item) => ({
+          nome: item.display_name,
           codigoPais: item.countryCode,
         }));
 

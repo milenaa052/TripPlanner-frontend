@@ -3,8 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const GEONAMES_USERNAME = "milenaa052";
-
 const marcadorIcone = new Leaflet.Icon({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
   iconSize: [25, 41],
@@ -26,7 +24,7 @@ const MapaComponente: React.FC<{ local: string }> = ({ local }) => {
     const buscarLocalizacao = async () => {
       try {
         const response = await fetch(
-          `http://api.geonames.org/searchJSON?q=${local}&maxRows=1&username=${GEONAMES_USERNAME}`
+          `https://nominatim.openstreetmap.org/search?city=${local}&format=json`
         );
 
         const data = await response.json();
