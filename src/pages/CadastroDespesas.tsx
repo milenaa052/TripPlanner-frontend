@@ -1,35 +1,62 @@
 import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 function CadastroDespesas() {
-    const [mensagem, setMensagem] = useState("");
     const [tipoDespesa, setTipoDespesa] = useState("");
     const [gasto, setGasto] = useState("");
     const [dataDespesa, setDataDespesa] = useState("");
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
+    const navigate = useNavigate()
 
     const { id } = useParams();
 
     const enviarForm = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!tipoDespesa || !gasto || !dataDespesa) {
+            setMensagemFalha("Todos os campos são obrigatórios")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            return;
+        }
+
         try {
-            await axios.post("http://localhost:3000/cadastro-despesa", {
-                tipoDespesa,
-                gasto,
-                dataDespesa,
+            const dados = {
+                tipoDespesa: tipoDespesa,
+                gasto: Number(gasto),
+                dataDespesa: dataDespesa,
                 viagemId: Number(id)
+            }
+
+            await axios.post("http://localhost:3000/cadastro-despesa", dados, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             })
 
-            setMensagem("Cadastro efetuado com sucesso!");
+            setMensagemSucesso("Despesa cadastrada com sucesso!")
+            setTimeout(() => {
+                navigate(`/info-viagem/${id}`)
+            }, 2000)
 
             setTipoDespesa("");
             setGasto("");
             setDataDespesa("");
 
         } catch (error) {
-            setMensagem("Erro ao cadastrar a despesa");
-            console.error(error);
+            setMensagemFalha("Erro ao realizar o cadastro de Despesa")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            console.error(error)
         }
     }
     return (
@@ -60,7 +87,8 @@ function CadastroDespesas() {
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
     );
 };
