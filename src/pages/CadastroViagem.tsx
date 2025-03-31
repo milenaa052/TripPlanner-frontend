@@ -4,20 +4,28 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import InputLocal from "../components/InputLocal";
 import InputDestino from "../components/InputDestino";
+import { useNavigate } from "react-router";
 
 function CadastroViagem() {
     const [dataInicio, setDataInicio] = useState<Date | null>(null);
     const [dataFim, setDataFim] = useState<Date | null>(null);
-    const [mensagem, setMensagem] = useState("");
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const [localOrigem, setLocalOrigem] = useState("");
     const [localDestino, setLocalDestino] = useState("");
     const [codigoPais, setCodigoPais] = useState("");
+    const navigate = useNavigate();
 
     const enviarForm = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!dataInicio || !dataFim) {
-            setMensagem("Selecione uma data válida!");
+        if (!localOrigem || !localDestino || !dataInicio || !dataFim) {
+            setMensagemFalha("Todos os campos são obrigatórios!");
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
             return;
         }
 
@@ -33,16 +41,25 @@ function CadastroViagem() {
                 dataFinal
             })
 
-            setMensagem("Cadastro realizado com sucesso.");
+            setMensagemSucesso("Cadastro realizado com sucesso.");
+            setTimeout(() => {
+                navigate("/")
+            }, 2000)
 
             setLocalOrigem("");
             setLocalDestino("");
             setCodigoPais("");
             setDataInicio(null);
             setDataFim(null);
+
         } catch (error) {
-            setMensagem("Erro ao salvar dados");
-            console.log(error)
+            setMensagemFalha("Erro ao cadastrar viagem")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            console.error(error)
         }
     }
 
@@ -70,7 +87,7 @@ function CadastroViagem() {
                 <div className="campos">
                     <label htmlFor="data" className="label">Data de início e fim da viagem</label>
                     <DatePicker selected={dataInicio} onChange={manipularDatas} id="data" name="data"
-                        startDate={dataInicio} endDate={dataFim} selectsRange className="input" 
+                        startDate={dataInicio} endDate={dataFim} selectsRange className="input" autoComplete="off"
                         placeholderText="dd/mm/yyyy - dd/mm/yyyy" dateFormat="dd/MM/yyyy"/>
                 </div>
 
@@ -79,7 +96,8 @@ function CadastroViagem() {
                 </div>
             </form>
 
-            { mensagem && <p>{mensagem}</p> }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
         </div>
     );
 };

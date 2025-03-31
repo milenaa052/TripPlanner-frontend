@@ -4,7 +4,7 @@ interface GeoNamesResposta {
   name: string;
 }
 
-const GEONAMES_USERNAME = "milenaa052";
+const GEONAMES_USERNAME = process.env.GEONAMES_USERNAME
 
 interface InputLocalProps {
   local: string;

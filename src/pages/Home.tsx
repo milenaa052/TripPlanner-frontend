@@ -17,13 +17,17 @@ function Home() {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:3000/viagens")
-            .then((response) => {
-                setViagem(response.data)
-            })
-            .catch((error) => {
-                console.error("Erro ao buscar viagens:", error)
-            })
+        axios.get("http://localhost:3000/viagens", {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
+        .then((response) => {
+            setViagem(response.data)
+        })
+        .catch((error) => {
+            console.error("Erro ao buscar viagens:", error)
+        })
     }, []);
 
     const viagensFiltradas = viagem.filter((cidade) => 
