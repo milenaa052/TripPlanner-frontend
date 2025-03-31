@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
-import axios from "axios";
-import InputLocal from "../../components/input/InputLocal";
+import { useState } from "react"
+import { useParams } from "react-router"
+import { useNavigate } from "react-router"
+import axios from "axios"
+import InputLocal from "../../components/input/InputLocal"
 
 function CadastroTransporte() {
   const [tipoTransporte, setTipoTransporte] = useState("")
@@ -14,25 +14,19 @@ function CadastroTransporte() {
   const [mensagemSucesso, setMensagemSucesso] = useState("")
   const navigate = useNavigate()
 
-  const { id } = useParams();
+  const { id } = useParams()
 
   const enviarForm = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (
-      !tipoTransporte ||
-      !origemTransporte ||
-      !destinoTransporte ||
-      !gastoTransporte ||
-      !dataTransporte
-    ) {
-      setMensagemFalha("Todos os campos são obrigatórios");
+    if (!tipoTransporte || !origemTransporte || !destinoTransporte || !gastoTransporte || !dataTransporte) {
+      setMensagemFalha("Todos os campos são obrigatórios")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      return;
+      return
     }
 
     try {
@@ -43,34 +37,35 @@ function CadastroTransporte() {
         gastoTransporte: Number(gastoTransporte),
         dataTransporte: dataTransporte,
         viagemId: Number(id),
-      };
+      }
 
       await axios.post("http://localhost:3000/cadastro-transporte", dados, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`
+        }
+      })
 
-      setMensagemSucesso("Transporte cadastrado com sucesso!");
+      setMensagemSucesso("Transporte cadastrado com sucesso!")
       setTimeout(() => {
-        navigate(`/info-viagem/${id}`);
-      }, 2000);
+        navigate(`/info-viagem/${id}`)
+      }, 2000)
 
-      setTipoTransporte("");
-      setOrigemTransporte("");
-      setDestinoTransporte("");
-      setGastoTransporte("");
-      setDataTransporte("");
+      setTipoTransporte("")
+      setOrigemTransporte("")
+      setDestinoTransporte("")
+      setGastoTransporte("")
+      setDataTransporte("")
+
     } catch (error) {
-      setMensagemFalha("Erro ao realizar o cadastro de transporte");
+      setMensagemFalha("Erro ao realizar o cadastro de transporte")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <div className="card">
@@ -78,16 +73,9 @@ function CadastroTransporte() {
 
       <form className="form" onSubmit={enviarForm}>
         <div className="campos">
-          <label htmlFor="tipoTransporte" className="label">
-            Tipo de Transporte
-          </label>
-          <select
-            name="tipoTransporte"
-            id="tipoTransporte"
-            className="select"
-            value={tipoTransporte}
-            onChange={(e) => setTipoTransporte(e.target.value)}
-          >
+          <label htmlFor="tipoTransporte" className="label">Tipo de Transporte</label>
+          <select name="tipoTransporte" id="tipoTransporte" className="select"
+            value={tipoTransporte} onChange={(e) => setTipoTransporte(e.target.value)}>
             <option value="">Selecione</option>
             <option value="Aviao">Avião</option>
             <option value="Barco">Barco</option>
@@ -106,9 +94,7 @@ function CadastroTransporte() {
         </div>
 
         <div className="campos">
-          <label htmlFor="localOrigem" className="label">
-            De:
-          </label>
+          <label htmlFor="localOrigem" className="label">De:</label>
           <InputLocal
             local={origemTransporte}
             setLocal={setOrigemTransporte}
@@ -117,9 +103,7 @@ function CadastroTransporte() {
         </div>
 
         <div className="campos">
-          <label htmlFor="localDestino" className="label">
-            Até:
-          </label>
+          <label htmlFor="localDestino" className="label">Até:</label>
           <InputLocal
             local={destinoTransporte}
             setLocal={setDestinoTransporte}
@@ -128,9 +112,7 @@ function CadastroTransporte() {
         </div>
 
         <div className="campos">
-          <label htmlFor="gasto" className="label">
-            Gasto
-          </label>
+          <label htmlFor="gasto" className="label">Gasto</label>
           <input
             type="number"
             id="gasto"
@@ -143,9 +125,7 @@ function CadastroTransporte() {
         </div>
 
         <div className="campos">
-          <label htmlFor="data" className="label">
-            Data
-          </label>
+          <label htmlFor="data" className="label">Data</label>
           <input
             type="date"
             id="data"
@@ -157,20 +137,14 @@ function CadastroTransporte() {
         </div>
 
         <div className="submit">
-          <button type="submit" className="salvar">
-            Salvar
-          </button>
+          <button type="submit" className="salvar">Salvar</button>
         </div>
       </form>
 
       {mensagemFalha ? <p className="mensagemFalha">{mensagemFalha}</p> : ""}
-      {mensagemSucesso ? (
-        <p className="mensagemSucesso">{mensagemSucesso}</p>
-      ) : (
-        ""
-      )}
+      {mensagemSucesso ? <p className="mensagemSucesso">{mensagemSucesso}</p> : ""}
     </div>
-  );
+  )
 }
 
-export default CadastroTransporte;
+export default CadastroTransporte

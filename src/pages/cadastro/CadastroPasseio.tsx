@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useParams, useLocation } from "react-router";
-import { useNavigate } from "react-router";
-import axios from "axios";
-import InputLocal from "../../components/input/InputLocal";
+import { useState } from "react"
+import { useParams, useLocation } from "react-router"
+import { useNavigate } from "react-router"
+import axios from "axios"
+import InputLocal from "../../components/input/InputLocal"
 
 function CadastroPasseio() {
   const location = useLocation()
@@ -16,19 +16,19 @@ function CadastroPasseio() {
   const [mensagemSucesso, setMensagemSucesso] = useState("")
   const navigate = useNavigate()
 
-  const { id } = useParams();
+  const { id } = useParams()
 
   const enviarForm = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!localPasseio || !horaInicial || !horaFinal || !gastoPasseio) {
-      setMensagemFalha("Todos os campos são obrigatórios");
+      setMensagemFalha("Todos os campos são obrigatórios")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      return;
+      return
     }
 
     try {
@@ -39,33 +39,34 @@ function CadastroPasseio() {
         horaFinal: horaFinal,
         gastoPasseio: Number(gastoPasseio),
         viagemId: Number(id),
-      };
+      }
 
       await axios.post("http://localhost:3000/cadastro-passeio", dados, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`
+        }
+      })
 
-      setMensagemSucesso("Passeio cadastrado com sucesso!");
+      setMensagemSucesso("Passeio cadastrado com sucesso!")
       setTimeout(() => {
-        navigate(`/info-viagem/${id}`);
-      }, 2000);
+        navigate(`/info-viagem/${id}`)
+      }, 2000)
 
-      setLocalPasseio("");
-      setHoraInicial("");
-      setHoraFinal("");
-      setGastoPasseio("");
+      setLocalPasseio("")
+      setHoraInicial("")
+      setHoraFinal("")
+      setGastoPasseio("")
+
     } catch (error) {
-      setMensagemFalha("Erro ao realizar o cadastro de Passeio");
+      setMensagemFalha("Erro ao realizar o cadastro de Passeio")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <div className="card">
@@ -73,9 +74,7 @@ function CadastroPasseio() {
 
       <form className="form" onSubmit={enviarForm}>
         <div className="campos">
-          <label htmlFor="localPasseio" className="label">
-            Local
-          </label>
+          <label htmlFor="localPasseio" className="label">Local</label>
           <InputLocal
             local={localPasseio}
             setLocal={setLocalPasseio}
@@ -85,9 +84,7 @@ function CadastroPasseio() {
 
         <div className="camposHora">
           <div className="camp">
-            <label htmlFor="horaInicial" className="label">
-              Horário Inicial
-            </label>
+            <label htmlFor="horaInicial" className="label">Horário Inicial</label>
             <input
               type="time"
               id="horaInicial"
@@ -100,9 +97,7 @@ function CadastroPasseio() {
           </div>
 
           <div className="camp">
-            <label htmlFor="horaFinal" className="label">
-              Horário Final
-            </label>
+            <label htmlFor="horaFinal" className="label">Horário Final</label>
             <input
               type="time"
               id="horaFinal"
@@ -116,9 +111,7 @@ function CadastroPasseio() {
         </div>
 
         <div className="campos">
-          <label htmlFor="gasto" className="label">
-            Gasto
-          </label>
+          <label htmlFor="gasto" className="label">Gasto</label>
           <input
             type="number"
             id="gasto"
@@ -131,20 +124,14 @@ function CadastroPasseio() {
         </div>
 
         <div className="submit">
-          <button type="submit" className="salvar">
-            Salvar
-          </button>
+          <button type="submit" className="salvar">Salvar</button>
         </div>
       </form>
 
       {mensagemFalha ? <p className="mensagemFalha">{mensagemFalha}</p> : ""}
-      {mensagemSucesso ? (
-        <p className="mensagemSucesso">{mensagemSucesso}</p>
-      ) : (
-        ""
-      )}
+      {mensagemSucesso ? <p className="mensagemSucesso">{mensagemSucesso}</p> : ""}
     </div>
-  );
+  )
 }
 
-export default CadastroPasseio;
+export default CadastroPasseio

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
-import axios from "axios";
+import { useState } from "react"
+import { useParams } from "react-router"
+import { useNavigate } from "react-router"
+import axios from "axios"
 
 function CadastroDespesas() {
     const [tipoDespesa, setTipoDespesa] = useState("")
@@ -11,10 +11,10 @@ function CadastroDespesas() {
     const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate()
 
-    const { id } = useParams();
+    const { id } = useParams()
 
     const enviarForm = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (!tipoDespesa || !gasto || !dataDespesa) {
             setMensagemFalha("Todos os campos são obrigatórios")
@@ -23,7 +23,7 @@ function CadastroDespesas() {
                 setMensagemFalha("")
             }, 1500)
 
-            return;
+            return
         }
 
         try {
@@ -45,9 +45,9 @@ function CadastroDespesas() {
                 navigate(`/info-viagem/${id}`)
             }, 2000)
 
-            setTipoDespesa("");
-            setGasto("");
-            setDataDespesa("");
+            setTipoDespesa("")
+            setGasto("")
+            setDataDespesa("")
 
         } catch (error) {
             setMensagemFalha("Erro ao realizar o cadastro de Despesa")
@@ -66,20 +66,41 @@ function CadastroDespesas() {
             <form className="form" onSubmit={enviarForm}>
                 <div className="campos">
                     <label htmlFor="tipoDespesa" className="label">Tipo de Despesa</label>
-                    <input type="text" id="tipoDespesa" name="tipoDespesa" className="input" 
-                        value={tipoDespesa} onChange={(e) => setTipoDespesa(e.target.value)} placeholder="Insira a categoria da despesa. Ex: Alimentação"/>
+                    <input 
+                        type="text" 
+                        id="tipoDespesa" 
+                        name="tipoDespesa" 
+                        className="input" 
+                        value={tipoDespesa}
+                        onChange={(e) => setTipoDespesa(e.target.value)} 
+                        placeholder="Insira a categoria da despesa. Ex: Alimentação"
+                    />
                 </div>
                 
                 <div className="campos">
                     <label htmlFor="gasto" className="label">Gasto</label>
-                    <input type="number" id="gasto" name="gasto" className="input" 
-                       value={gasto} onChange={(e) => setGasto(e.target.value)} placeholder="Insira o gasto do passeio"/>
+                    <input 
+                        type="number" 
+                        id="gasto" 
+                        name="gasto" 
+                        className="input" 
+                        value={gasto} 
+                        onChange={(e) => setGasto(e.target.value)} 
+                        placeholder="Insira o gasto do passeio"
+                    />
                 </div>
 
                 <div className="campos">
                     <label htmlFor="data" className="label">Data</label>
-                    <input type="date" id="data" name="data" className="input" 
-                       value={dataDespesa} onChange={(e) => setDataDespesa(e.target.value)} placeholder="Insira a data da despesa"/>
+                    <input 
+                        type="date" 
+                        id="data" 
+                        name="data" 
+                        className="input" 
+                        value={dataDespesa} 
+                        onChange={(e) => setDataDespesa(e.target.value)}
+                        placeholder="Insira a data da despesa"
+                    />
                 </div>
 
                 <div className="submit">
@@ -87,10 +108,10 @@ function CadastroDespesas() {
                 </div>
             </form>
 
-            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
-            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
+            {mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : ""}
+            {mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : ""}
       </div>
-    );
-};
+    )
+}
 
-export default CadastroDespesas;
+export default CadastroDespesas

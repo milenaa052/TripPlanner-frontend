@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import InputLocal from "../../components/input/InputLocal";
+import { useState } from "react"
+import { useParams } from "react-router"
+import { useNavigate } from "react-router"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import axios from "axios"
+import InputLocal from "../../components/input/InputLocal"
 
 function CadastroHospedagem() {
   const [localHospedagem, setLocalHospedagem] = useState("")
@@ -15,19 +15,19 @@ function CadastroHospedagem() {
   const [mensagemSucesso, setMensagemSucesso] = useState("")
   const navigate = useNavigate()
 
-  const { id } = useParams();
+  const { id } = useParams()
 
   const enviarForm = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!dataInicio || !dataFim || !localHospedagem || !gastoTotal) {
-      setMensagemFalha("Todos os campos são obrigatórios");
+      setMensagemFalha("Todos os campos são obrigatórios")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      return;
+      return
     }
 
     try {
@@ -37,39 +37,40 @@ function CadastroHospedagem() {
         dataCheckout: dataFim.toISOString().split("T")[0],
         gastoTotal: Number(gastoTotal),
         viagemId: Number(id),
-      };
+      }
 
       await axios.post("http://localhost:3000/cadastro-hospedagem", dados, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`
+        }
+      })
 
-      setMensagemSucesso("Hospedagem cadastrada com sucesso!");
+      setMensagemSucesso("Hospedagem cadastrada com sucesso!")
       setTimeout(() => {
-        navigate(`/info-viagem/${id}`);
-      }, 2000);
+        navigate(`/info-viagem/${id}`)
+      }, 2000)
 
-      setLocalHospedagem("");
-      setDataInicio(null);
-      setDataFim(null);
-      setGastoTotal("");
+      setLocalHospedagem("")
+      setDataInicio(null)
+      setDataFim(null)
+      setGastoTotal("")
+
     } catch (error) {
-      setMensagemFalha("Erro ao realizar o cadastro de Hospedagem");
+      setMensagemFalha("Erro ao realizar o cadastro de Hospedagem")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const manipularDatas = (range: [Date | null, Date | null]) => {
-    const [startDate, endDate] = range;
-    setDataInicio(startDate);
-    setDataFim(endDate);
-  };
+    const [startDate, endDate] = range
+    setDataInicio(startDate)
+    setDataFim(endDate)
+  }
 
   return (
     <div className="card">
@@ -77,9 +78,7 @@ function CadastroHospedagem() {
 
       <form className="form" onSubmit={enviarForm}>
         <div className="campos">
-          <label htmlFor="hotel" className="label">
-            Hotel / Airnb
-          </label>
+          <label htmlFor="hotel" className="label">Hotel / Airnb</label>
           <InputLocal
             local={localHospedagem}
             setLocal={setLocalHospedagem}
@@ -88,9 +87,7 @@ function CadastroHospedagem() {
         </div>
 
         <div className="campos">
-          <label htmlFor="data" className="label">
-            Data de chekin e chekout
-          </label>
+          <label htmlFor="data" className="label">Data de chekin e chekout</label>
           <DatePicker
             selected={dataInicio}
             onChange={manipularDatas}
@@ -107,9 +104,7 @@ function CadastroHospedagem() {
         </div>
 
         <div className="campos">
-          <label htmlFor="gasto" className="label">
-            Gasto Total
-          </label>
+          <label htmlFor="gasto" className="label">Gasto Total</label>
           <input
             type="number"
             id="gasto"
@@ -122,20 +117,14 @@ function CadastroHospedagem() {
         </div>
 
         <div className="submit">
-          <button type="submit" className="salvar">
-            Salvar
-          </button>
+          <button type="submit" className="salvar">Salvar</button>
         </div>
       </form>
 
       {mensagemFalha ? <p className="mensagemFalha">{mensagemFalha}</p> : ""}
-      {mensagemSucesso ? (
-        <p className="mensagemSucesso">{mensagemSucesso}</p>
-      ) : (
-        ""
-      )}
+      {mensagemSucesso ? <p className="mensagemSucesso">{mensagemSucesso}</p> : ""}
     </div>
-  );
+  )
 }
 
-export default CadastroHospedagem;
+export default CadastroHospedagem

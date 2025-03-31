@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import InputLocal from "../../components/input/InputLocal";
-import InputDestino from "../../components/input/InputDestino";
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import axios from "axios"
+import InputLocal from "../../components/input/InputLocal"
+import InputDestino from "../../components/input/InputDestino"
 
 function CadastroViagem() {
   const [localOrigem, setLocalOrigem] = useState("")
@@ -17,16 +17,16 @@ function CadastroViagem() {
   const navigate = useNavigate()
 
   const enviarForm = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!localOrigem || !localDestino || !dataInicio || !dataFim) {
-      setMensagemFalha("Todos os campos são obrigatórios!");
+      setMensagemFalha("Todos os campos são obrigatórios!")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      return;
+      return
     }
 
     try {
@@ -36,40 +36,41 @@ function CadastroViagem() {
         codigoPais: codigoPais,
         dataInicial: dataInicio.toISOString().split("T")[0],
         dataFinal: dataFim.toISOString().split("T")[0],
-      };
+      }
 
       await axios.post("http://localhost:3000/cadastro-viagem", dados, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`
+        }
+      })
 
-      setMensagemSucesso("Cadastro realizado com sucesso.");
+      setMensagemSucesso("Cadastro realizado com sucesso.")
       setTimeout(() => {
-        navigate("/");
-      }, 2000);
+        navigate("/")
+      }, 2000)
 
-      setLocalOrigem("");
-      setLocalDestino("");
-      setCodigoPais("");
-      setDataInicio(null);
-      setDataFim(null);
+      setLocalOrigem("")
+      setLocalDestino("")
+      setCodigoPais("")
+      setDataInicio(null)
+      setDataFim(null)
+
     } catch (error) {
-      setMensagemFalha("Erro ao cadastrar viagem");
+      setMensagemFalha("Erro ao cadastrar viagem")
 
       setTimeout(() => {
-        setMensagemFalha("");
-      }, 1500);
+        setMensagemFalha("")
+      }, 1500)
 
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const manipularDatas = (range: [Date | null, Date | null]) => {
-    const [startDate, endDate] = range;
-    setDataInicio(startDate);
-    setDataFim(endDate);
-  };
+    const [startDate, endDate] = range
+    setDataInicio(startDate)
+    setDataFim(endDate)
+  }
 
   return (
     <div className="card">
@@ -77,9 +78,7 @@ function CadastroViagem() {
 
       <form className="form" onSubmit={enviarForm}>
         <div className="campos">
-          <label htmlFor="localOrigem" className="label">
-            Local de Origem
-          </label>
+          <label htmlFor="localOrigem" className="label">Local de Origem</label>
           <InputLocal
             local={localOrigem}
             setLocal={setLocalOrigem}
@@ -88,9 +87,7 @@ function CadastroViagem() {
         </div>
 
         <div className="campos">
-          <label htmlFor="localDestino" className="label">
-            Destino
-          </label>
+          <label htmlFor="localDestino" className="label">Destino</label>
           <InputDestino
             localDestino={localDestino}
             setLocalDestino={setLocalDestino}
@@ -100,9 +97,7 @@ function CadastroViagem() {
         </div>
 
         <div className="campos">
-          <label htmlFor="data" className="label">
-            Data de início e fim da viagem
-          </label>
+          <label htmlFor="data" className="label">Data de início e fim da viagem</label>
           <DatePicker
             selected={dataInicio}
             onChange={manipularDatas}
@@ -119,20 +114,14 @@ function CadastroViagem() {
         </div>
 
         <div className="submit">
-          <button type="submit" className="salvar">
-            Salvar
-          </button>
+          <button type="submit" className="salvar">Salvar</button>
         </div>
       </form>
 
       {mensagemFalha ? <p className="mensagemFalha">{mensagemFalha}</p> : ""}
-      {mensagemSucesso ? (
-        <p className="mensagemSucesso">{mensagemSucesso}</p>
-      ) : (
-        ""
-      )}
+      {mensagemSucesso ? <p className="mensagemSucesso">{mensagemSucesso}</p> : ""}
     </div>
-  );
+  )
 }
 
-export default CadastroViagem;
+export default CadastroViagem

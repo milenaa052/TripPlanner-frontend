@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import { useState, useEffect } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import axios from "axios"
 
 function Home() {
     const [viagem, setViagem] = useState<Viagem[]>([])
     const [busca, setBusca] = useState("")
+    const [mensagemFalha, setMensagemFalha] = useState("")
 
     interface Viagem {
         idViagem: number,
@@ -27,20 +28,31 @@ function Home() {
             setViagem(response.data)
         })
         .catch((error) => {
-            console.error("Erro ao buscar viagens:", error)
+            setMensagemFalha("Erro ao buscar viagens")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 2000)
+
+            console.error(error)
         })
-    }, []);
+    }, [])
 
     const viagensFiltradas = viagem.filter((cidade) => 
         cidade.localDestino.toLowerCase().includes(busca.toLowerCase())
-    );
+    )
 
     return (
         <div className="home">
             <div className="fileira">
                 <h1 className="titulo">Adicione o seu destino</h1>
-                <input type="text" placeholder="Procure sua viagem" className="input" 
-                    value={busca} onChange={(e) => setBusca(e.target.value)}/>
+                <input 
+                    type="text" 
+                    placeholder="Procure sua viagem" 
+                    className="input" 
+                    value={busca} 
+                    onChange={(e) => setBusca(e.target.value)}
+                />
             </div>
 
             <div className="viagens">
@@ -50,6 +62,7 @@ function Home() {
                             <FontAwesomeIcon icon={faPlus}/>
                         </a>
                     </div>
+
                     <p>Adicionar viagem</p>
                 </div>
 
@@ -67,9 +80,11 @@ function Home() {
                 ) : (
                     <p>Não existe viagem cadastrada!</p>
                 )}
+
+                {mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : ""}
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Home;
+export default Home
