@@ -1,76 +1,97 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react"
+import { useParams } from "react-router"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons"
 import axios from "axios"
-import ModalHospedagem from "../modal/ModalHospedagem";
-import MapaLocal from "../mapas/MapaLocal";;
+import ModalHospedagem from "../modal/ModalHospedagem"
+import MapaLocal from "../mapas/MapaLocal"
 
 interface Hospedagens {
-  idHospedagem: number;
-  localHospedagem: string;
-  dataCheckin: string;
-  dataCheckout: string;
-  gastoTotal: number;
+  idHospedagem: number
+  localHospedagem: string
+  dataCheckin: string
+  dataCheckout: string
+  gastoTotal: number
+  viagemId: number
 }
 
 function TelaHospedagem() {
   const [hospedagens, setHospedagens] = useState<Hospedagens[]>([])
   const [idHospedagem, setIdHospedagem] = useState<Hospedagens | null>(null)
   const [modal, setModal] = useState(false)
+  const [mensagemFalha, setMensagemFalha] = useState("")
+  const [mensagemSucesso, setMensagemSucesso] = useState("")
 
-  const { id } = useParams();
+  const { id } = useParams()
 
   useEffect(() => {
-    carregarHospedagens();
+    carregarHospedagens()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const carregarHospedagens = () => {
-    axios
-      .get(`http://localhost:3000/hospedagens/?viagemId=${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      })
-      .then((response) => {
-        setHospedagens(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar hospedagens ", error);
-      });
-  };
+    axios.get(`http://localhost:3000/hospedagens/?viagemId=${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`
+      }
+    })
+    .then((response) => {
+      setHospedagens(response.data)
+    })
+    .catch((error) => {
+      setMensagemFalha("Erro ao buscar hospedagens")
+
+      setTimeout(() => {
+        setMensagemFalha("")
+      }, 2000)
+
+      console.error(error)
+    })
+  }
 
   const formatarData = (data: string) => {
-    const date = new Date(data);
-    const dia = String(date.getUTCDate()).padStart(2, "0");
-    const mes = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const ano = date.getUTCFullYear();
-    return `${dia}/${mes}/${ano}`;
-  };
+    const date = new Date(data)
+    const dia = String(date.getUTCDate()).padStart(2, "0")
+    const mes = String(date.getUTCMonth() + 1).padStart(2, "0")
+    const ano = date.getUTCFullYear()
+    return `${dia}/${mes}/${ano}`
+  }
 
   const deletarHospedagem = (idHospedagem: number) => {
-    axios
-      .delete(`http://localhost:3000/hospedagem/${idHospedagem}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      })
-      .then(() => {
-        carregarHospedagens();
-      })
-      .catch((error) => {
-        console.error("Erro ao excluir hospedagem ", error);
-      });
-  };
+    axios.delete(`http://localhost:3000/hospedagem/${idHospedagem}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`
+      }
+    })
+    .then(() => {
+      carregarHospedagens()
+      setMensagemSucesso("Hospedagem excluída com sucesso!")
+
+      setTimeout(() => {
+        setMensagemSucesso("")
+      }, 2000)
+    })
+    .catch((error) => {
+      setMensagemFalha("Erro ao excluir hospedagem ")
+
+      setTimeout(() => {
+        setMensagemFalha("")
+      }, 2000)
+
+      console.error(error)
+    })
+  }
 
   const abrirModal = (hospedagem: Hospedagens) => {
-    setIdHospedagem(hospedagem);
-    setModal(true);
-  };
+    setIdHospedagem(hospedagem)
+    setModal(true)
+  }
 
   return (
     <div>
+      { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+      { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
+
       {hospedagens.length > 0 ? (
         hospedagens.map((hospedagens) => (
           <div className="listagens" key={hospedagens.idHospedagem}>
@@ -117,7 +138,7 @@ function TelaHospedagem() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default TelaHospedagem;
+export default TelaHospedagem

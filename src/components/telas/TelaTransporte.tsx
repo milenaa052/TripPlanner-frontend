@@ -1,78 +1,98 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import ModalTransporte from "../modal/ModalTransporte";
-import MapaRotas from "../mapas/MapaRotas";
+import { useEffect, useState } from "react"
+import { useParams } from "react-router"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons"
+import axios from "axios"
+import ModalTransporte from "../modal/ModalTransporte"
+import MapaRotas from "../mapas/MapaRotas"
 
 interface Transporte {
-  idTransporte: number;
-  tipoTransporte: string;
-  origemTransporte: string;
-  destinoTransporte: string;
-  gastoTransporte: number;
-  dataTransporte: string;
-  viagemId: number;
+  idTransporte: number
+  tipoTransporte: string
+  origemTransporte: string
+  destinoTransporte: string
+  gastoTransporte: number
+  dataTransporte: string
+  viagemId: number
 }
 
 function TelaTransporte() {
   const [transporte, setTransporte] = useState<Transporte[]>([])
   const [idTransporte, setIdTransporte] = useState<Transporte | null>(null)
   const [modal, setModal] = useState(false)
+  const [mensagemFalha, setMensagemFalha] = useState("")
+  const [mensagemSucesso, setMensagemSucesso] = useState("")
 
-  const { id } = useParams();
+  const { id } = useParams()
 
   useEffect(() => {
-    carregarTransportes();
+    carregarTransportes()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const carregarTransportes = () => {
-    axios
-      .get(`http://localhost:3000/transportes/?viagemId=${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      })
-      .then((response) => {
-        setTransporte(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar transportes " + error);
-      });
-  };
+    axios.get(`http://localhost:3000/transportes/?viagemId=${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`
+      }
+    })
+    .then((response) => {
+      setTransporte(response.data)
+    })
+    .catch((error) => {
+      setMensagemFalha("Erro ao buscar transportes ")
+
+      setTimeout(() => {
+        setMensagemFalha("")
+      }, 2000)
+
+      console.error(error)
+    })
+  }
 
   const formatarData = (data: string) => {
-    const date = new Date(data);
-    const dia = String(date.getUTCDate()).padStart(2, "0");
-    const mes = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const ano = date.getUTCFullYear();
-    return `${dia}/${mes}/${ano}`;
-  };
+    const date = new Date(data)
+    const dia = String(date.getUTCDate()).padStart(2, "0")
+    const mes = String(date.getUTCMonth() + 1).padStart(2, "0")
+    const ano = date.getUTCFullYear()
+    return `${dia}/${mes}/${ano}`
+  }
 
   const deletarTransporte = (idTransporte: number) => {
-    axios
-      .delete(`http://localhost:3000/transporte/${idTransporte}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      })
-      .then(() => {
-        carregarTransportes();
-      })
-      .catch((error) => {
-        console.error("Erro ao excluir transporte ", error);
-      });
-  };
+    axios.delete(`http://localhost:3000/transporte/${idTransporte}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`
+      }
+    })
+    .then(() => {
+      carregarTransportes()
+      setMensagemSucesso("Transporte excluído com sucesso!")
+
+      setTimeout(() => {
+        setMensagemSucesso("")
+      }, 2000)
+    })
+    .catch((error) => {
+      setMensagemFalha("Erro ao excluir transporte")
+
+      setTimeout(() => {
+        setMensagemFalha("")
+      }, 2000)
+
+      console.error(error)
+    })
+  }
 
   const abrirModal = (transporte: Transporte) => {
-    setIdTransporte(transporte);
-    setModal(true);
-  };
+    setIdTransporte(transporte)
+    setModal(true)
+  }
 
   return (
     <div>
+      { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+      { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
+
       {transporte.length > 0 ? (
         transporte.map((transportes) => (
           <div className="listagens" key={transportes.idTransporte}>
@@ -123,7 +143,7 @@ function TelaTransporte() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default TelaTransporte;
+export default TelaTransporte
