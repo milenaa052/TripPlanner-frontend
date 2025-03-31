@@ -4,8 +4,8 @@ import { faPenToSquare, faCheck, faArrowRightFromBracket } from "@fortawesome/fr
 import { useAuth } from "../contexts/AuthContext";
 
 function CadastroTransporte() {
-    const [nomeUsuario, setNomeUsuario] = useState("Milena Santos de Oliveira");
-    const [editando, setEditando] = useState(false);
+    const [nomeUsuario, setNomeUsuario] = useState("Milena Santos de Oliveira")
+    const [editando, setEditando] = useState(false)
     const { logout } = useAuth()
 
     const handleEditar = () => {

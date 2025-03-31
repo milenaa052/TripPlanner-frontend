@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 function Home() {
-    const [busca, setBusca] = useState("");
-    const [viagem, setViagem] = useState<Viagem[]>([]);
+    const [viagem, setViagem] = useState<Viagem[]>([])
+    const [busca, setBusca] = useState("")
 
     interface Viagem {
         idViagem: number,

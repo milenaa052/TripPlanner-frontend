@@ -1,12 +1,12 @@
-import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 function CadastroDespesas() {
-    const [tipoDespesa, setTipoDespesa] = useState("");
-    const [gasto, setGasto] = useState("");
-    const [dataDespesa, setDataDespesa] = useState("");
+    const [tipoDespesa, setTipoDespesa] = useState("")
+    const [gasto, setGasto] = useState("")
+    const [dataDespesa, setDataDespesa] = useState("")
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate()

@@ -1,24 +1,47 @@
-import axios from "axios";
 import { useState } from "react";
 import { useParams, useLocation } from "react-router";
-import InputLocal from "../components/InputLocal";
-import { useNavigate } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import ConfirmaExclusao from "./ConfirmaExclusao";
+import InputLocal from "../input/InputLocal";
 
-function CadastroPasseio() {
-    const [localPasseio, setLocalPasseio] = useState("");
-    const [horaInicial, setHoraInicial] = useState("");
-    const [horaFinal, setHoraFinal] = useState("");
-    const [gastoPasseio, setGastoPasseio] = useState("");
+interface PasseioProps {
+    idPasseio: number;
+    dataPasseio: string;
+    localPasseio: string;
+    horaInicial: string;
+    horaFinal: string;
+    gastoPasseio: number;
+}
+
+interface ModalPasseioProps {
+    passeio: PasseioProps;
+    onDelete: (idPasseio: number) => void;
+    onClose: () => void;
+    onUpdate: () => void;
+}
+
+function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProps) {
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+    const [dataPasseio, setDataPasseio] = useState(queryParams.get("data") || passeio.dataPasseio)
+    const [localPasseio, setLocalPasseio] = useState(passeio.localPasseio)
+    const [horaInicial, setHoraInicial] = useState(passeio.horaInicial)
+    const [horaFinal, setHoraFinal] = useState(passeio.horaFinal)
+    const [gastoPasseio, setGastoPasseio] = useState(passeio.gastoPasseio.toString())
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const dataPasseio = queryParams.get("data");
-    const navigate = useNavigate()
+    const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false)
 
     const { id } = useParams();
 
-    const enviarForm = async (e: React.FormEvent) => {
+    const formatarHora = (hora: string) => {
+        return `${hora}:00`;
+    };
+
+    const atualizarPasseio = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!localPasseio || !horaInicial || !horaFinal|| !gastoPasseio) {
@@ -35,44 +58,35 @@ function CadastroPasseio() {
             const dados = {
                 dataPasseio: dataPasseio,
                 localPasseio: localPasseio,
-                horaInicial: horaInicial,
-                horaFinal: horaFinal,
+                horaInicial: formatarHora(horaInicial),
+                horaFinal: formatarHora(horaFinal),
                 gastoPasseio: Number(gastoPasseio),
                 viagemId: Number(id)
             }
 
-            await axios.post("http://localhost:3000/cadastro-passeio", dados, {
+            await axios.put(`http://localhost:3000/passeio/${passeio.idPasseio}`, dados, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                 }
             })
 
-            setMensagemSucesso("Passeio cadastrado com sucesso!")
+            setMensagemSucesso("Passeio atualizado com sucesso!");
+            onUpdate();
             setTimeout(() => {
-                navigate(`/info-viagem/${id}`)
-            }, 2000)
-
-            setLocalPasseio("");
-            setHoraInicial("");
-            setHoraFinal("");
-            setGastoPasseio("");
-
-        } catch (error) {
-            setMensagemFalha("Erro ao realizar o cadastro de Passeio")
-
-            setTimeout(() => {
-                setMensagemFalha("")
+                onClose();
             }, 1500)
 
-            console.error(error)
+            setDataPasseio("");
+
+        } catch (error) {
+            setMensagemFalha("Erro ao atualizar o passeio.");
+            console.error(error);
         }
     }
 
     return (
         <div className="card">
-            <h1 className="titulo">Cadastrar Passeio</h1>
-
-            <form className="form" onSubmit={enviarForm}>
+            <form className="form" onSubmit={atualizarPasseio}>
                 <div className="campos">
                     <label htmlFor="localPasseio" className="label">Local</label>
                     <InputLocal local={localPasseio} setLocal={setLocalPasseio} className="input" />
@@ -82,7 +96,7 @@ function CadastroPasseio() {
                     <div className="camp">
                         <label htmlFor="horaInicial" className="label">Horário Inicial</label>
                         <input type="time" id="horaInicial" name="horaInicial" className="input" 
-                            value={horaInicial} onChange={(e) => setHoraInicial(e.target.value)} placeholder="Insira o horário de início"/>
+                           value={horaInicial} onChange={(e) => setHoraInicial(e.target.value)} placeholder="Insira o horário de início"/>
                     </div>
 
                     <div className="camp">
@@ -99,14 +113,27 @@ function CadastroPasseio() {
                 </div>
 
                 <div className="submit">
+                    <button type="button" className="excluir" onClick={() => setMostrarConfirmacao(true)}>
+                        <FontAwesomeIcon icon={faTrashCan} className="icone"/>
+                    </button>
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
 
             { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
             { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
+            
+            {mostrarConfirmacao && (
+                <ConfirmaExclusao 
+                    onClose={() => setMostrarConfirmacao(false)}
+                    onConfirm={() => {
+                        onDelete(passeio.idPasseio);
+                        onClose();
+                    }}
+                />
+            )}
       </div>
     );
 };
 
-export default CadastroPasseio;
+export default ModalPasseio;

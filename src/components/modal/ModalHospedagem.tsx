@@ -1,12 +1,12 @@
 import { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import ConfirmaExclusao from "./ConfirmaExclusao";
-import InputLocal from "./InputLocal";
-import { useParams } from "react-router";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import ConfirmaExclusao from "./ConfirmaExclusao";
+import InputLocal from "../input/InputLocal";
 
 interface HospedagemProps {
     idHospedagem: number;
@@ -24,13 +24,13 @@ interface ModalHospedagemProps {
 }
 
 function ModalHospedagem({ hospedagem, onDelete, onClose, onUpdate }: ModalHospedagemProps) {
-    const [dataInicio, setDataInicio] = useState<Date | null>(new Date(hospedagem.dataCheckin));
-    const [dataFim, setDataFim] = useState<Date | null>(new Date(hospedagem.dataCheckout));
-    const [localHospedagem, setLocalHospedagem] = useState(hospedagem.localHospedagem);
-    const [gastoTotal, setGastoTotal] = useState(hospedagem.gastoTotal.toString());
-    const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
+    const [localHospedagem, setLocalHospedagem] = useState(hospedagem.localHospedagem)
+    const [dataInicio, setDataInicio] = useState<Date | null>(new Date(hospedagem.dataCheckin))
+    const [dataFim, setDataFim] = useState<Date | null>(new Date(hospedagem.dataCheckout))
+    const [gastoTotal, setGastoTotal] = useState(hospedagem.gastoTotal.toString())
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
+    const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false)
 
     const { id } = useParams();
 

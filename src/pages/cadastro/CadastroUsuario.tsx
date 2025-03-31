@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 function CadastroUsuario () {
-    const [nome, setNome] = useState("");
-    const [cpf, setCpf] = useState("");
+    const [nome, setNome] = useState("")
+    const [cpf, setCpf] = useState("")
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const cadastroUsuario = (e: React.FormEvent) => {
         e.preventDefault();

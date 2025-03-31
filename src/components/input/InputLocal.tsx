@@ -13,7 +13,7 @@ interface InputLocalProps {
 }
 
 const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) => {
-  const [sugestoes, setSugestoes] = useState<{ nome: string; codigoPais: string }[]>([]);
+  const [sugestoes, setSugestoes] = useState<{ nome: string; codigoPais: string }[]>([])
 
   const buscarSugestoes = async (input: string) => {
     if (input.length < 3) {

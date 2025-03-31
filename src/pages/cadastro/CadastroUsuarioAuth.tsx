@@ -1,16 +1,16 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 function CadastroUsuarioAuth () {
+    const [nome, setNome] = useState(localStorage.getItem("nome") || "")
+    const [cpf, setCpf] = useState(localStorage.getItem("cpf") || "")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [confirmaSenha, setConfirmaSenha] = useState("")
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate()
-    const [nome, setNome] = useState(localStorage.getItem("nome") || "")
-    const [cpf, setCpf] = useState(localStorage.getItem("cpf") || "")
 
     const cadastroUsuario = async (e: React.FormEvent) => {
         e.preventDefault()

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
-import ModalDespesa from "./ModalDespesa";
-import { useParams } from "react-router";
 import axios from "axios";
+import ModalDespesa from "../modal/ModalDespesa";
 
 interface Despesa {
   idDespesa: number;
@@ -13,9 +13,9 @@ interface Despesa {
 }
 
 function TelaDespesas() {
-  const [modal, setModal] = useState(false);
-  const [despesas, setDespesas] = useState<Despesa[]>([]);
-  const [idDespesa, setIdDespesa] = useState<Despesa | null>(null);
+  const [despesas, setDespesas] = useState<Despesa[]>([])
+  const [idDespesa, setIdDespesa] = useState<Despesa | null>(null)
+  const [modal, setModal] = useState(false)
 
   const { id } = useParams();
 
@@ -25,18 +25,19 @@ function TelaDespesas() {
   }, []);
 
   const carregarDespesas = () => {
-    axios.get(`http://localhost:3000/despesas/?viagemId=${id}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      }
-    })
-    .then((response) => {
-      setDespesas(response.data);
-    })
-    .catch((error) => {
-      console.error("Erro ao buscar despesas:", error);
-    });
-  }
+    axios
+      .get(`http://localhost:3000/despesas/?viagemId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      })
+      .then((response) => {
+        setDespesas(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar despesas:", error);
+      });
+  };
 
   const formatarData = (data: string) => {
     const date = new Date(data);
@@ -47,17 +48,18 @@ function TelaDespesas() {
   };
 
   const deletarDespesa = (idDespesa: number) => {
-    axios.delete(`http://localhost:3000/despesa/${idDespesa}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      }
-    })
-    .then(() => {
-      carregarDespesas();
-    })
-    .catch((error) => {
-      console.error("Erro ao excluir despesa ", error);
-    })
+    axios
+      .delete(`http://localhost:3000/despesa/${idDespesa}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      })
+      .then(() => {
+        carregarDespesas();
+      })
+      .catch((error) => {
+        console.error("Erro ao excluir despesa ", error);
+      });
   };
 
   const abrirModal = (despesa: Despesa) => {
@@ -65,15 +67,18 @@ function TelaDespesas() {
     setModal(true);
   };
 
-  const totalDespesas = despesas.reduce((total, despesa) => total + despesa.gasto, 0);
+  const totalDespesas = despesas.reduce(
+    (total, despesa) => total + despesa.gasto,
+    0
+  );
 
   return (
     <div>
-      <h2>Total de Despesas: { totalDespesas.toFixed(2) }</h2>
+      <h2>Total de Despesas: {totalDespesas.toFixed(2)}</h2>
 
       {despesas.length > 0 ? (
         despesas.map((despesa) => (
-          <div className="listagens" key={ despesa.idDespesa }>
+          <div className="listagens" key={despesa.idDespesa}>
             <div className="textoInfo">
               <h3>{despesa.tipoDespesa}</h3>
               <p>{despesa.gasto.toFixed(2)}</p>

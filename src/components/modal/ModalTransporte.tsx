@@ -1,22 +1,41 @@
-import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router";
-import InputLocal from "../components/InputLocal";
-import { useNavigate } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import ConfirmaExclusao from "./ConfirmaExclusao";
+import InputLocal from "../input/InputLocal";
 
-function CadastroTransporte() {
-    const [tipoTransporte, setTipoTransporte] = useState("");
-    const [origemTransporte, setOrigemTransporte] = useState("");
-    const [destinoTransporte, setDestinoTransporte] = useState("");
-    const [gastoTransporte, setGastoTransporte] = useState("");
-    const [dataTransporte, setDataTransporte] = useState("");
+interface TransporteProps {
+    idTransporte: number;
+    tipoTransporte: string;
+    origemTransporte: string;
+    destinoTransporte: string;
+    gastoTransporte: number;
+    dataTransporte: string;
+}
+
+interface ModalTransporteProps {
+    transporte: TransporteProps;
+    onDelete: (idTransporte: number) => void;
+    onClose: () => void;
+    onUpdate: () => void;
+}
+
+function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTransporteProps) {
+    const [tipoTransporte, setTipoTransporte] = useState(transporte.tipoTransporte)
+    const [origemTransporte, setOrigemTransporte] = useState(transporte.origemTransporte)
+    const [destinoTransporte, setDestinoTransporte] = useState(transporte.destinoTransporte)
+    const [gastoTransporte, setGastoTransporte] = useState(transporte.gastoTransporte.toString())
+    const [dataTransporte, setDataTransporte] = useState(transporte.dataTransporte)
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
-    const navigate = useNavigate()
+    const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false)
 
     const { id } = useParams();
 
-    const enviarForm = async (e: React.FormEvent) => {
+    const atualizarTransporte = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!tipoTransporte || !origemTransporte || !destinoTransporte || !gastoTransporte || !dataTransporte) {
@@ -39,42 +58,39 @@ function CadastroTransporte() {
                 viagemId: Number(id)
             }
 
-            await axios.post("http://localhost:3000/cadastro-transporte", dados, {
+            await axios.put(`http://localhost:3000/transporte/${transporte.idTransporte}`, dados, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                 }
             })
 
-            setMensagemSucesso("Transporte cadastrado com sucesso!");
+            setMensagemSucesso("Transporte atualizado com sucesso!");
+            onUpdate();
             setTimeout(() => {
-                navigate(`/info-viagem/${id}`)
-            }, 2000)
-
-            setTipoTransporte("");
-            setOrigemTransporte("");
-            setDestinoTransporte("");
-            setGastoTransporte("");
-            setDataTransporte("");
+                onClose();
+            }, 1500)
 
         } catch (error) {
-            setMensagemFalha("Erro ao realizar o cadastro de transporte")
-
+            setMensagemFalha("Erro ao atualizar o Transporte")
+            
             setTimeout(() => {
                 setMensagemFalha("")
             }, 1500)
 
-            console.error(error)           
+            console.error(error)
         }
+    }
+
+    const formatarData = (data: string) => {
+        return data.slice(0, 10);
     }
 
     return (
         <div className="card">
-            <h1 className="titulo">Cadastrar Transporte</h1>
-
-            <form className="form" onSubmit={enviarForm}>
+            <form className="form" onSubmit={atualizarTransporte}>
                 <div className="campos">
                     <label htmlFor="tipoTransporte" className="label">Tipo de Transporte</label>
-                    <select name="tipoTransporte" id="tipoTransporte" className="select" 
+                    <select name="tipoTransporte" id="tipoTransporte" className="select"
                         value={tipoTransporte} onChange={(e) => setTipoTransporte(e.target.value)}>
                         <option value="">Selecione</option>
                         <option value="Aviao">Avião</option>
@@ -112,18 +128,31 @@ function CadastroTransporte() {
                 <div className="campos">
                     <label htmlFor="data" className="label">Data</label>
                     <input type="date" id="data" name="data" className="input"
-                       value={dataTransporte} onChange={(e) => setDataTransporte(e.target.value)} />
+                       value={formatarData(dataTransporte)} onChange={(e) => setDataTransporte(e.target.value)} />
                 </div>
 
                 <div className="submit">
+                    <button type="button" className="excluir" onClick={() => setMostrarConfirmacao(true)}>
+                        <FontAwesomeIcon icon={faTrashCan} className="icone"/>
+                    </button>
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
 
             { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
             { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
+
+            {mostrarConfirmacao && (
+                <ConfirmaExclusao 
+                    onClose={() => setMostrarConfirmacao(false)}
+                    onConfirm={() => {
+                        onDelete(transporte.idTransporte);
+                        onClose();
+                    }}
+                />
+            )}
       </div>
     );
 };
 
-export default CadastroTransporte;
+export default ModalTransporte;

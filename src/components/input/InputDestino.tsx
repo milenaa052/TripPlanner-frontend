@@ -15,7 +15,7 @@ interface InputDestinoProps {
 }
 
 const InputDestino: React.FC<InputDestinoProps> = ({  localDestino, setLocalDestino, setCodigoPais, className }) => {
-  const [sugestoes, setSugestoes] = useState<{ nome: string; codigoPais: string }[]>([]);
+  const [sugestoes, setSugestoes] = useState<{ nome: string; codigoPais: string }[]>([])
 
   const buscarSugestoes = async (input: string) => {
     if (input.length < 3) {

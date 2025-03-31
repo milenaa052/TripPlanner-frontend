@@ -1,13 +1,13 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
 
 function Login () {
-    const [mensagemFalha, setMensagemFalha] = useState("")
-    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const { login } = useAuth();
     const navigate = useNavigate();
 
