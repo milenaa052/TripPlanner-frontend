@@ -1,26 +1,27 @@
-import { useState } from "react";
-import { useParams, useLocation } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import ConfirmaExclusao from "./ConfirmaExclusao";
-import InputLocal from "../input/InputLocal";
+import { useState } from "react"
+import { useParams, useLocation } from "react-router"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import "react-datepicker/dist/react-datepicker.css"
+import axios from "axios"
+import ConfirmaExclusao from "./ConfirmaExclusao"
+import InputLocal from "../input/InputLocal"
 
 interface PasseioProps {
-    idPasseio: number;
-    dataPasseio: string;
-    localPasseio: string;
-    horaInicial: string;
-    horaFinal: string;
-    gastoPasseio: number;
+    idPasseio: number
+    dataPasseio: string
+    localPasseio: string
+    horaInicial: string
+    horaFinal: string
+    gastoPasseio: number
+    viagemId: number
 }
 
 interface ModalPasseioProps {
-    passeio: PasseioProps;
-    onDelete: (idPasseio: number) => void;
-    onClose: () => void;
-    onUpdate: () => void;
+    passeio: PasseioProps
+    onDelete: (idPasseio: number) => void
+    onClose: () => void
+    onUpdate: () => void
 }
 
 function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProps) {
@@ -35,14 +36,14 @@ function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProp
     const [mensagemSucesso, setMensagemSucesso] = useState("")
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false)
 
-    const { id } = useParams();
+    const { id } = useParams()
 
     const formatarHora = (hora: string) => {
-        return `${hora}:00`;
-    };
+        return `${hora}:00`
+    }
 
     const atualizarPasseio = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (!localPasseio || !horaInicial || !horaFinal|| !gastoPasseio) {
             setMensagemFalha("Todos os campos são obrigatórios")
@@ -51,7 +52,7 @@ function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProp
                 setMensagemFalha("")
             }, 1500)
 
-            return;
+            return
         }
 
         try {
@@ -70,17 +71,18 @@ function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProp
                 }
             })
 
-            setMensagemSucesso("Passeio atualizado com sucesso!");
-            onUpdate();
+            setMensagemSucesso("Passeio atualizado com sucesso!")
+
+            onUpdate()
             setTimeout(() => {
-                onClose();
+                onClose()
             }, 1500)
 
-            setDataPasseio("");
+            setDataPasseio("")
 
         } catch (error) {
-            setMensagemFalha("Erro ao atualizar o passeio.");
-            console.error(error);
+            setMensagemFalha("Erro ao atualizar o passeio.")
+            console.error(error)
         }
     }
 
@@ -89,33 +91,59 @@ function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProp
             <form className="form" onSubmit={atualizarPasseio}>
                 <div className="campos">
                     <label htmlFor="localPasseio" className="label">Local</label>
-                    <InputLocal local={localPasseio} setLocal={setLocalPasseio} className="input" />
+                    <InputLocal 
+                        local={localPasseio} 
+                        setLocal={setLocalPasseio} 
+                        className="input" 
+                    />
                 </div>
                 
                 <div className="camposHora">
                     <div className="camp">
                         <label htmlFor="horaInicial" className="label">Horário Inicial</label>
-                        <input type="time" id="horaInicial" name="horaInicial" className="input" 
-                           value={horaInicial} onChange={(e) => setHoraInicial(e.target.value)} placeholder="Insira o horário de início"/>
+                        <input 
+                            type="time" 
+                            id="horaInicial" 
+                            name="horaInicial" 
+                            className="input" 
+                            value={horaInicial} 
+                            onChange={(e) => setHoraInicial(e.target.value)} 
+                            placeholder="Insira o horário de início"
+                        />
                     </div>
 
                     <div className="camp">
                         <label htmlFor="horaFinal" className="label">Horário Final</label>
-                        <input type="time" id="horaFinal" name="horaFinal" className="input" 
-                           value={horaFinal} onChange={(e) => setHoraFinal(e.target.value)} placeholder="Insira o horário final"/>
+                        <input 
+                            type="time" 
+                            id="horaFinal" 
+                            name="horaFinal" 
+                            className="input" 
+                            value={horaFinal} 
+                            onChange={(e) => setHoraFinal(e.target.value)} 
+                            placeholder="Insira o horário final"
+                        />
                     </div>
                 </div>
 
                 <div className="campos">
                     <label htmlFor="gasto" className="label">Gasto</label>
-                    <input type="number" id="gasto" name="gasto" className="input" 
-                       value={gastoPasseio} onChange={(e) => setGastoPasseio(e.target.value)} placeholder="Insira o gasto do passeio"/>
+                    <input 
+                        type="number" 
+                        id="gasto" 
+                        name="gasto" 
+                        className="input" 
+                        value={gastoPasseio} 
+                        onChange={(e) => setGastoPasseio(e.target.value)} 
+                        placeholder="Insira o gasto do passeio"
+                    />
                 </div>
 
                 <div className="submit">
                     <button type="button" className="excluir" onClick={() => setMostrarConfirmacao(true)}>
                         <FontAwesomeIcon icon={faTrashCan} className="icone"/>
                     </button>
+                    
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
@@ -127,13 +155,13 @@ function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProp
                 <ConfirmaExclusao 
                     onClose={() => setMostrarConfirmacao(false)}
                     onConfirm={() => {
-                        onDelete(passeio.idPasseio);
-                        onClose();
+                        onDelete(passeio.idPasseio)
+                        onClose()
                     }}
                 />
             )}
       </div>
-    );
-};
+    )
+}
 
-export default ModalPasseio;
+export default ModalPasseio
