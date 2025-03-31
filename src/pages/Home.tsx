@@ -12,8 +12,9 @@ function Home() {
         localOrigem: string,
         localDestino: string,
         codigoPais: string,
-        dataInicial: Date,
-        dataFinal: Date,
+        dataInicial: string,
+        dataFinal: string,
+        usuarioId: number
     }
 
     useEffect(() => {
@@ -54,7 +55,7 @@ function Home() {
 
                 {viagensFiltradas.length > 0 ? (
                     viagensFiltradas.map((cidade) => (
-                        <div className="infoViagem">
+                        <div className="infoViagem" key={cidade.idViagem}>
                             <div className="viagemCadastrada">
                                 <a href={`/info-viagem/${cidade.idViagem}`}>
                                     <img src={`https://flagcdn.com/144x108/${cidade.codigoPais.toLowerCase()}.png`} alt="" />

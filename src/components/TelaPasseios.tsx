@@ -36,7 +36,11 @@ function TelaPasseios() {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/viagem/${id}`)
+        axios.get(`http://localhost:3000/viagem/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
         .then((response) => {
             setViagem(response.data)
         })
@@ -47,10 +51,15 @@ function TelaPasseios() {
 
     useEffect(() => {
         carregarPasseios();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const carregarPasseios = () => {
-        axios.get("http://localhost:3000/passeios")
+        axios.get(`http://localhost:3000/passeios/?viagemId=${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
         .then((response) => {
             setPasseio(response.data)
         })
@@ -140,7 +149,11 @@ function TelaPasseios() {
     }
 
     const deletarPasseio = (idPasseio: number) => {
-        axios.delete(`http://localhost:3000/passeio/${idPasseio}`)
+        axios.delete(`http://localhost:3000/passeio/${idPasseio}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
         .then(() => {
             carregarPasseios();
         })
@@ -231,6 +244,7 @@ function TelaPasseios() {
                             passeio={idPasseio}
                             onDelete={deletarPasseio}
                             onClose={() => setModal(false)}
+                            onUpdate={carregarPasseios}
                         />
                     </div>
                 </div>

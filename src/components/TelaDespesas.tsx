@@ -21,10 +21,15 @@ function TelaDespesas() {
 
   useEffect(() => {
     carregarDespesas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const carregarDespesas = () => {
-    axios.get("http://localhost:3000/despesas")
+    axios.get(`http://localhost:3000/despesas/?viagemId=${id}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    })
     .then((response) => {
       setDespesas(response.data);
     })
@@ -42,7 +47,11 @@ function TelaDespesas() {
   };
 
   const deletarDespesa = (idDespesa: number) => {
-    axios.delete(`http://localhost:3000/despesa/${idDespesa}`)
+    axios.delete(`http://localhost:3000/despesa/${idDespesa}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    })
     .then(() => {
       carregarDespesas();
     })
@@ -56,25 +65,31 @@ function TelaDespesas() {
     setModal(true);
   };
 
+  const totalDespesas = despesas.reduce((total, despesa) => total + despesa.gasto, 0);
+
   return (
     <div>
-      <h2>Total de Despesas: 0</h2>
+      <h2>Total de Despesas: { totalDespesas.toFixed(2) }</h2>
 
-      {despesas.map((despesa) => (
-        <div className="listagens" key={ despesa.idDespesa }>
-          <div className="textoInfo">
-            <h3>{despesa.tipoDespesa}</h3>
-            <p>{despesa.gasto.toFixed(2)}</p>
-            <p>{formatarData(despesa.dataDespesa)}</p>
-          </div>
+      {despesas.length > 0 ? (
+        despesas.map((despesa) => (
+          <div className="listagens" key={ despesa.idDespesa }>
+            <div className="textoInfo">
+              <h3>{despesa.tipoDespesa}</h3>
+              <p>{despesa.gasto.toFixed(2)}</p>
+              <p>{formatarData(despesa.dataDespesa)}</p>
+            </div>
 
-          <div className="icone">
-            <button onClick={() => abrirModal(despesa)}>
-              <FontAwesomeIcon icon={faChevronRight} />
-            </button>
+            <div className="icone">
+              <button onClick={() => abrirModal(despesa)}>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p>Nenhuma despesa cadastrada!</p>
+      )}
 
       <div className="botao">
         <div className="adicionar">
@@ -91,6 +106,7 @@ function TelaDespesas() {
               despesa={idDespesa}
               onDelete={deletarDespesa}
               onClose={() => setModal(false)}
+              onUpdate={carregarDespesas}
             />
           </div>
         </div>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router";
 import InputLocal from "../components/InputLocal";
+import { useNavigate } from "react-router";
 
 function CadastroTransporte() {
     const [tipoTransporte, setTipoTransporte] = useState("");
@@ -9,24 +10,45 @@ function CadastroTransporte() {
     const [destinoTransporte, setDestinoTransporte] = useState("");
     const [gastoTransporte, setGastoTransporte] = useState("");
     const [dataTransporte, setDataTransporte] = useState("");
-    const [mensagem, setMensagem] = useState("");
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
+    const navigate = useNavigate()
 
     const { id } = useParams();
 
     const enviarForm = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!tipoTransporte || !origemTransporte || !destinoTransporte || !gastoTransporte || !dataTransporte) {
+            setMensagemFalha("Todos os campos são obrigatórios")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            return;
+        }
+
         try {
-            await axios.post("http://localhost:3000/cadastro-transporte", {
-                tipoTransporte,
-                origemTransporte,
-                destinoTransporte,
-                gastoTransporte,
-                dataTransporte,
+            const dados = {
+                tipoTransporte: tipoTransporte,
+                origemTransporte: origemTransporte,
+                destinoTransporte: destinoTransporte,
+                gastoTransporte: Number(gastoTransporte),
+                dataTransporte: dataTransporte,
                 viagemId: Number(id)
+            }
+
+            await axios.post("http://localhost:3000/cadastro-transporte", dados, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             })
 
-            setMensagem("Transporte cadastrado com sucesso!!");
+            setMensagemSucesso("Transporte cadastrado com sucesso!");
+            setTimeout(() => {
+                navigate(`/info-viagem/${id}`)
+            }, 2000)
 
             setTipoTransporte("");
             setOrigemTransporte("");
@@ -35,8 +57,13 @@ function CadastroTransporte() {
             setDataTransporte("");
 
         } catch (error) {
-            setMensagem("Erro ao cadastrar o transporte!");
-            console.error(error);            
+            setMensagemFalha("Erro ao realizar o cadastro de transporte")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            console.error(error)           
         }
     }
 
@@ -93,7 +120,8 @@ function CadastroTransporte() {
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
     );
 };
