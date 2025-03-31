@@ -36,7 +36,7 @@ function CadastroViagem() {
                 codigoPais: codigoPais,
                 dataInicial: dataInicio.toISOString().split("T")[0],
                 dataFinal: dataFim.toISOString().split("T")[0]
-              };
+            };
 
             await axios.post('http://localhost:3000/cadastro-viagem', dados, {
                 headers: {

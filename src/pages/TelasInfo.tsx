@@ -15,6 +15,7 @@ interface Viagem {
     codigoPais: string,
     dataInicial: string,
     dataFinal: string,
+    usuarioId: number
 }
 
 function TelasInfo() {

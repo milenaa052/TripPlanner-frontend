@@ -4,37 +4,52 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useParams } from "react-router";
 import InputLocal from "../components/InputLocal";
+import { useNavigate } from "react-router";
 
 function CadastroHospedagem() {;
-    const [dataInicio, setDataInicio] = useState<Date | null>(null);
-    const [dataFim, setDataFim] = useState<Date | null>(null);
-    const [mensagem, setMensagem] = useState("");
-    const [localHospedagem, setLocalHospedagem] = useState("");
-    const [gastoTotal, setGastoTotal] = useState("");
+    const [dataInicio, setDataInicio] = useState<Date | null>(null)
+    const [dataFim, setDataFim] = useState<Date | null>(null)
+    const [localHospedagem, setLocalHospedagem] = useState("")
+    const [gastoTotal, setGastoTotal] = useState("")
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
+    const navigate = useNavigate()
 
     const { id } = useParams();
 
     const enviarForm = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!dataInicio || !dataFim) {
-            setMensagem("Selecione uma data válida!");
+        if (!dataInicio || !dataFim || !localHospedagem || !gastoTotal) {
+            setMensagemFalha("Todos os campos são obrigatórios")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
             return;
         }
 
-        const dataCheckin = dataInicio.toISOString().split("T")[0];
-        const dataCheckout = dataFim.toISOString().split("T")[0];
-
         try {
-            await axios.post("http://localhost:3000/cadastro-hospedagem", {
-                localHospedagem,
-                dataCheckin,
-                dataCheckout,
-                gastoTotal,
+            const dados = {
+                localHospedagem: localHospedagem,
+                dataCheckin: dataInicio.toISOString().split("T")[0],
+                dataCheckout: dataFim.toISOString().split("T")[0],
+                gastoTotal: Number(gastoTotal),
                 viagemId: Number(id)
+            };
+
+            await axios.post("http://localhost:3000/cadastro-hospedagem", dados, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             })
     
-            setMensagem("Cadastro realizado com sucesso!");
+            setMensagemSucesso("Cadastro realizado com sucesso!")
+            setTimeout(() => {
+                navigate(`/info-viagem/${id}`)
+            }, 2000)
+              
     
             setLocalHospedagem("");
             setDataInicio(null);
@@ -42,8 +57,13 @@ function CadastroHospedagem() {;
             setGastoTotal("");
     
         } catch (error) {
-            setMensagem("Erro ao realizar o cadastro de Hospedagem");
-            console.error(error);
+            setMensagemFalha("Erro ao realizar o cadastro de Hospedagem")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            console.error(error)
         }
     }
 
@@ -66,7 +86,7 @@ function CadastroHospedagem() {;
                 <div className="campos">
                     <label htmlFor="data" className="label">Data de chekin e chekout</label>
                     <DatePicker selected={dataInicio} onChange={manipularDatas} id="data" name="data"
-                        startDate={dataInicio} endDate={dataFim} selectsRange className="input" 
+                        startDate={dataInicio} endDate={dataFim} selectsRange className="input" autoComplete="off"
                         placeholderText="dd/mm/yyyy - dd/mm/yyyy" dateFormat="dd/MM/yyyy"/>
                 </div>
 
@@ -81,7 +101,8 @@ function CadastroHospedagem() {;
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
     );
 };

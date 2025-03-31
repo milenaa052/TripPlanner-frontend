@@ -20,15 +20,17 @@ interface ModalHospedagemProps {
     hospedagem: HospedagemProps;
     onDelete: (idHospedagem: number) => void;
     onClose: () => void;
+    onUpdate: () => void;
 }
 
-function ModalHospedagem({ hospedagem, onDelete, onClose }: ModalHospedagemProps) {
+function ModalHospedagem({ hospedagem, onDelete, onClose, onUpdate }: ModalHospedagemProps) {
     const [dataInicio, setDataInicio] = useState<Date | null>(new Date(hospedagem.dataCheckin));
     const [dataFim, setDataFim] = useState<Date | null>(new Date(hospedagem.dataCheckout));
     const [localHospedagem, setLocalHospedagem] = useState(hospedagem.localHospedagem);
     const [gastoTotal, setGastoTotal] = useState(hospedagem.gastoTotal.toString());
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
-    const [mensagem, setMensagem] = useState("");
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
 
     const { id } = useParams();
 
@@ -41,29 +43,45 @@ function ModalHospedagem({ hospedagem, onDelete, onClose }: ModalHospedagemProps
     const atualizarHospedagem = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!dataInicio || !dataFim) {
-            setMensagem("Selecione uma data válida!");
+        if (!dataInicio || !dataFim || !localHospedagem || !gastoTotal) {
+            setMensagemFalha("Todos os campos são obrigatórios")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
             return;
         }
 
-        const dataCheckin = dataInicio.toISOString().split("T")[0];
-        const dataCheckout = dataFim.toISOString().split("T")[0];
-
         try {
-            await axios.put(`http://localhost:3000/hospedagem/${hospedagem.idHospedagem}`, {
-                localHospedagem,
-                dataCheckin,
-                dataCheckout,
-                gastoTotal: parseFloat(gastoTotal),
+            const dados = {
+                localHospedagem: localHospedagem,
+                dataCheckin: dataInicio.toISOString().split("T")[0],
+                dataCheckout: dataFim.toISOString().split("T")[0],
+                gastoTotal: Number(gastoTotal),
                 viagemId: Number(id)
+            };
+
+            await axios.put(`http://localhost:3000/hospedagem/${hospedagem.idHospedagem}`, dados, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             })
 
-            setMensagem("Hospedagem atualizada com sucesso!!");
-            onClose();
+            setMensagemSucesso("Hospedagem atualizada com sucesso!");
+            onUpdate();
+            setTimeout(() => {
+                onClose();
+            }, 1500)
 
         } catch (error) {
-            setMensagem("Erro ao atualizar a hospedagem");
-            console.error(error);
+            setMensagemFalha("Erro ao atualizar a Hospedagem")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            console.error(error)
         }
     }
 
@@ -95,7 +113,8 @@ function ModalHospedagem({ hospedagem, onDelete, onClose }: ModalHospedagemProps
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
 
             {mostrarConfirmacao && (
                 <ConfirmaExclusao 

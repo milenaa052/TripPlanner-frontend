@@ -23,16 +23,21 @@ function TelaHospedagem() {
 
     useEffect(() => {
         carregarHospedagens();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const carregarHospedagens = () => {
-        axios.get("http://localhost:3000/hospedagens")
-            .then((response) => {
-                setHospedagens(response.data)
-            })
-            .catch((error) => {
-                console.error("Erro ao buscar hospedagens ", error)
-            })
+        axios.get(`http://localhost:3000/hospedagens/?viagemId=${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
+        .then((response) => {
+            setHospedagens(response.data)
+        })
+        .catch((error) => {
+            console.error("Erro ao buscar hospedagens ", error)
+        })
     };
 
     const formatarData = (data: string) => {
@@ -44,7 +49,11 @@ function TelaHospedagem() {
     };
 
     const deletarHospedagem = (idHospedagem: number) => {
-        axios.delete(`http://localhost:3000/hospedagem/${idHospedagem}`)
+        axios.delete(`http://localhost:3000/hospedagem/${idHospedagem}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
         .then(() => {
             carregarHospedagens();
         })
@@ -60,26 +69,30 @@ function TelaHospedagem() {
 
     return (
         <div>
-            { hospedagens.map((hospedagens) => (
-                <div className="listagens" key={hospedagens.idHospedagem}>
-                    <div className="textoInfo">
-                        <h3>{ hospedagens.localHospedagem } </h3>
-                        <p>Checkin: { formatarData(hospedagens.dataCheckin) }</p>
-                        <p>Checkout: { formatarData(hospedagens.dataCheckout) }</p>
-                        <p>Gasto Total: { hospedagens.gastoTotal.toFixed(2) }</p>
-                    </div>
+            {hospedagens.length > 0 ? (
+                hospedagens.map((hospedagens) => (
+                    <div className="listagens" key={hospedagens.idHospedagem}>
+                        <div className="textoInfo">
+                            <h3>{ hospedagens.localHospedagem } </h3>
+                            <p>Checkin: { formatarData(hospedagens.dataCheckin) }</p>
+                            <p>Checkout: { formatarData(hospedagens.dataCheckout) }</p>
+                            <p>Gasto Total: { hospedagens.gastoTotal.toFixed(2) }</p>
+                        </div>
 
-                    <div className="mapa">
-                        <MapaLocal local={hospedagens.localHospedagem} />
-                    </div>
+                        <div className="mapa">
+                            <MapaLocal local={hospedagens.localHospedagem} />
+                        </div>
 
-                    <div className="icone">
-                        <button onClick={() => abrirModal(hospedagens)}>
-                            <FontAwesomeIcon icon={faChevronRight} className="icone"/>
-                        </button>
+                        <div className="icone">
+                            <button onClick={() => abrirModal(hospedagens)}>
+                                <FontAwesomeIcon icon={faChevronRight} className="icone"/>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                <p>Nenhuma hospedagem cadastrada!</p>
+            )}
 
             <div className="botao">
                 <div className="adicionar">
@@ -96,6 +109,7 @@ function TelaHospedagem() {
                             hospedagem={idHospedagem}
                             onDelete={deletarHospedagem}
                             onClose={() => setModal(false)}
+                            onUpdate={carregarHospedagens}
                         />
                     </div>
                 </div>
