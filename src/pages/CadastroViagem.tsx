@@ -29,17 +29,20 @@ function CadastroViagem() {
             return;
         }
 
-        const dataInicial = dataInicio.toISOString().split("T")[0];
-        const dataFinal = dataFim.toISOString().split("T")[0];
-
         try {
-            await axios.post("http://localhost:3000/cadastro-viagem", {
-                localOrigem,
-                localDestino,
-                codigoPais,
-                dataInicial,
-                dataFinal
-            })
+            const dados = {
+                localOrigem: localOrigem,
+                localDestino: localDestino,
+                codigoPais: codigoPais,
+                dataInicial: dataInicio.toISOString().split("T")[0],
+                dataFinal: dataFim.toISOString().split("T")[0]
+              };
+
+            await axios.post('http://localhost:3000/cadastro-viagem', dados, {
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
 
             setMensagemSucesso("Cadastro realizado com sucesso.");
             setTimeout(() => {
