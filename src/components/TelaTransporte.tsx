@@ -25,10 +25,15 @@ function TelaTransporte() {
 
     useEffect(() => {
         carregarTransportes();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const carregarTransportes = () => {
-        axios.get("http://localhost:3000/transportes")
+        axios.get(`http://localhost:3000/transportes/?viagemId=${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
         .then((response) => {
             setTransporte(response.data)
         })
@@ -46,7 +51,11 @@ function TelaTransporte() {
     };
 
     const deletarTransporte = (idTransporte: number) => {
-        axios.delete(`http://localhost:3000/transporte/${idTransporte}`)
+        axios.delete(`http://localhost:3000/transporte/${idTransporte}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
         .then(() => {
             carregarTransportes();
         })
@@ -85,7 +94,7 @@ function TelaTransporte() {
                     </div>
                 ))
             ) : (
-                <p>Nenhum transporte cadastrado.</p>
+                <p>Nenhum transporte cadastrado!</p>
             )}
 
             <div className="botao">
@@ -103,6 +112,7 @@ function TelaTransporte() {
                             transporte={idTransporte}
                             onDelete={deletarTransporte}
                             onClose={() => setModal(false)}
+                            onUpdate={carregarTransportes}
                         />
                     </div>
                 </div>

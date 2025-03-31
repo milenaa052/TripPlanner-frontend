@@ -45,7 +45,7 @@ function CadastroHospedagem() {;
                 }
             })
     
-            setMensagemSucesso("Cadastro realizado com sucesso!")
+            setMensagemSucesso("Hospedagem cadastrada com sucesso!")
             setTimeout(() => {
                 navigate(`/info-viagem/${id}`)
             }, 2000)

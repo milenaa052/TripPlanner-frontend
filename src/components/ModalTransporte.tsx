@@ -20,38 +20,63 @@ interface ModalTransporteProps {
     transporte: TransporteProps;
     onDelete: (idTransporte: number) => void;
     onClose: () => void;
+    onUpdate: () => void;
 }
 
-function ModalTransporte({ transporte, onDelete, onClose }: ModalTransporteProps) {
+function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTransporteProps) {
     const [tipoTransporte, setTipoTransporte] = useState(transporte.tipoTransporte);
     const [origemTransporte, setOrigemTransporte] = useState(transporte.origemTransporte);
     const [destinoTransporte, setDestinoTransporte] = useState(transporte.destinoTransporte);
     const [gastoTransporte, setGastoTransporte] = useState(transporte.gastoTransporte.toString());
     const [dataTransporte, setDataTransporte] = useState(transporte.dataTransporte);
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
-    const [mensagem, setMensagem] = useState("");
-
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const { id } = useParams();
 
     const atualizarTransporte = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!tipoTransporte || !origemTransporte || !destinoTransporte || !gastoTransporte || !dataTransporte) {
+            setMensagemFalha("Todos os campos são obrigatórios")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            return;
+        }
+
         try {
-            await axios.put(`http://localhost:3000/transporte/${transporte.idTransporte}`, {
-                tipoTransporte,
-                origemTransporte,
-                destinoTransporte,
-                gastoTransporte,
-                dataTransporte,
+            const dados = {
+                tipoTransporte: tipoTransporte,
+                origemTransporte: origemTransporte,
+                destinoTransporte: destinoTransporte,
+                gastoTransporte: Number(gastoTransporte),
+                dataTransporte: dataTransporte,
                 viagemId: Number(id)
+            }
+
+            await axios.put(`http://localhost:3000/transporte/${transporte.idTransporte}`, dados, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             })
 
-            setMensagem("Transporte atualizado com sucesso!");
-            onClose();
+            setMensagemSucesso("Transporte atualizado com sucesso!");
+            onUpdate();
+            setTimeout(() => {
+                onClose();
+            }, 1500)
 
         } catch (error) {
-            setMensagem("Erro ao atualizar o transporte");
-            console.error(error);
+            setMensagemFalha("Erro ao atualizar o Transporte")
+            
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            console.error(error)
         }
     }
 
@@ -113,7 +138,8 @@ function ModalTransporte({ transporte, onDelete, onClose }: ModalTransporteProps
                 </div>
             </form>
 
-            { mensagem ? <p>{ mensagem }</p> : "" }
+            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
+            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
 
             {mostrarConfirmacao && (
                 <ConfirmaExclusao 
