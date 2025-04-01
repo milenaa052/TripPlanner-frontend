@@ -1,20 +1,18 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router";
-import Header from "./components/Header";
-import CadastroUsuario from "./pages/CadastroUsuario"
-import CadastroUsuarioAuth from "./pages/CadastroUsuarioAuth";
-import Login from "./pages/Login";
-import Usuario from "./pages/Usuario";
-import Home from "./pages/Home";
-import CadastroViagem from "./pages/CadastroViagem";
-import TelasInfo from "./pages/TelasInfo";
-import CadastroHospedagem from "./pages/CadastroHospedagem";
-import CadastroTransporte from "./pages/CadastroTransporte";
-import CadastroPasseio from "./pages/CadastroPasseio";
-import CadastroDespesas from "./pages/CadastroDespesas";
-import PrivateRoute from "./components/PrivateRoutes";
-//import MapaCidades from "./components/MapaCidades";
-//import RotasMapa from "./components/RotasMapa";
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router"
 import "./App.css"
+import Header from "./components/Header"
+import CadastroUsuario from "./pages/cadastro/CadastroUsuario"
+import CadastroUsuarioAuth from "./pages/cadastro/CadastroUsuarioAuth"
+import Login from "./pages/Login"
+import Usuario from "./pages/Usuario"
+import Home from "./pages/Home"
+import CadastroViagem from "./pages/cadastro/CadastroViagem"
+import TelasInfo from "./pages/TelasInfo"
+import CadastroHospedagem from "./pages/cadastro/CadastroHospedagem"
+import CadastroTransporte from "./pages/cadastro/CadastroTransporte"
+import CadastroPasseio from "./pages/cadastro/CadastroPasseio"
+import CadastroDespesas from "./pages/cadastro/CadastroDespesas"
+import PrivateRoute from "./components/PrivateRoutes"
 
 function App() {
   return (
@@ -45,7 +43,7 @@ function App() {
         </Routes>
       </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

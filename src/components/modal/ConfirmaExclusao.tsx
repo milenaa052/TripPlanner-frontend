@@ -1,16 +1,17 @@
-import React from "react";
+import React from "react"
 
 interface ConfirmaExclusaoProps {
-    onClose: () => void;
-    onConfirm: () => void;
+    onClose: () => void
+    onConfirm: () => void
 }
 
 const ConfirmaExclusao: React.FC<ConfirmaExclusaoProps> = ({ onClose, onConfirm }) => {
-    const handleConfirm = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        onConfirm();
-        onClose();
-    };
+    const confirma = (e: React.FormEvent) => {
+        e.preventDefault()
+
+        onConfirm()
+        onClose()
+    }
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -18,11 +19,11 @@ const ConfirmaExclusao: React.FC<ConfirmaExclusaoProps> = ({ onClose, onConfirm 
                 <h3>Tem certeza que deseja excluir o item?</h3>
                 <div className="botoes">
                     <button className="cancelar" onClick={onClose}>Cancelar</button>
-                    <button className="confirmar" onClick={handleConfirm}>Confirmar</button>
+                    <button className="confirmar" onClick={confirma}>Confirmar</button>
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ConfirmaExclusao;
+export default ConfirmaExclusao

@@ -1,41 +1,43 @@
-import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import ConfirmaExclusao from "./ConfirmaExclusao";
-import InputLocal from "./InputLocal";
-import axios from "axios";
-import { useParams } from "react-router";
+import { useState } from "react"
+import { useParams } from "react-router"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import "react-datepicker/dist/react-datepicker.css"
+import axios from "axios"
+import ConfirmaExclusao from "./ConfirmaExclusao"
+import InputLocal from "../input/InputLocal"
 
 interface TransporteProps {
-    idTransporte: number;
-    tipoTransporte: string;
-    origemTransporte: string;
-    destinoTransporte: string;
-    gastoTransporte: number;
-    dataTransporte: string;
+    idTransporte: number
+    tipoTransporte: string
+    origemTransporte: string
+    destinoTransporte: string
+    gastoTransporte: number
+    dataTransporte: string
+    viagemId: number
 }
 
 interface ModalTransporteProps {
-    transporte: TransporteProps;
-    onDelete: (idTransporte: number) => void;
-    onClose: () => void;
-    onUpdate: () => void;
+    transporte: TransporteProps
+    onDelete: (idTransporte: number) => void
+    onClose: () => void
+    onUpdate: () => void
 }
 
 function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTransporteProps) {
-    const [tipoTransporte, setTipoTransporte] = useState(transporte.tipoTransporte);
-    const [origemTransporte, setOrigemTransporte] = useState(transporte.origemTransporte);
-    const [destinoTransporte, setDestinoTransporte] = useState(transporte.destinoTransporte);
-    const [gastoTransporte, setGastoTransporte] = useState(transporte.gastoTransporte.toString());
-    const [dataTransporte, setDataTransporte] = useState(transporte.dataTransporte);
-    const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
+    const [tipoTransporte, setTipoTransporte] = useState(transporte.tipoTransporte)
+    const [origemTransporte, setOrigemTransporte] = useState(transporte.origemTransporte)
+    const [destinoTransporte, setDestinoTransporte] = useState(transporte.destinoTransporte)
+    const [gastoTransporte, setGastoTransporte] = useState(transporte.gastoTransporte.toString())
+    const [dataTransporte, setDataTransporte] = useState(transporte.dataTransporte)
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
-    const { id } = useParams();
+    const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false)
+
+    const { id } = useParams()
 
     const atualizarTransporte = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (!tipoTransporte || !origemTransporte || !destinoTransporte || !gastoTransporte || !dataTransporte) {
             setMensagemFalha("Todos os campos são obrigatórios")
@@ -44,7 +46,7 @@ function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTrans
                 setMensagemFalha("")
             }, 1500)
 
-            return;
+            return
         }
 
         try {
@@ -63,25 +65,20 @@ function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTrans
                 }
             })
 
-            setMensagemSucesso("Transporte atualizado com sucesso!");
-            onUpdate();
+            setMensagemSucesso("Transporte atualizado com sucesso!")
+
+            onUpdate()
             setTimeout(() => {
-                onClose();
+                onClose()
             }, 1500)
 
         } catch (error) {
-            setMensagemFalha("Erro ao atualizar o Transporte")
-            
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 1500)
-
-            console.error(error)
+            console.error("Erro ao atualizar o Transporte", error)
         }
     }
 
     const formatarData = (data: string) => {
-        return data.slice(0, 10);
+        return data.slice(0, 10)
     }
 
     return (
@@ -110,30 +107,52 @@ function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTrans
 
                 <div className="campos">
                     <label htmlFor="localOrigem" className="label">De:</label>
-                    <InputLocal local={origemTransporte} setLocal={setOrigemTransporte} className="input" />
+                    <InputLocal 
+                        local={origemTransporte} 
+                        setLocal={setOrigemTransporte} 
+                        className="input" 
+                    />
                 </div>
                 
                 <div className="campos">
                     <label htmlFor="localDestino" className="label">Até:</label>
-                    <InputLocal local={destinoTransporte} setLocal={setDestinoTransporte} className="input" />
+                    <InputLocal 
+                        local={destinoTransporte} 
+                        setLocal={setDestinoTransporte} 
+                        className="input" 
+                    />
                 </div>
 
                 <div className="campos">
                     <label htmlFor="gasto" className="label">Gasto</label>
-                    <input type="number" id="gasto" name="gasto" className="input" 
-                       value={gastoTransporte} onChange={(e) => setGastoTransporte(e.target.value)} placeholder="Insira o gasto com o transporte"/>
+                    <input 
+                        type="number" 
+                        id="gasto" 
+                        name="gasto" 
+                        className="input" 
+                        value={gastoTransporte} 
+                        onChange={(e) => setGastoTransporte(e.target.value)} 
+                        placeholder="Insira o gasto com o transporte"
+                    />
                 </div>
 
                 <div className="campos">
                     <label htmlFor="data" className="label">Data</label>
-                    <input type="date" id="data" name="data" className="input"
-                       value={formatarData(dataTransporte)} onChange={(e) => setDataTransporte(e.target.value)} />
+                    <input 
+                        type="date" 
+                        id="data" 
+                        name="data" 
+                        className="input"
+                        value={formatarData(dataTransporte)} 
+                        onChange={(e) => setDataTransporte(e.target.value)} 
+                    />
                 </div>
 
                 <div className="submit">
                     <button type="button" className="excluir" onClick={() => setMostrarConfirmacao(true)}>
                         <FontAwesomeIcon icon={faTrashCan} className="icone"/>
                     </button>
+                    
                     <button type="submit" className="salvar">Salvar</button>
                 </div>
             </form>
@@ -145,13 +164,13 @@ function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTrans
                 <ConfirmaExclusao 
                     onClose={() => setMostrarConfirmacao(false)}
                     onConfirm={() => {
-                        onDelete(transporte.idTransporte);
-                        onClose();
+                        onDelete(transporte.idTransporte)
+                        onClose()
                     }}
                 />
             )}
       </div>
-    );
-};
+    )
+}
 
-export default ModalTransporte;
+export default ModalTransporte

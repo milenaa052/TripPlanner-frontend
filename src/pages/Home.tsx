@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import { useState, useEffect } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import axios from "axios"
 
 function Home() {
-    const [busca, setBusca] = useState("");
-    const [viagem, setViagem] = useState<Viagem[]>([]);
+    const [viagem, setViagem] = useState<Viagem[]>([])
+    const [busca, setBusca] = useState("")
 
     interface Viagem {
         idViagem: number,
@@ -27,20 +27,25 @@ function Home() {
             setViagem(response.data)
         })
         .catch((error) => {
-            console.error("Erro ao buscar viagens:", error)
+            console.error("Erro ao buscar viagens", error)
         })
-    }, []);
+    }, [])
 
     const viagensFiltradas = viagem.filter((cidade) => 
         cidade.localDestino.toLowerCase().includes(busca.toLowerCase())
-    );
+    )
 
     return (
         <div className="home">
             <div className="fileira">
                 <h1 className="titulo">Adicione o seu destino</h1>
-                <input type="text" placeholder="Procure sua viagem" className="input" 
-                    value={busca} onChange={(e) => setBusca(e.target.value)}/>
+                <input 
+                    type="text" 
+                    placeholder="Procure sua viagem" 
+                    className="input" 
+                    value={busca} 
+                    onChange={(e) => setBusca(e.target.value)}
+                />
             </div>
 
             <div className="viagens">
@@ -50,6 +55,7 @@ function Home() {
                             <FontAwesomeIcon icon={faPlus}/>
                         </a>
                     </div>
+
                     <p>Adicionar viagem</p>
                 </div>
 
@@ -69,7 +75,7 @@ function Home() {
                 )}
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Home;
+export default Home

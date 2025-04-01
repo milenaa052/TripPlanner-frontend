@@ -1,38 +1,38 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useState } from "react"
+import { useNavigate } from "react-router"
+import axios from "axios"
 
 function CadastroUsuarioAuth () {
+    const [nome, setNome] = useState(localStorage.getItem("nome") || "")
+    const [cpf, setCpf] = useState(localStorage.getItem("cpf") || "")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [confirmaSenha, setConfirmaSenha] = useState("")
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate()
-    const [nome, setNome] = useState(localStorage.getItem("nome") || "")
-    const [cpf, setCpf] = useState(localStorage.getItem("cpf") || "")
 
     const cadastroUsuario = async (e: React.FormEvent) => {
         e.preventDefault()
 
         if (!email || !senha || !confirmaSenha) {
-            setMensagemFalha("Todos os campos são obrigatórios.");
+            setMensagemFalha("Todos os campos são obrigatórios.")
             
             setTimeout(() => {
                 setMensagemFalha("")
             }, 1500)
 
-            return;
+            return
         }
 
         if (senha !== confirmaSenha) {
-            setMensagemFalha("As senhas não coincidem.");
+            setMensagemFalha("As senhas não coincidem.")
             
             setTimeout(() => {
                 setMensagemFalha("")
             }, 1500)
 
-            return;
+            return
         }
 
         try {
@@ -41,12 +41,12 @@ function CadastroUsuarioAuth () {
                 cpf,
                 email,
                 senha
-            });
+            })
 
             setMensagemSucesso("Usuário cadastrado com sucesso!")
 
-            localStorage.removeItem("nome");
-            localStorage.removeItem("cpf");
+            localStorage.removeItem("nome")
+            localStorage.removeItem("cpf")
 
             setEmail("")
             setSenha("")
@@ -59,13 +59,7 @@ function CadastroUsuarioAuth () {
             }, 2000)
 
         } catch (error) {
-            setMensagemFalha("Erro ao cadastrar usuário.");
-
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 1500)
-
-            console.error(error);
+            console.error("Erro ao cadastrar usuário", error)
         }
     }
 
@@ -76,35 +70,61 @@ function CadastroUsuarioAuth () {
             <form className="form" onSubmit={cadastroUsuario}>
                 <div className="campos">
                     <label htmlFor="email" className="label">Email</label>
-                    <input type="email" id="email" name="email" className="input" autoComplete="off"
-                       value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Insira um email válido"/>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        className="input" 
+                        autoComplete="off"
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        placeholder="Insira um email válido"
+                    />
                 </div>
 
                 <div className="campos">
                     <label htmlFor="senha" className="label">Senha</label>
-                    <input type="password" id="senha" name="senha" className="input" autoComplete="off"
-                       value={senha} onChange={(e) => setSenha(e.target.value)} placeholder="Insira a sua senha"/>
+                    <input 
+                        type="password" 
+                        id="senha" 
+                        name="senha" 
+                        className="input" 
+                        autoComplete="off"
+                        value={senha} 
+                        onChange={(e) => setSenha(e.target.value)} 
+                        placeholder="Insira a sua senha"
+                    />
                 </div>
 
                 <div className="campos">
                     <label htmlFor="confirmaSenha" className="label">Confirme a sua senha</label>
-                    <input type="password" id="confirmaSenha" name="confirmaSenha" className="input" autoComplete="off"
-                       value={confirmaSenha} onChange={(e) => setConfirmaSenha(e.target.value)} placeholder="Confime a sua senha"/>
+                    <input 
+                        type="password" 
+                        id="confirmaSenha" 
+                        name="confirmaSenha" 
+                        className="input" 
+                        autoComplete="off"
+                        value={confirmaSenha} 
+                        onChange={(e) => setConfirmaSenha(e.target.value)} 
+                        placeholder="Confime a sua senha"
+                    />
                 </div>
 
                 <div className="submitAuth">
                     <p>Já tem cadastro? <a href="/login" className="link">Faça login</a></p>
+
                     <div className="botoes">
                         <a href="/cadastro-usuario" className="voltar">Voltar</a>
+                        
                         <button type="submit" className="salvar">Salvar</button>
                     </div>
                 </div>
             </form>
 
-            { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
-            { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
+            {mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : ""}
+            {mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : ""}
       </div>
-    );
-};
+    )
+}
 
-export default CadastroUsuarioAuth;
+export default CadastroUsuarioAuth

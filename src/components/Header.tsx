@@ -1,5 +1,5 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
 
 function Header() {
     return (
@@ -13,7 +13,7 @@ function Header() {
                 <FontAwesomeIcon icon={faCircleUser} className="icon"/>
             </a>
         </header>
-    );
-};
+    )
+}
 
-export default Header;
+export default Header

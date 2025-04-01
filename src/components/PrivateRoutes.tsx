@@ -1,15 +1,15 @@
-import { Navigate } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
-import { JSX } from "react";
+import { Navigate } from "react-router"
+import { useAuth } from "../contexts/AuthContext"
+import { JSX } from "react"
 
 interface Props {
-    children: JSX.Element;
+    children: JSX.Element
 }
 
 const PrivateRoute = ({ children }: Props) => {
-    const { estaAutenticado } = useAuth();
+    const { estaAutenticado } = useAuth()
 
     return estaAutenticado ? children : <Navigate to="/login" />
 }
 
-export default PrivateRoute;
+export default PrivateRoute

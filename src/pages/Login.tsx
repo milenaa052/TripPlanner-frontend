@@ -1,15 +1,15 @@
-import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import { useAuth } from "../contexts/AuthContext"
+import axios from "axios"
 
 function Login () {
-    const [mensagemFalha, setMensagemFalha] = useState("")
-    const [mensagemSucesso, setMensagemSucesso] = useState("")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
-    const { login } = useAuth();
-    const navigate = useNavigate();
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
+    const { login } = useAuth()
+    const navigate = useNavigate()
 
     const enviarLogin = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -50,18 +50,35 @@ function Login () {
             <form className="form" onSubmit={enviarLogin}>
                 <div className="campos">
                     <label htmlFor="email" className="label">Email</label>
-                    <input type="email" id="email" name="email" className="input" autoComplete="off"
-                       value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Insira o seu email"/>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        className="input" 
+                        autoComplete="off"
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        placeholder="Insira o seu email"
+                    />
                 </div>
 
                 <div className="campos">
                     <label htmlFor="senha" className="label">Senha</label>
-                    <input type="password" id="senha" name="senha" className="input" autoComplete="off"
-                       value={senha} onChange={(e) => setSenha(e.target.value)} placeholder="Insira a sua senha"/>
+                    <input 
+                        type="password" 
+                        id="senha" 
+                        name="senha" 
+                        className="input" 
+                        autoComplete="off"
+                        value={senha} 
+                        onChange={(e) => setSenha(e.target.value)} 
+                        placeholder="Insira a sua senha"
+                    />
                 </div>
 
                 <div className="submitAuth">
                     <p>Não tem conta? <a href="/cadastro-usuario" className="link">Faça cadastro</a></p>
+
                     <button type="submit" className="entrar">Entrar</button>
                 </div>
             </form>
@@ -69,7 +86,7 @@ function Login () {
             { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
             { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
       </div>
-    );
-};
+    )
+}
 
-export default Login;
+export default Login

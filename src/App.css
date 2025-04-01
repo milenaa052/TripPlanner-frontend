@@ -620,6 +620,24 @@ html {
             }
           }
         }
+
+        .mensagemFalha {
+          padding: 5px;
+          background-color: var(--vermelho);
+          color: var(--branco);
+          border-radius: 3px;
+          text-align: center;
+          width: 30%;
+        }
+
+        .mensagemSucesso {
+          padding: 5px;
+          background-color: var(--verde);
+          color: var(--branco);
+          border-radius: 3px;
+          text-align: center;
+          width: 30%;
+        }
       }
     }
   }

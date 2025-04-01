@@ -18,7 +18,7 @@ const ChangeView: React.FC<{ center: [number, number]; zoom: number }> = ({ cent
 };
 
 const MapaComponente: React.FC<{ local: string }> = ({ local }) => {
-  const [posicao, setPosicao] = useState<[number, number]>([0, 0]);
+  const [posicao, setPosicao] = useState<[number, number]>([0, 0])
 
   useEffect(() => {
     if (!local) return;

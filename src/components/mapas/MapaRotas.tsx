@@ -5,13 +5,10 @@ import "leaflet/dist/leaflet.css";
 const GEONAMES_USERNAME = "milenaa052";
 const API_KEY = "356a4553-eb5c-43e1-bff1-f878b4fd8f10";
 
-const RotasMapa: React.FC<{ origem: string; destino: string }> = ({
-  origem,
-  destino,
-}) => {
-  const [coordenadasRota, setCoordenadasRota] = useState<[number, number][]>([]);
-  const [erro, setErro] = useState<string>("");
-  const [rotaAtual, setRotaAtual] = useState<{ origem: [number, number], destino: [number, number] } | null>(null);
+const RotasMapa: React.FC<{ origem: string; destino: string }> = ({ origem, destino }) => {
+  const [coordenadasRota, setCoordenadasRota] = useState<[number, number][]>([])
+  const [rotaAtual, setRotaAtual] = useState<{ origem: [number, number], destino: [number, number] } | null>(null)
+  const [erro, setErro] = useState<string>("")
 
   useEffect(() => {
     if (!origem || !destino) return;
