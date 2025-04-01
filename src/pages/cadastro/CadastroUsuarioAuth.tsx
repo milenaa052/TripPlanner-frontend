@@ -59,13 +59,7 @@ function CadastroUsuarioAuth () {
             }, 2000)
 
         } catch (error) {
-            setMensagemFalha("Erro ao cadastrar usuário.")
-
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 1500)
-
-            console.error(error)
+            console.error("Erro ao cadastrar usuário", error)
         }
     }
 

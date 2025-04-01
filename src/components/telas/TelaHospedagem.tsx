@@ -19,7 +19,6 @@ function TelaHospedagem() {
   const [hospedagens, setHospedagens] = useState<Hospedagens[]>([])
   const [idHospedagem, setIdHospedagem] = useState<Hospedagens | null>(null)
   const [modal, setModal] = useState(false)
-  const [mensagemFalha, setMensagemFalha] = useState("")
   const [mensagemSucesso, setMensagemSucesso] = useState("")
 
   const { id } = useParams()
@@ -39,13 +38,7 @@ function TelaHospedagem() {
       setHospedagens(response.data)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao buscar hospedagens")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao buscar hospedagens", error)
     })
   }
 
@@ -72,13 +65,7 @@ function TelaHospedagem() {
       }, 2000)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao excluir hospedagem ")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao excluir hospedagem", error)
     })
   }
 
@@ -89,7 +76,6 @@ function TelaHospedagem() {
 
   return (
     <div>
-      { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
       { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
 
       {hospedagens.length > 0 ? (

@@ -56,13 +56,7 @@ function CadastroViagem() {
       setDataFim(null)
 
     } catch (error) {
-      setMensagemFalha("Erro ao cadastrar viagem")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 1500)
-
-      console.error(error)
+      console.error("Erro ao cadastrar viagem", error)
     }
   }
 

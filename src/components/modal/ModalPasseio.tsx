@@ -81,8 +81,7 @@ function ModalPasseio({ passeio, onDelete, onClose, onUpdate }: ModalPasseioProp
             setDataPasseio("")
 
         } catch (error) {
-            setMensagemFalha("Erro ao atualizar o passeio.")
-            console.error(error)
+            console.error("Erro ao atualizar o passeio", error)
         }
     }
 

@@ -56,13 +56,7 @@ function CadastroHospedagem() {
       setGastoTotal("")
 
     } catch (error) {
-      setMensagemFalha("Erro ao realizar o cadastro de Hospedagem")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 1500)
-
-      console.error(error)
+      console.error("Erro ao realizar o cadastro de Hospedagem", error)
     }
   }
 

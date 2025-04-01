@@ -67,13 +67,7 @@ function ModalDespesa({ despesa, onDelete, onClose, onUpdate }: ModalDespesaProp
       }, 1500)
 
     } catch (error) {
-      setMensagemFalha("Erro ao atualizar a Despesa")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 1500)
-
-      console.error(error)
+      console.error("Erro ao atualizar a Despesa", error)
     }
   }
 

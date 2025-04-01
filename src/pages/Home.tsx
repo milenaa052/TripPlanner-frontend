@@ -6,7 +6,6 @@ import axios from "axios"
 function Home() {
     const [viagem, setViagem] = useState<Viagem[]>([])
     const [busca, setBusca] = useState("")
-    const [mensagemFalha, setMensagemFalha] = useState("")
 
     interface Viagem {
         idViagem: number,
@@ -28,13 +27,7 @@ function Home() {
             setViagem(response.data)
         })
         .catch((error) => {
-            setMensagemFalha("Erro ao buscar viagens")
-
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 2000)
-
-            console.error(error)
+            console.error("Erro ao buscar viagens", error)
         })
     }, [])
 
@@ -80,8 +73,6 @@ function Home() {
                 ) : (
                     <p>Não existe viagem cadastrada!</p>
                 )}
-
-                {mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : ""}
             </div>
         </div>
     )

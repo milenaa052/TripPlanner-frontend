@@ -21,7 +21,6 @@ interface Viagem {
 function TelasInfo() {
   const [viagem, setViagem] = useState<Viagem | null>(null)
   const [tela, setTela] = useState("Hospedagem")
-  const [mensagemFalha, setMensagemFalha] = useState("")
 
   const { id } = useParams()
 
@@ -35,8 +34,7 @@ function TelasInfo() {
       setViagem(response.data)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao buscar viagem")
-      console.error(error)
+      console.error("Erro ao buscar viagem", error)
     })
   }, [id])
 
@@ -58,8 +56,6 @@ function TelasInfo() {
         <FontAwesomeIcon icon={faCalendarDays} className="icone" />
         {viagem ? `${formatarData(viagem.dataInicial)} - ${formatarData(viagem.dataFinal)}` : ""}
       </p>
-
-      {mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : ""}
 
       <div className="telasInfo">
         <button 

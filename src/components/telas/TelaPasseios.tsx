@@ -33,7 +33,6 @@ function TelaPasseios() {
   const [passeio, setPasseio] = useState<Passeio[]>([])
   const [idPasseio, setIdPasseio] = useState<Passeio | null>(null)
   const [modal, setModal] = useState(false)
-  const [mensagemFalha, setMensagemFalha] = useState("")
   const [mensagemSucesso, setMensagemSucesso] = useState("")
 
   const { id } = useParams()
@@ -48,13 +47,7 @@ function TelaPasseios() {
       setViagem(response.data)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao buscar a viagem")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao buscar a viagem", error)
     })
   }, [id])
 
@@ -73,13 +66,7 @@ function TelaPasseios() {
       setPasseio(response.data)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao buscar passeios")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao buscar passeios", error)
     })
   }
 
@@ -178,13 +165,7 @@ function TelaPasseios() {
       }, 2000)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao excluir passeio")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao excluir passeio", error)
     })
   }
 
@@ -218,7 +199,6 @@ function TelaPasseios() {
         </button>
       </div>
 
-      { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
       { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
 
       {passeio.some((passeioData) => {

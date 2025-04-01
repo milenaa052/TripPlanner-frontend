@@ -20,7 +20,6 @@ function TelaTransporte() {
   const [transporte, setTransporte] = useState<Transporte[]>([])
   const [idTransporte, setIdTransporte] = useState<Transporte | null>(null)
   const [modal, setModal] = useState(false)
-  const [mensagemFalha, setMensagemFalha] = useState("")
   const [mensagemSucesso, setMensagemSucesso] = useState("")
 
   const { id } = useParams()
@@ -40,13 +39,7 @@ function TelaTransporte() {
       setTransporte(response.data)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao buscar transportes ")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao buscar transportes", error)
     })
   }
 
@@ -73,13 +66,7 @@ function TelaTransporte() {
       }, 2000)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao excluir transporte")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao excluir transporte", error)
     })
   }
 
@@ -90,7 +77,6 @@ function TelaTransporte() {
 
   return (
     <div>
-      { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
       { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
 
       {transporte.length > 0 ? (

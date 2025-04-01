@@ -17,7 +17,6 @@ function TelaDespesas() {
   const [despesas, setDespesas] = useState<Despesa[]>([])
   const [idDespesa, setIdDespesa] = useState<Despesa | null>(null)
   const [modal, setModal] = useState(false)
-  const [mensagemFalha, setMensagemFalha] = useState("")
   const [mensagemSucesso, setMensagemSucesso] = useState("")
 
   const { id } = useParams()
@@ -37,13 +36,7 @@ function TelaDespesas() {
       setDespesas(response.data)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao buscar despesas")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 1500)
-
-      console.error(error)
+      console.error("Erro ao buscar despesas", error)
     })
   }
 
@@ -70,13 +63,7 @@ function TelaDespesas() {
       }, 2000)
     })
     .catch((error) => {
-      setMensagemFalha("Erro ao excluir despesa")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 2000)
-
-      console.error(error)
+      console.error("Erro ao excluir despesa", error)
     })
   }
 
@@ -91,7 +78,6 @@ function TelaDespesas() {
     <div>
       <h2>Total de Despesas: {totalDespesas.toFixed(2)}</h2>
 
-      { mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : "" }
       { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
 
       {despesas.length > 0 ? (

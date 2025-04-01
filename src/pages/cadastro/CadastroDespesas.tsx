@@ -50,13 +50,7 @@ function CadastroDespesas() {
             setDataDespesa("")
 
         } catch (error) {
-            setMensagemFalha("Erro ao realizar o cadastro de Despesa")
-
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 1500)
-
-            console.error(error)
+            console.error("Erro ao realizar o cadastro de Despesa", error)
         }
     }
     return (

@@ -73,13 +73,7 @@ function ModalTransporte({ transporte, onDelete, onClose, onUpdate }: ModalTrans
             }, 1500)
 
         } catch (error) {
-            setMensagemFalha("Erro ao atualizar o Transporte")
-            
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 1500)
-
-            console.error(error)
+            console.error("Erro ao atualizar o Transporte", error)
         }
     }
 

@@ -77,13 +77,7 @@ function ModalHospedagem({ hospedagem, onDelete, onClose, onUpdate }: ModalHospe
             }, 1500)
 
         } catch (error) {
-            setMensagemFalha("Erro ao atualizar a Hospedagem")
-
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 1500)
-
-            console.error(error)
+            console.error("Erro ao atualizar a Hospedagem", error)
         }
     }
 

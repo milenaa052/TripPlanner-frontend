@@ -58,13 +58,7 @@ function CadastroPasseio() {
       setGastoPasseio("")
 
     } catch (error) {
-      setMensagemFalha("Erro ao realizar o cadastro de Passeio")
-
-      setTimeout(() => {
-        setMensagemFalha("")
-      }, 1500)
-
-      console.error(error)
+      console.error("Erro ao realizar o cadastro de Passeio", error)
     }
   }
 
