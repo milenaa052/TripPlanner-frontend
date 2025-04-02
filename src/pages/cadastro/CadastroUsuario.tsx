@@ -1,33 +1,53 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { useNavigate } from "react-router"
+import { cpf } from "cpf-cnpj-validator"
 
 function CadastroUsuario () {
     const [nome, setNome] = useState("")
-    const [cpf, setCpf] = useState("")
+    const [cpfUsuario, setCpfUsuario] = useState("")
     const [mensagemFalha, setMensagemFalha] = useState("")
     const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate()
 
+    const formatCPF = (value: string) => {
+        return value
+            .replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+    }
+
     const cadastroUsuario = (e: React.FormEvent) => {
         e.preventDefault()
 
-        if(!nome || !cpf) {
+        if(!nome || !cpfUsuario) {
             setMensagemFalha("Nome ou CPF não preenchido")
 
             setTimeout(() => {
                 setMensagemFalha("")
             }, 1500)
 
-        } else {
-            localStorage.setItem("nome", nome)
-            localStorage.setItem("cpf", cpf)
-
-            setMensagemSucesso("Redirecionando para a próxima tela...")
+            return
+        } 
+        
+        if (!cpf.isValid(cpfUsuario)) {
+            setMensagemFalha("CPF inválido ou não existe")
 
             setTimeout(() => {
-                navigate("/cadastro-usuario-auth")
-            }, 2000)
+                setMensagemFalha("")
+            }, 1500)
+
+            return
         }
+
+        localStorage.setItem("nome", nome)
+        localStorage.setItem("cpf", cpfUsuario)
+
+        setMensagemSucesso("Redirecionando para a próxima tela...")
+
+        setTimeout(() => {
+            navigate("/cadastro-usuario-auth")
+        }, 2000)
     }
 
     return (
@@ -57,8 +77,9 @@ function CadastroUsuario () {
                         name="cpf" 
                         className="input" 
                         placeholder="Insira o seu cpf"
-                        value={cpf} 
-                        onChange={(e) => setCpf(e.target.value)} 
+                        value={cpfUsuario} 
+                        onChange={(e) => setCpfUsuario(formatCPF(e.target.value))} 
+                        maxLength={14}
                         autoComplete="off"
                     />
                 </div>
