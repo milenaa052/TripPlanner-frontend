@@ -41,7 +41,7 @@ function CadastroUsuario () {
         }
 
         localStorage.setItem("nome", nome)
-        localStorage.setItem("cpf", cpfUsuario)
+        localStorage.setItem("cpfUsuario", cpfUsuario)
 
         setMensagemSucesso("Redirecionando para a próxima tela...")
 
