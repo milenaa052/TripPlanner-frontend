@@ -15,6 +15,17 @@ function Login () {
         e.preventDefault()
 
         try {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+            if (!emailRegex.test(email)) {
+                setMensagemFalha("Formato de e-mail inválido")
+
+                setTimeout(() => {
+                    setMensagemFalha("")
+                }, 1500)
+                
+                return
+            }
+
             const response = await axios.post("http://localhost:3000/login", {
                 email,
                 senha

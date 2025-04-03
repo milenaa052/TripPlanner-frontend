@@ -25,6 +25,17 @@ function CadastroUsuarioAuth () {
             return
         }
 
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        if (!emailRegex.test(email)) {
+            setMensagemFalha("Formato de e-mail inválido")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+            
+            return
+        }
+
         if (senha !== confirmaSenha) {
             setMensagemFalha("As senhas não coincidem.")
             
