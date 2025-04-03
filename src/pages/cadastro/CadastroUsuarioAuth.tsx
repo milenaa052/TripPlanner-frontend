@@ -4,7 +4,7 @@ import axios from "axios"
 
 function CadastroUsuarioAuth () {
     const [nome, setNome] = useState(localStorage.getItem("nome") || "")
-    const [cpf, setCpf] = useState(localStorage.getItem("cpf") || "")
+    const [cpfUsuario, setCpfUsuario] = useState(localStorage.getItem("cpfUsuario") || "")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [confirmaSenha, setConfirmaSenha] = useState("")
@@ -38,7 +38,7 @@ function CadastroUsuarioAuth () {
         try {
             await axios.post("http://localhost:3000/cadastro-usuario", {
                 nome,
-                cpf,
+                cpfUsuario,
                 email,
                 senha
             })
@@ -46,13 +46,13 @@ function CadastroUsuarioAuth () {
             setMensagemSucesso("Usuário cadastrado com sucesso!")
 
             localStorage.removeItem("nome")
-            localStorage.removeItem("cpf")
+            localStorage.removeItem("cpfUsuario")
 
             setEmail("")
             setSenha("")
             setConfirmaSenha("")
             setNome("")
-            setCpf("")
+            setCpfUsuario("")
 
             setTimeout(() => {
                 navigate("/login")
