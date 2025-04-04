@@ -12,6 +12,24 @@ function CadastroUsuarioAuth () {
     const [mensagemSucesso, setMensagemSucesso] = useState("")
     const navigate = useNavigate()
 
+    const validarNivelSenha = async (senha: string) => {
+        const requisitos = {
+            temMaiuscula: /[A-Z]/.test(senha),
+            temMinuscula: /[a-z]/.test(senha),
+            temNumero: /[0-9]/.test(senha),
+            temEspecial: /[!@#$%&*°?]/.test(senha),
+            tamanhoMinimo: senha.length >= 8
+        }
+          
+        const valida = Object.values(requisitos).every(Boolean)
+            
+        return {
+            valida,
+            requisitos,
+            mensagem: valida ? 'Senha válida' : 'Senha não atende aos requisitos mínimos'
+        }
+    }
+
     const cadastroUsuario = async (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -28,6 +46,17 @@ function CadastroUsuarioAuth () {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         if (!emailRegex.test(email)) {
             setMensagemFalha("Formato de e-mail inválido")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+            
+            return
+        }
+
+        const validacaoNivelSenha =  await validarNivelSenha(senha)
+        if (!validacaoNivelSenha.valida) {
+            setMensagemFalha("Senha muito fraca")
 
             setTimeout(() => {
                 setMensagemFalha("")
