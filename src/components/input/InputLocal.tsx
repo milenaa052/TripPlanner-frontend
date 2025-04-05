@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState } from "react"
 
 interface GeoNamesResposta {
-  name: string;
+  name: string
 }
 
-const GEONAMES_USERNAME = "milenaa052";
+const GEONAMES_USERNAME = "milenaa052"
 
 interface InputLocalProps {
-  local: string;
-  setLocal: (cidade: string) => void;
-  className: string;
+  local: string
+  setLocal: (cidade: string) => void
+  className: string
 }
 
 const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) => {
@@ -17,31 +17,31 @@ const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) 
 
   const buscarSugestoes = async (input: string) => {
     if (input.length < 3) {
-      setSugestoes([]);
-      return;
+      setSugestoes([])
+      return
     }
 
     try {
-      const response = await fetch(
-        `http://api.geonames.org/searchJSON?q=${input}&maxRows=5&username=${GEONAMES_USERNAME}`
-      );
+      const response = await fetch(`http://api.geonames.org/searchJSON?q=${input}&maxRows=5&username=${GEONAMES_USERNAME}`)
       
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.geonames.length > 0) {
         const opcoes = data.geonames.map((item: GeoNamesResposta) => ({
           nome: item.name,
-        }));
+        }))
 
-        setSugestoes(opcoes);
+        setSugestoes(opcoes)
+
       } else {
-        setSugestoes([]);
+        setSugestoes([])
       }
+      
     } catch (error) {
-      console.error("Erro ao buscar sugestões:", error);
-      setSugestoes([]);
+      console.error("Erro ao buscar sugestões:", error)
+      setSugestoes([])
     }
-  };
+  }
 
   return (
     <div>
@@ -49,8 +49,8 @@ const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) 
         type="text"
         value={local}
         onChange={(e) => {
-          setLocal(e.target.value);
-          buscarSugestoes(e.target.value);
+          setLocal(e.target.value)
+          buscarSugestoes(e.target.value)
         }}
         list="sugestoes-cidades"
         placeholder="Insira o local"
@@ -63,7 +63,7 @@ const InputLocal: React.FC<InputLocalProps> = ({  local, setLocal, className }) 
         ))}
       </datalist>
     </div>
-  );
-};
+  )
+}
 
-export default InputLocal;
+export default InputLocal

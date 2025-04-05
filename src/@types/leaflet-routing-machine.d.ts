@@ -1,2 +1,2 @@
 /// <reference types="leaflet" />
-declare module "leaflet-routing-machine";
+declare module "leaflet-routing-machine"

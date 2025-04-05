@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polyline } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { useEffect, useState } from "react"
+import { MapContainer, TileLayer, Polyline } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
 
-const GEONAMES_USERNAME = "milenaa052";
-const API_KEY = "356a4553-eb5c-43e1-bff1-f878b4fd8f10";
+const GEONAMES_USERNAME = "milenaa052"
+const API_KEY = "356a4553-eb5c-43e1-bff1-f878b4fd8f10"
 
 const RotasMapa: React.FC<{ origem: string; destino: string }> = ({ origem, destino }) => {
   const [coordenadasRota, setCoordenadasRota] = useState<[number, number][]>([])
@@ -11,48 +11,45 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({ origem, dest
   const [erro, setErro] = useState<string>("")
 
   useEffect(() => {
-    if (!origem || !destino) return;
+    if (!origem || !destino) return
 
     const buscarCoordenadas = async () => {
       if (!origem.trim() || !destino.trim()) {
-        setErro("Por favor, preencha ambos os campos.");
-        return;
+        setErro("Por favor, preencha ambos os campos.")
+        return
       }
 
-      setErro("");
+      setErro("")
 
       try {
-        console.log(`Buscando origem: ${origem}`);
-        const responseOrigem = await fetch(
-          `http://api.geonames.org/searchJSON?q=${origem}&maxRows=1&username=${GEONAMES_USERNAME}`
-        );
-        const dataOrigem = await responseOrigem.json();
+        const responseOrigem = await fetch(`http://api.geonames.org/searchJSON?q=${origem}&maxRows=1&username=${GEONAMES_USERNAME}`)
+        const dataOrigem = await responseOrigem.json()
 
-        const responseDestino = await fetch(
-          `http://api.geonames.org/searchJSON?q=${destino}&maxRows=1&username=${GEONAMES_USERNAME}`
-        );
-        const dataDestino = await responseDestino.json();
+        const responseDestino = await fetch(`http://api.geonames.org/searchJSON?q=${destino}&maxRows=1&username=${GEONAMES_USERNAME}`)
+        const dataDestino = await responseDestino.json()
 
         if (dataOrigem.geonames.length > 0 && dataDestino.geonames.length > 0) {
-          const latOrigem = parseFloat(dataOrigem.geonames[0].lat);
-          const lonOrigem = parseFloat(dataOrigem.geonames[0].lng);
-          const latDestino = parseFloat(dataDestino.geonames[0].lat);
-          const lonDestino = parseFloat(dataDestino.geonames[0].lng);
+          const latOrigem = parseFloat(dataOrigem.geonames[0].lat)
+          const lonOrigem = parseFloat(dataOrigem.geonames[0].lng)
+          const latDestino = parseFloat(dataDestino.geonames[0].lat)
+          const lonDestino = parseFloat(dataDestino.geonames[0].lng)
 
-          setRotaAtual({ origem: [latOrigem, lonOrigem], destino: [latDestino, lonDestino] });
+          setRotaAtual({ origem: [latOrigem, lonOrigem], destino: [latDestino, lonDestino] })
 
-          await buscarRotaGraphHopper(latOrigem, lonOrigem, latDestino, lonDestino);
+          await buscarRotaGraphHopper(latOrigem, lonOrigem, latDestino, lonDestino)
+
         } else {
-          setErro("Uma das cidades não foi encontrada!");
+          setErro("Uma das cidades não foi encontrada!")
         }
+        
       } catch (error) {
-        console.log("Erro na busca:", error);
-        setErro("Erro ao buscar as cidades.");
+        console.error("Erro na busca:", error)
+        setErro("Erro ao buscar as cidades.")
       }
-    };
+    }
 
-    buscarCoordenadas();
-  }, [origem, destino]);
+    buscarCoordenadas()
+  }, [origem, destino])
 
   const buscarRotaGraphHopper = async (
     latOrigem: number,
@@ -61,36 +58,32 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({ origem, dest
     lonDestino: number
   ) => {
     try {
-      const response = await fetch(
-        `https://graphhopper.com/api/1/route?point=${latOrigem},${lonOrigem}&point=${latDestino},${lonDestino}&vehicle=car&locale=pt&points_encoded=false&key=${API_KEY}`
-      );
-      const data = await response.json();
+      const response = await fetch(`https://graphhopper.com/api/1/route?point=${latOrigem},${lonOrigem}&point=${latDestino},${lonDestino}&vehicle=car&locale=pt&points_encoded=false&key=${API_KEY}`)
+      const data = await response.json()
 
       if (data.paths.length > 0) {
         const coordenadas = data.paths[0].points.coordinates.map(
           ([lon, lat]: [number, number]) => [lat, lon] as [number, number]
-        );
+        )
 
-        setCoordenadasRota(coordenadas);
+        setCoordenadasRota(coordenadas)
       } else {
-        setErro("Não foi possível calcular a rota.");
+        setErro("Não foi possível calcular a rota.")
       }
+
     } catch (error) {
-      console.error("Erro ao buscar rota do GraphHopper:", error);
-      setErro("Erro ao calcular a rota.");
+      console.error("Erro ao buscar rota do GraphHopper:", error)
+      setErro("Erro ao calcular a rota.")
     }
-  };
+  }
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
       {rotaAtual && (
-        <MapContainer 
-          center={rotaAtual.origem} zoom={12} 
-          style={{ height: "100%", width: "100%" }}
-        >
+        <MapContainer center={rotaAtual.origem} zoom={12} style={{ height: "100%", width: "100%" }}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; OpenStreetMap contributors'
+            attribution='&copy OpenStreetMap contributors'
           />
 
           {coordenadasRota.length > 0 && (
@@ -105,7 +98,7 @@ const RotasMapa: React.FC<{ origem: string; destino: string }> = ({ origem, dest
 
       {erro && <p style={{ color: "red" }}>{erro}</p>}
     </div>
-  );
-};
+  )
+}
 
-export default RotasMapa;
+export default RotasMapa
