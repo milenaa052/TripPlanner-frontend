@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useState } from "react"
 
 interface GeoNamesResposta {
-  name: string;
-  countryCode: string;
+  name: string
+  countryCode: string
 }
 
-const GEONAMES_USERNAME = "milenaa052";
+const GEONAMES_USERNAME = "milenaa052"
 
 interface InputDestinoProps {
-  localDestino: string;
-  setLocalDestino: (cidade: string) => void;
-  setCodigoPais: (codigo: string) => void;
-  className: string;
+  localDestino: string
+  setLocalDestino: (cidade: string) => void
+  setCodigoPais: (codigo: string) => void
+  className: string
 }
 
 const InputDestino: React.FC<InputDestinoProps> = ({  localDestino, setLocalDestino, setCodigoPais, className }) => {
@@ -19,42 +19,42 @@ const InputDestino: React.FC<InputDestinoProps> = ({  localDestino, setLocalDest
 
   const buscarSugestoes = async (input: string) => {
     if (input.length < 3) {
-      setSugestoes([]);
-      return;
+      setSugestoes([])
+      return
     }
 
     try {
-      const response = await fetch(
-        `http://api.geonames.org/searchJSON?q=${input}&maxRows=5&username=${GEONAMES_USERNAME}`
-      );
+      const response = await fetch(`http://api.geonames.org/searchJSON?q=${input}&maxRows=5&username=${GEONAMES_USERNAME}`)
       
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.geonames.length > 0) {
         const opcoes = data.geonames.map((item: GeoNamesResposta) => ({
           nome: item.name,
           codigoPais: item.countryCode,
-        }));
+        }))
 
-        setSugestoes(opcoes);
+        setSugestoes(opcoes)
+
       } else {
-        setSugestoes([]);
+        setSugestoes([])
       }
+
     } catch (error) {
-      console.error("Erro ao buscar sugestões:", error);
-      setSugestoes([]);
+      console.error("Erro ao buscar sugestões:", error)
+      setSugestoes([])
     }
-  };
+  }
 
   const selecionarCidade = (cidadeNome: string) => {
-    setLocalDestino(cidadeNome);
+    setLocalDestino(cidadeNome)
 
-    const cidadeEncontrada = sugestoes.find((sugestao) => sugestao.nome === cidadeNome);
+    const cidadeEncontrada = sugestoes.find((sugestao) => sugestao.nome === cidadeNome)
 
     if (cidadeEncontrada) {
-      setCodigoPais(cidadeEncontrada.codigoPais);
+      setCodigoPais(cidadeEncontrada.codigoPais)
     }
-  };
+  }
 
   return (
     <div>
@@ -62,8 +62,8 @@ const InputDestino: React.FC<InputDestinoProps> = ({  localDestino, setLocalDest
         type="text"
         value={localDestino}
         onChange={(e) => {
-          setLocalDestino(e.target.value);
-          buscarSugestoes(e.target.value);
+          setLocalDestino(e.target.value)
+          buscarSugestoes(e.target.value)
         }}
         onBlur={() => selecionarCidade(localDestino)}
         list="sugestoes-cidades"
@@ -77,7 +77,7 @@ const InputDestino: React.FC<InputDestinoProps> = ({  localDestino, setLocalDest
         ))}
       </datalist>
     </div>
-  );
-};
+  )
+}
 
-export default InputDestino;
+export default InputDestino
