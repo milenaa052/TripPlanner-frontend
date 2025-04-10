@@ -3,19 +3,23 @@ import { toast } from "sonner"
 import { useAuth } from "./AuthContext"
 import axios from "axios"
 
+interface UpdateUsuarioPayload {
+  nome: string;
+  email?: string;
+  cpfUsuario?: string;
+  senhaAtual?: string;
+  novaSenha?: string;
+}
+
 interface UsuarioContextProps {
-    usuario: { idUsuario: string; nome: string; email: string; cpfUsuario?: string } | null;
-    setUsuario: (usuario: {
-        idUsuario: string;
-        nome: string;
-        email: string;
-        cpfUsuario?: string;
-    }) => void;
-    updateUsuario: (updatedUsuario: {
-        nome: string;
-        email: string;
-        cpfUsuario?: string;
-    }) => Promise<void>;
+  usuario: { idUsuario: string; nome: string; email: string; cpfUsuario?: string } | null;
+  setUsuario: (usuario: {
+    idUsuario: string;
+    nome: string;
+    email: string;
+    cpfUsuario?: string;
+  }) => void;
+  updateUsuario: (updatedUsuario: UpdateUsuarioPayload) => Promise<void>;
 }
 
 const UsuarioContext = createContext<UsuarioContextProps | undefined>(undefined)
@@ -41,7 +45,7 @@ export const UsuarioProvider = ({ children }: { children: React.ReactNode }) => 
             }
         })
 
-        setUsuario(response.data.usuario.usuario)
+        setUsuario(response.data.usuario)
 
       } catch (error) {
         console.error("Erro ao buscar usuário:", error);
@@ -52,9 +56,15 @@ export const UsuarioProvider = ({ children }: { children: React.ReactNode }) => 
     fetchUser();
   }, [token]);
 
-  const updateUsuario = async (updateUsuario: { nome: string; email: string; cpfUsuario?: string; }) => {
+  const updateUsuario = async (updateUsuario: UpdateUsuarioPayload) => {
     try {
-      const response = await axios.put(`/usuario/${usuario?.idUsuario}`, updateUsuario)
+      const response = await axios.put(`/usuario/${usuario?.idUsuario}`, updateUsuario,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
       setUsuario(response.data)
 
       toast.success("Usuário atualizado com sucesso!")

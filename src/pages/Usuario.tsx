@@ -11,37 +11,66 @@ function Usuario() {
 
     const [nome, setNome] = useState("")
     const [email, setEmail] = useState("")
-    const [cpf, setCpf] = useState("")
+    const [cpfUsuario, setCpfUsuario] = useState("")
+    const [senhaAtual, setSenhaAtual] = useState("")
+    const [novaSenha, setNovaSenha] = useState("")
+    const [confirmaSenha, setConfirmaSenha] = useState("")
+    const [mensagemFalha, setMensagemFalha] = useState("")
+    const [mensagemSucesso, setMensagemSucesso] = useState("")
 
     useEffect(() => {
         if (usuario) {
             setNome(usuario.nome)
             setEmail(usuario.email)
-            setCpf(usuario.cpfUsuario || "")
+            setCpfUsuario(usuario.cpfUsuario || "")
         }
     }, [usuario])
 
     const editar = () => setEditando(true)
 
-    const salvar = async () => {
-        if (usuario) {
-            try {
-                await updateUsuario({
-                    nome: nome,
-                    email: email,
-                    cpfUsuario: cpf
-                })
+    const salvar = async (e: React.FormEvent) => {
+        e.preventDefault()
+        
+        if (!editando) return
+    
+        if (!nome || !cpfUsuario) {
+            setMensagemFalha("Nome e CPF são obrigatórios.");
+            return
+        }
+    
+        if ((novaSenha || confirmaSenha || senhaAtual) && (!senhaAtual || novaSenha !== confirmaSenha)) {
+            setMensagemFalha("Senhas não conferem ou senha atual não informada.")
+            return
+        }
+    
+        try {
+            await updateUsuario({
+                nome,
+                cpfUsuario,
+                email,
+                senhaAtual: senhaAtual || undefined,
+                novaSenha: novaSenha || undefined,
+            })
+    
+            setMensagemSucesso("Informações atualizadas com sucesso!")
 
-                setEditando(false)
+            setEditando(false)
+            setSenhaAtual("")
+            setNovaSenha("")
+            setConfirmaSenha("")
 
-            } catch (error) {
-                console.error("Erro ao atualizar usuário", error)
-            }
+        } catch (error) {
+            setMensagemFalha("Erro ao atualizar informações.")
+            console.error(error)
         }
     }
 
-    if (!usuario) {
-        return <div>Carregando...</div>
+    const formatCPF = (value: string) => {
+        return value
+            .replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
     }
 
     return (
@@ -56,14 +85,14 @@ function Usuario() {
                             className="input"
                         />
                     ) : (
-                        <>Olá, {usuario.nome}</>
+                        <>Olá, { usuario?.nome }</>
                     )}
                     <FontAwesomeIcon 
                         icon={editando ? faCheck : faPenToSquare} 
                         className="icone" onClick={editando ? salvar : editar}
                     />
                 </h1>
-                <p className="email">{usuario.email}</p>
+                <p className="email">{ usuario?.email }</p>
             </div>
 
             <div className="cardUser">
@@ -74,8 +103,8 @@ function Usuario() {
                             type="text" 
                             id="cpf" 
                             name="cpf"
-                            value={cpf}
-                            onChange={(e) => setCpf(e.target.value)}
+                            value={cpfUsuario}
+                            onChange={(e) => setCpfUsuario(formatCPF(e.target.value))}
                             className="input" 
                             placeholder="Insira o seu CPF"
                         />
@@ -86,7 +115,9 @@ function Usuario() {
                         <input 
                             type="password" 
                             id="senhaAtual" 
-                            name="senhaAtual" 
+                            name="senhaAtual"
+                            value={senhaAtual}
+                            onChange={(e) => setSenhaAtual(e.target.value)}
                             className="input" 
                             placeholder="Insira a sua senha atual"
                         />
@@ -97,7 +128,9 @@ function Usuario() {
                         <input 
                             type="password" 
                             id="novaSenha" 
-                            name="novaSenha" 
+                            name="novaSenha"
+                            value={novaSenha}
+                            onChange={(e) => setNovaSenha(e.target.value)}
                             className="input" 
                             placeholder="Insira a sua nova senha"
                         />
@@ -109,6 +142,8 @@ function Usuario() {
                             type="password" 
                             id="confimaSenha" 
                             name="confimaSenha" 
+                            value={confirmaSenha}
+                            onChange={(e) => setConfirmaSenha(e.target.value)}
                             className="input" 
                             placeholder="Confime a sua senha"
                         />
@@ -119,13 +154,12 @@ function Usuario() {
                             Logout <FontAwesomeIcon icon={faArrowRightFromBracket} />
                         </button>
 
-                        {editando && (
-                            <button type="button" className="salvar" onClick={salvar}>
-                                Salvar
-                            </button>
-                        )}
+                        <button type="button" className="salvar" onClick={salvar}>Salvar</button>
                     </div>
                 </form>
+
+                {mensagemFalha ? <p className="mensagemFalha">{ mensagemFalha }</p> : ""}
+                {mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : ""}
             </div>
         </div>
     )
