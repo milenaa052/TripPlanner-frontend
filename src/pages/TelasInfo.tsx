@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
+import { faCalendarDays, faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import axios from "axios"
 import TelaHospedagem from "../components/telas/TelaHospedagem"
 import TelaTransporte from "../components/telas/TelaTransporte"
@@ -50,6 +50,9 @@ function TelasInfo() {
     <div className="planoViagem">
       <h1 className="titulo">
         {viagem ? `${viagem.localDestino}, ${viagem.codigoPais.toUpperCase()}` : ""}
+        <button>
+          <FontAwesomeIcon icon={faTrashCan} className="icone" />
+        </button>
       </h1>
 
       <p>
