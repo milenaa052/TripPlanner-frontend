@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPenToSquare, faCheck, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
+import { cpf } from "cpf-cnpj-validator"
 import { useAuth } from "../contexts/AuthContext"
 import { useUsuario } from "../contexts/UsuarioContext"
 
@@ -26,6 +27,24 @@ function Usuario() {
 
     const editar = () => setEditando(true)
 
+    const validarNivelSenha = async (senha: string) => {
+        const requisitos = {
+            temMaiuscula: /[A-Z]/.test(senha),
+            temMinuscula: /[a-z]/.test(senha),
+            temNumero: /[0-9]/.test(senha),
+            temEspecial: /[!@#$%&*°?]/.test(senha),
+            tamanhoMinimo: senha.length >= 8
+        }
+          
+        const valida = Object.values(requisitos).every(Boolean)
+            
+        return {
+            valida,
+            requisitos,
+            mensagem: valida ? 'Senha válida' : 'Senha não atende aos requisitos mínimos'
+        }
+    }
+
     const salvar = async (e: React.FormEvent) => {
         e.preventDefault()
     
@@ -37,12 +56,33 @@ function Usuario() {
 
             return
         }
+
+        if (!cpf.isValid(cpfUsuario)) {
+            setMensagemFalha("CPF inválido ou não existe")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+
+            return
+        }
+
+        const validacaoNivelSenha =  await validarNivelSenha(novaSenha)
+        if (!validacaoNivelSenha.valida) {
+            setMensagemFalha("Senha muito fraca")
+
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 1500)
+            
+            return
+        }
     
         if ((novaSenha || confirmaSenha || senhaAtual) && (!senhaAtual || novaSenha !== confirmaSenha)) {
             setMensagemFalha("Senhas não conferem ou senha atual não informada.")
             setTimeout(() => {
                 setMensagemFalha("")
-            }, 2000)
+            }, 3000)
 
             return
         }
