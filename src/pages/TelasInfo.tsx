@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCalendarDays, faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import { faCalendarDays, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+import { useNavigate } from "react-router"
 import axios from "axios"
 import TelaHospedagem from "../components/telas/TelaHospedagem"
 import TelaTransporte from "../components/telas/TelaTransporte"
 import TelaPasseios from "../components/telas/TelaPasseios"
 import TelaDespesas from "../components/telas/TelaDespesas"
+import ModalViagem from "../components/modal/ModalViagem"
 
 interface Viagem {
   idViagem: number
@@ -20,11 +22,20 @@ interface Viagem {
 
 function TelasInfo() {
   const [viagem, setViagem] = useState<Viagem | null>(null)
+  const [idViagem, setIdViagem] = useState<Viagem | null>(null)
+  const [modal, setModal] = useState(false)
   const [tela, setTela] = useState("Hospedagem")
+  const [mensagemSucesso, setMensagemSucesso] = useState("")
+  const navigate = useNavigate()
 
   const { id } = useParams()
 
   useEffect(() => {
+    carregarViagem()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const carregarViagem = () => {{
     axios.get(`http://localhost:3000/viagem/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("authToken")}`
@@ -36,7 +47,7 @@ function TelasInfo() {
     .catch((error) => {
       console.error("Erro ao buscar viagem", error)
     })
-  }, [id])
+  }}
 
   const formatarData = (data: string) => {
     const date = new Date(data)
@@ -46,12 +57,37 @@ function TelasInfo() {
     return `${dia}/${mes}/${ano}`
   }
 
+  const abrirModal = (viagem: Viagem) => {
+    setIdViagem(viagem)
+    setModal(true)
+  }
+
+  const deletarViagem = (idViagem: number) => {
+    axios.delete(`http://localhost:3000/viagem/${idViagem}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`
+      }
+    })
+    .then(() => {
+      carregarViagem()
+      setMensagemSucesso("Viagem excluída com sucesso!")
+
+      setTimeout(() => {
+        setMensagemSucesso("")
+        navigate("/")
+      }, 2000)
+    })
+    .catch((error) => {
+      console.error("Erro ao excluir Viagem", error)
+    })
+  }
+
   return (
     <div className="planoViagem">
       <h1 className="titulo">
         {viagem ? `${viagem.localDestino}, ${viagem.codigoPais.toUpperCase()}` : ""}
-        <button>
-          <FontAwesomeIcon icon={faTrashCan} className="icone" />
+        <button onClick={() => viagem && abrirModal(viagem)}>
+          <FontAwesomeIcon icon={faPenToSquare} className="icone" />
         </button>
       </h1>
 
@@ -59,6 +95,8 @@ function TelasInfo() {
         <FontAwesomeIcon icon={faCalendarDays} className="icone" />
         {viagem ? `${formatarData(viagem.dataInicial)} - ${formatarData(viagem.dataFinal)}` : ""}
       </p>
+
+      { mensagemSucesso ? <p className="mensagemSucesso">{ mensagemSucesso }</p> : "" }
 
       <div className="telasInfo">
         <button 
@@ -94,6 +132,19 @@ function TelasInfo() {
       {tela === "Transporte" && <TelaTransporte />}
       {tela === "Passeios" && <TelaPasseios />}
       {tela === "Despesas" && <TelaDespesas />}
+
+      {modal && idViagem && (
+        <div className="modal-overlay" onClick={() => setModal(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <ModalViagem
+              viagem={idViagem}
+              onDelete={deletarViagem}
+              onClose={() => setModal(false)}
+              onUpdate={carregarViagem}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -410,11 +410,11 @@ html {
             margin: 5px 0px 0px 5px;
 
             .icone {
-              color: var(--vermelho);
+              color: var(--laranja);
               width: 30%;
 
               &:hover {
-                color: var(--cinza-escuro);
+                color: var(--laranja-escuro);
               }
             }
           }
