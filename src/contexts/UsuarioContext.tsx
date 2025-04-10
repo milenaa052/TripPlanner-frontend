@@ -54,11 +54,11 @@ export const UsuarioProvider = ({ children }: { children: React.ReactNode }) => 
     };
 
     fetchUser();
-  }, [token]);
+  }, [token, setUsuario]);
 
   const updateUsuario = async (updateUsuario: UpdateUsuarioPayload) => {
     try {
-      const response = await axios.put(`/usuario/${usuario?.idUsuario}`, updateUsuario,
+      const response = await axios.put(`http://localhost:3000/usuario/${usuario?.idUsuario}`, updateUsuario,
         {
           headers: {
             Authorization: `Bearer ${token}`

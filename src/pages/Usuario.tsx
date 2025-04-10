@@ -10,7 +10,6 @@ function Usuario() {
     const { usuario, updateUsuario } = useUsuario()
 
     const [nome, setNome] = useState("")
-    const [email, setEmail] = useState("")
     const [cpfUsuario, setCpfUsuario] = useState("")
     const [senhaAtual, setSenhaAtual] = useState("")
     const [novaSenha, setNovaSenha] = useState("")
@@ -21,7 +20,6 @@ function Usuario() {
     useEffect(() => {
         if (usuario) {
             setNome(usuario.nome)
-            setEmail(usuario.email)
             setCpfUsuario(usuario.cpfUsuario || "")
         }
     }, [usuario])
@@ -30,16 +28,22 @@ function Usuario() {
 
     const salvar = async (e: React.FormEvent) => {
         e.preventDefault()
-        
-        if (!editando) return
     
         if (!nome || !cpfUsuario) {
-            setMensagemFalha("Nome e CPF são obrigatórios.");
+            setMensagemFalha("Nome e CPF são obrigatórios.")
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 2000)
+
             return
         }
     
         if ((novaSenha || confirmaSenha || senhaAtual) && (!senhaAtual || novaSenha !== confirmaSenha)) {
             setMensagemFalha("Senhas não conferem ou senha atual não informada.")
+            setTimeout(() => {
+                setMensagemFalha("")
+            }, 2000)
+
             return
         }
     
@@ -47,12 +51,14 @@ function Usuario() {
             await updateUsuario({
                 nome,
                 cpfUsuario,
-                email,
                 senhaAtual: senhaAtual || undefined,
                 novaSenha: novaSenha || undefined,
             })
     
             setMensagemSucesso("Informações atualizadas com sucesso!")
+            setTimeout(() => {
+                setMensagemSucesso("")
+            }, 2000)
 
             setEditando(false)
             setSenhaAtual("")
