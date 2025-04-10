@@ -67,15 +67,13 @@ function Usuario() {
             return
         }
 
-        const validacaoNivelSenha =  await validarNivelSenha(novaSenha)
-        if (!validacaoNivelSenha.valida) {
-            setMensagemFalha("Senha muito fraca")
-
-            setTimeout(() => {
-                setMensagemFalha("")
-            }, 1500)
-            
-            return
+        if (novaSenha) {
+            const validacaoNivelSenha = await validarNivelSenha(novaSenha)
+            if (!validacaoNivelSenha.valida) {
+                setMensagemFalha("Senha muito fraca")
+                setTimeout(() => setMensagemFalha(""), 1500)
+                return
+            }
         }
     
         if ((novaSenha || confirmaSenha || senhaAtual) && (!senhaAtual || novaSenha !== confirmaSenha)) {
@@ -153,6 +151,7 @@ function Usuario() {
                             onChange={(e) => setCpfUsuario(formatCPF(e.target.value))}
                             className="input" 
                             placeholder="Insira o seu CPF"
+                            autoComplete="off"
                         />
                     </div>
 
